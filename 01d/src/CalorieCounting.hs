@@ -17,8 +17,8 @@ parseInput :: String -> [[Int]]
 parseInput =  fmap (fmap parseNumberFromString) . groupCalories . lines
 
 
-findElfCarryingMostCalories :: [[Int]] -> [Int]
-findElfCarryingMostCalories = undefined
+findMostCalories :: [[Int]] -> Int
+findMostCalories = maximum . fmap sum
 
 
 solveTest :: IO ()

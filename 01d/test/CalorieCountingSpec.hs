@@ -2,22 +2,30 @@ module CalorieCountingSpec where
 
 import Test.Hspec (Spec, describe, it, runIO, shouldBe)
 
-import CalorieCounting
+import CalorieCounting (findMostCalories, parseInput)
 
 spec :: Spec
 spec = do
     testInput <- runIO $ readFile "testInput"
 
-    --input <- runIO $ readFile "input.txt"
+    input <- runIO $ readFile "input.txt"
 
     describe "parseInput" $ do
         it "works"
             $ shouldBe
                 (parseInput testInput)
-                []
+                [[1000,2000,3000],[4000],[5000,6000],[7000,8000,9000],[10000]]
 
-    describe "f" $ do
+    describe "findMostCalories" $ do
         it "works"
             $ shouldBe
-                42
-                42
+                (findMostCalories [[0,1], [1,2], [1,1]])
+                3
+        it "for for testInput"
+            $ shouldBe
+                (findMostCalories $ parseInput testInput)
+                24000
+        it "for for real input"
+            $ shouldBe
+                (findMostCalories $ parseInput input)
+                69289
