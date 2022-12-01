@@ -1,6 +1,6 @@
 module CalorieCounting where
 
-import Data.List (foldl')
+import Data.List (foldl', sort)
 
 groupCaloriesF :: [[String]] -> String -> [[String]]
 groupCaloriesF acc "" = [] : acc
@@ -21,23 +21,5 @@ findMostCalories :: [[Int]] -> Int
 findMostCalories = maximum . fmap sum
 
 
-solveTest :: IO ()
-solveTest = readFile "testInput"
-    >>= print
-        . parseInput
-
-solve :: IO ()
-solve = readFile "input.txt"
-    >>= print
-        . parseInput
-
-solveTest2 :: IO ()
-solveTest2 = readFile "testInput"
-    >>= print
-        . parseInput
-
-solve2 :: IO ()
-solve2 = readFile "input.txt"
-    >>= print
-        . parseInput
-
+getTop3Calories :: [[Int]] -> [Int]
+getTop3Calories = take 3 . reverse . sort . fmap sum

@@ -1,8 +1,9 @@
 module CalorieCountingSpec where 
 
+import Data.List (sort)
 import Test.Hspec (Spec, describe, it, runIO, shouldBe)
 
-import CalorieCounting (findMostCalories, parseInput)
+import CalorieCounting (findMostCalories, getTop3Calories, parseInput)
 
 spec :: Spec
 spec = do
@@ -29,3 +30,16 @@ spec = do
             $ shouldBe
                 (findMostCalories $ parseInput input)
                 69289
+
+    describe "getTop3Calories" $ do
+        it "for for testInput"
+            $ shouldBe
+                (sort $ getTop3Calories $ parseInput testInput)
+                [10000, 11000, 24000]
+
+    describe "How many Calories are those Elves carrying in total?" $ do
+        it ""
+            $ shouldBe
+                (sum $ getTop3Calories $ parseInput input)
+                205615
+    
