@@ -5,6 +5,7 @@ import Data.List (foldl')
 groupCaloriesF :: [[String]] -> String -> [[String]]
 groupCaloriesF acc "" = [] : acc
 groupCaloriesF (accHead:restAcc) stringWithNumber = (stringWithNumber : accHead) : restAcc
+groupCaloriesF notMatchedAcc _ = error $ "acc paramater has no match: " ++ show notMatchedAcc
 
 parseNumberFromString :: String -> Int
 parseNumberFromString = read
@@ -14,6 +15,7 @@ groupCalories = reverse . fmap reverse . foldl' groupCaloriesF [[]]
 
 parseInput :: String -> [[Int]]
 parseInput =  fmap (fmap parseNumberFromString) . groupCalories . lines
+
 
 findElfCarryingMostCalories :: [[Int]] -> [Int]
 findElfCarryingMostCalories = undefined
