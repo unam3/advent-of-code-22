@@ -5,5 +5,5 @@
 
 + Find the top three Elves carrying the most Calories.
     + sort and get top 3
-- How many Calories are those Elves carrying in total?
-    - sum top 3
++ How many Calories are those Elves carrying in total?
+    + sum top 3
