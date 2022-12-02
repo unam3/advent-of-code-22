@@ -29,3 +29,17 @@ spec = do
             $ shouldBe
                 (getTotalScore $ fmap playRound $ parseInput input)
                 11603
+
+    describe "playRound'" $ do
+        --it "works for testInput"
+        --    $ shouldBe
+        --        (fmap playRound' $ parseInput testInput)
+        --        [8, 1, 6]
+        it "wiht getTotalScore works for testInput"
+            $ shouldBe
+                (getTotalScore $ fmap playRound' $ parseInput testInput)
+                12
+        it "wiht getTotalScore works for input.txt"
+            $ shouldBe
+                (getTotalScore $ fmap playRound' $ parseInput input)
+                12725

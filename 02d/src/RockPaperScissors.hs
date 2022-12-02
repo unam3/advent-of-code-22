@@ -63,3 +63,32 @@ playRound (A, Y) = 6 + 2
 
 getTotalScore :: [Int] -> Int
 getTotalScore = sum
+
+
+-- P2.
+-- Second column says how the round needs to end:
+--  X means you need to lose,
+--  Y means you need to end the round in a draw,
+--  Z means you need to win.
+
+playRound' :: Round -> Int
+-- If both players choose the same shape, the round instead ends in a draw.
+playRound' (A, Y) = 1 + 3
+playRound' (B, Y) = 2 + 3
+playRound' (C, Y) = 3 + 3
+
+-- opponent wins
+-- Rock defeats Scissors
+playRound' (A, X) = 0 + 3
+-- Scissors defeats Paper
+playRound' (C, X) = 0 + 2
+-- Paper defeats Rock
+playRound' (B, X) = 0 + 1
+
+-- I win
+-- Rock defeats Scissors
+playRound' (C, Z) = 6 + 1
+-- Scissors defeats Paper
+playRound' (B, Z) = 6 + 3
+-- Paper defeats Rock
+playRound' (A, Z) = 6 + 2

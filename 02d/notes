@@ -1,5 +1,10 @@
 + parse input
 
-- implement playRound
++ implement playRound
 
-- What would your total score be if everything goes exactly according to your strategy guide?
++ What would your total score be if everything goes exactly according to your strategy guide?
+
+
+P2. 
+
++ figure out what shape to choose so the round ends as indicated
