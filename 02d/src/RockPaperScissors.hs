@@ -8,9 +8,9 @@ data FirstColumn = A | B | C
     deriving (Show, Eq)
 
 -- I should play in response
--- X — rock
--- Y — paper
--- Z — scissors
+-- X — rock 1
+-- Y — paper 2
+-- Z — scissors 3
 data SecondColumn = X | Y | Z
     deriving (Show, Eq)
 
@@ -36,6 +36,30 @@ parseInput :: String -> [Round]
 parseInput = fmap parseRound . lines
 
 
-playRound :: Round -> Int
-playRound = undefined
+-- The score for a single round is the score for the shape you selected (1 for Rock, 2 for Paper, and 3 for Scissors) plus the score for the outcome of the round (0 if you lost, 3 if the round was a draw, and 6 if you won).
 
+playRound :: Round -> Int
+-- If both players choose the same shape, the round instead ends in a draw.
+playRound (A, X) = 1 + 3
+playRound (B, Y) = 2 + 3
+playRound (C, Z) = 3 + 3
+
+-- opponent wins
+-- Rock defeats Scissors
+playRound (A, Z) = 0 + 3
+-- Scissors defeats Paper
+playRound (C, Y) = 0 + 2
+-- Paper defeats Rock
+playRound (B, X) = 0 + 1
+
+-- I win
+-- Rock defeats Scissors
+playRound (C, X) = 6 + 1
+-- Scissors defeats Paper
+playRound (B, Z) = 6 + 3
+-- Paper defeats Rock
+playRound (A, Y) = 6 + 2
+
+
+getTotalScore :: [Int] -> Int
+getTotalScore = sum

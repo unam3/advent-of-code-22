@@ -8,7 +8,7 @@ spec :: Spec
 spec = do
     testInput <- runIO $ readFile "testInput"
 
-    --input <- runIO $ readFile "input.txt"
+    input <- runIO $ readFile "input.txt"
 
     describe "parseInput" $ do
         it "works"
@@ -16,8 +16,16 @@ spec = do
                 (parseInput testInput)
                 [(A, Y), (B, X), (C, Z)]
 
-    describe "f" $ do
-        it "works"
+    describe "playRound" $ do
+        it "works for testInput"
             $ shouldBe
-                42
-                42
+                (fmap playRound $ parseInput testInput)
+                [8, 1, 6]
+        it "wiht getTotalScore works for testInput"
+            $ shouldBe
+                (getTotalScore $ fmap playRound $ parseInput testInput)
+                15
+        it "wiht getTotalScore works for input.txt"
+            $ shouldBe
+                (getTotalScore $ fmap playRound $ parseInput input)
+                11603
