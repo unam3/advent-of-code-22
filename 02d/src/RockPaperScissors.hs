@@ -29,7 +29,7 @@ parseSecondColumn 'Z' = Z
 parseSecondColumn wrongInput = error $ "wrong input: " ++ show wrongInput
 
 parseRound :: String -> Round
-parseRound (firstColumn : ' ' : secondColumn : []) = (parseFirstColumn firstColumn, parseSecondColumn secondColumn)
+parseRound [firstColumn, ' ', secondColumn] = (parseFirstColumn firstColumn, parseSecondColumn secondColumn)
 parseRound wrongInput = error $ "wrong input: " ++ wrongInput
 
 parseInput :: String -> [Round]

@@ -19,7 +19,7 @@ spec = do
     describe "playRound" $ do
         it "works for testInput"
             $ shouldBe
-                (fmap playRound $ parseInput testInput)
+                (playRound <$> parseInput testInput)
                 [8, 1, 6]
         it "wiht getTotalScore works for testInput"
             $ shouldBe
