@@ -4,3 +4,10 @@
 + Find the item type that appears in both compartments of each rucksack.
     Data.List.intersect
 + What is the sum of the priorities of those item types?
+
+P2.
+
++ Implement parseInputP2: parse in triplets: String -> [(String, String, String)]
++ Find the item type that corresponds to the badges of each three-Elf group: Data.List.intersect
+    We do not need repeating items, so we will use nub in parseInput2
++ What is the sum of the priorities of those item types?
