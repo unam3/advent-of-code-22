@@ -21,8 +21,53 @@ spec = do
                 (all even . fmap length $ lines input)
                 True
 
-    describe "f" $ do
-        it "works"
+    describe "divideLine" $ do
+        it ""
             $ shouldBe
-                42
-                42
+                (divideLine "vJrwpWtwJgWrhcsFMMfFFhFp")
+                ("vJrwpWtwJgWr", "hcsFMMfFFhFp")
+
+    --describe "parseInput" $ do
+    --    it "works"
+    --        $ shouldBe
+    --            (parseInput testInput)
+    --            [
+    --                ("vJrwpWtwJgWr", "hcsFMMfFFhFp"),
+    --                ("jqHRNqRjqzjGDLGL", "rsFMfFZSrLrFZsSL"),
+    --                ("PmmdzqPrV", "vPwwTWBwg"),
+    --                ("", ""),
+    --                ("", "")
+    --            ]
+
+    describe "findItemFromBothCompartments" $ do
+        it "works for first testInput line"
+            $ shouldBe
+                (findItemFromBothCompartments  ("vJrwpWtwJgWr", "hcsFMMfFFhFp"))
+                'p'
+        it "works for testInput"
+            $ shouldBe
+                (fmap findItemFromBothCompartments $ parseInput testInput)
+                ['p', 'L', 'P', 'v', 't', 's']
+
+    describe "getPriority" $ do
+        it "works for 'Z'"
+            $ shouldBe
+                (getPriority 'Z')
+                52
+
+    describe "getPriority" $ do
+        it "works for 'Z'"
+            $ shouldBe
+                (getPriority 'Z')
+                52
+
+        it "works for testInput"
+            $ shouldBe
+                (sum . fmap (getPriority . findItemFromBothCompartments) $ parseInput testInput)
+                157
+
+        it "works for input.txt"
+            $ shouldBe
+                (sum . fmap (getPriority . findItemFromBothCompartments) $ parseInput input)
+                7568
+

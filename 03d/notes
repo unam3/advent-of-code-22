@@ -1,4 +1,6 @@
-- Implement parseInput.
-- Implement relation between item types and priority (zip?)
-- Find the item type that appears in both compartments of each rucksack.
-- What is the sum of the priorities of those item types?
++ Implement parseInput.
+    + divide input lines into tuple of two strings
++ Implement relation between item types and priority (zip?)
++ Find the item type that appears in both compartments of each rucksack.
+    Data.List.intersect
++ What is the sum of the priorities of those item types?
