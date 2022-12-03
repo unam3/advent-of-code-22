@@ -1,0 +1,27 @@
+name:                03d
+version:             0.1.0.0
+
+dependencies:
+# lts/20/2.yaml
+- base == 4.16.4.0
+
+ghc-options:
+- -threaded
+- -O2
+- -Wall
+
+library:
+  source-dirs:      src
+
+tests:
+  03d-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -O2
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - 03d
+    - hspec    
