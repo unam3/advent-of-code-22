@@ -52,3 +52,32 @@ isSectionContainAnother ((firstElfSectionsRangeStart, firstElfSectionsRangeEnd),
         -- ...4.....  4-4
         (EQ, EQ) -> True
         _ -> False
+
+
+doPairOverlap :: Pair -> Bool
+doPairOverlap pair@((firstElfSectionsRangeStart, firstElfSectionsRangeEnd), (secondElfSectionsRangeStart, secondElfSectionsRangeEnd)) =
+    if isSectionContainAnother pair
+        then True
+        else case (
+                compare firstElfSectionsRangeStart secondElfSectionsRangeStart,
+                compare firstElfSectionsRangeEnd secondElfSectionsRangeEnd,
+                compare firstElfSectionsRangeEnd secondElfSectionsRangeStart,
+                compare firstElfSectionsRangeStart secondElfSectionsRangeEnd
+            ) of
+                -- ....567..  5-7
+                -- ......789  7-9
+                (LT, LT, EQ, _) -> True
+
+                -- ....5678.  5-8
+                -- ......789  7-9
+                (LT, LT, GT, _) -> True
+
+                -- ......789  7-9
+                -- ....567..  5-7
+                (GT, GT, _, EQ) -> True
+
+                -- ......789  7-9
+                -- ....5678.  5-8
+                (GT, GT, _, LT) -> True
+
+                _ -> False

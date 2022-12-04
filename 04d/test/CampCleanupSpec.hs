@@ -75,3 +75,27 @@ spec = do
             $ shouldBe
                 (length $ filter (== True) $ fmap isSectionContainAnother $ parseInput input)
                 584
+
+    describe "doPairOverlap" $ do
+        it "works for testInput: the first two pairs (2-4,6-8 and 2-3,4-5) don't overlap, while the remaining four pairs (5-7,7-9, 2-8,3-7, 6-6,4-6, and 2-6,4-8) do overlap"
+            $ shouldBe
+                (doPairOverlap <$> parseInput testInput)
+                [
+                    False,
+                    False,
+                    True,
+                    True,
+                    True,
+                    True
+                ]
+
+        it "works for 4-6, 4-5"
+            $ shouldBe
+                (doPairOverlap ((4,6), (4,5)))
+                True
+
+        it "answer the question: In how many assignment pairs do the ranges overlap?"
+            $ shouldBe
+                (length $ filter (== True) $ fmap doPairOverlap $ parseInput input)
+                933
+
