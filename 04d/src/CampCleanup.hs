@@ -48,4 +48,7 @@ isSectionContainAnother ((firstElfSectionsRangeStart, firstElfSectionsRangeEnd),
         -- ...456...  4-6
         -- ...4.....  4-4
         (EQ, GT) -> True
+        -- ...4.....  4-4
+        -- ...4.....  4-4
+        (EQ, EQ) -> True
         _ -> False
