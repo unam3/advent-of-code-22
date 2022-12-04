@@ -28,8 +28,16 @@ spec = do
                 (last $ parseInput testInput)
                 ((2,6), (4,8))
 
-    --describe "f" $ do
-    --    it "works"
-    --        $ shouldBe
-    --            42
-    --            42
+    describe "isSectionContainAnother" $ do
+        it "works"
+            $ shouldBe
+                (fmap isSectionContainAnother $ parseInput testInput)
+                [
+                    False,
+                    False,
+                    False,
+                    True,
+                    True,
+                    False
+                ]
+                
