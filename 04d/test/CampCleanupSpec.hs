@@ -16,11 +16,17 @@ spec = do
                 (parseRange "12-34")
                 (12, 34)
 
-    --describe "parseInput" $ do
-    --    it "works"
-    --        $ shouldBe
-    --            (parseInput testInput)
-    --            "42"
+    describe "parsePair" $ do
+        it "works"
+            $ shouldBe
+                (parsePair "2-4,6-8")
+                ((2, 4), (6,8))
+
+    describe "parseInput" $ do
+        it "works"
+            $ shouldBe
+                (last $ parseInput testInput)
+                ((2,6), (4,8))
 
     --describe "f" $ do
     --    it "works"

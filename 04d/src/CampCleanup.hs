@@ -15,11 +15,12 @@ parseRange string =
     let (rangeStart, rangeEnd) = splitToTupleByChar string '-'
     in (read rangeStart, read rangeEnd)
 
---parsePair :: String -> Pair
---parsePair = parseRange . splitLineByComa
+parsePair :: String -> Pair
+parsePair string =
+    let (firstElfAssignedSectionsString, secondElfAssignedSectionsString) = splitToTupleByChar string ','
+    in (parseRange firstElfAssignedSectionsString, parseRange secondElfAssignedSectionsString)
 
 parseInput :: String -> [Pair]
-parseInput = undefined
-    -- fmap id . lines
+parseInput = fmap parsePair . lines
 
 

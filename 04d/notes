@@ -1,4 +1,4 @@
-- Implement parseInput
++ Implement parseInput
 - In how many assignment pairs does one range fully contain the other?
     - implement function to check pair: is one range fully contain the other
         - can we implement 2 checks in one go?
