@@ -4,10 +4,15 @@ type AssignedSectionsRange = (Int, Int)
 
 type Pair = (AssignedSectionsRange, AssignedSectionsRange)
 
+splitToTupleByChar :: String -> Char -> (String, String)
+splitToTupleByChar string char =
+    let (leftPart, righPartWithDelimiter) = break (== char) string
+        rightPart = drop 1 righPartWithDelimiter
+    in (leftPart, rightPart)
+
 parseRange :: String -> AssignedSectionsRange
 parseRange string =
-    let (rangeStart, almostRangeEnd) = break (== '-') string
-        rangeEnd = drop 1 almostRangeEnd
+    let (rangeStart, rangeEnd) = splitToTupleByChar string '-'
     in (read rangeStart, read rangeEnd)
 
 --parsePair :: String -> Pair
