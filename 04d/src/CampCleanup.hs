@@ -56,9 +56,8 @@ isSectionContainAnother ((firstElfSectionsRangeStart, firstElfSectionsRangeEnd),
 
 doPairOverlap :: Pair -> Bool
 doPairOverlap pair@((firstElfSectionsRangeStart, firstElfSectionsRangeEnd), (secondElfSectionsRangeStart, secondElfSectionsRangeEnd)) =
-    if isSectionContainAnother pair
-        then True
-        else case (
+    isSectionContainAnother pair
+        || case (
                 compare firstElfSectionsRangeStart secondElfSectionsRangeStart,
                 compare firstElfSectionsRangeEnd secondElfSectionsRangeEnd,
                 compare firstElfSectionsRangeEnd secondElfSectionsRangeStart,
