@@ -1,16 +1,16 @@
 module SupplyStacks where
 
 import Data.List (foldl', transpose)
-import Data.Map.Strict (Map, fromList)
+import Data.Map.Strict (Map, (!), adjust, fromList)
 
 
-type StackOfCrates = (Char, String)
-type StacksOfCrates = Map Char String
+type StackOfCrates = (String, String)
+type StacksOfCrates = Map String String
 
 data RearrangementProcedure = RearrangementProcedure {
-    cratesQuantitityToMove :: String,
-    sourceStack :: Int,
-    targetStack :: Int
+    cratesQuantitityToMove :: Int,
+    sourceStack :: String,
+    targetStack :: String
 } deriving (Eq, Show)
 
 
@@ -42,7 +42,7 @@ preprocessStackOfCrates =
             ))
 
 parseStackOfCrates :: String -> StackOfCrates
-parseStackOfCrates (stackNumber : crates) = (stackNumber, crates)
+parseStackOfCrates (stackNumber : crates) = ([stackNumber], reverse crates)
 parseStackOfCrates nonMatchedInput = error $ "get non matched input: " ++ show nonMatchedInput
 
 
@@ -51,9 +51,8 @@ takeOnlyNumerical = filter ((\ char -> any (== char) ['0'..'9'])  . head)
 
 parseRearrangementProcedure :: String -> RearrangementProcedure
 parseRearrangementProcedure string =
-    let [cratesQuantitityToMove', almostSourceStack', almostTargetStack'] = takeOnlyNumerical $ words string
-        sourceStack' = read almostSourceStack'
-        targetStack' = read almostTargetStack'
+    let [almostCratesQuantitityToMove, sourceStack', targetStack'] = takeOnlyNumerical $ words string
+        cratesQuantitityToMove' = read almostCratesQuantitityToMove
     in RearrangementProcedure cratesQuantitityToMove' sourceStack' targetStack'
 
 
@@ -65,4 +64,14 @@ parseInput input =
     in (stacksOfCrates, rearrangementProcedures)
 
 
--- Crates are moved one at a time, so the first crate to be moved (D) ends up below the second and third crates
+rearrange' :: StacksOfCrates -> RearrangementProcedure -> StacksOfCrates
+rearrange' stacksOfCrates (RearrangementProcedure quantity source target) =
+        -- get qtt from source
+    let delta = take quantity $ (!) stacksOfCrates source
+        -- remove from source first qtty
+        stackWithUpdatedSource = adjust (drop quantity) source stacksOfCrates
+    -- add to target in reverse order
+    in adjust (reverse delta ++) target stackWithUpdatedSource
+
+rearrange :: StacksOfCrates -> [RearrangementProcedure] -> StacksOfCrates
+rearrange = foldl' rearrange'

@@ -28,13 +28,13 @@ spec = do
         it "works"
             $ shouldBe
                 (parseStackOfCrates "1ZN")
-                ('1', "ZN")
+                ("1", "NZ")
 
     describe "parseRearrangementProcedure" $ do
         it "works"
             $ shouldBe
                 (parseRearrangementProcedure "move 3 from 5 to 2")
-                $ RearrangementProcedure "3" 5 2 
+                $ RearrangementProcedure 3 "5" "2" 
 
     --input <- runIO $ readFile "input.txt"
 
@@ -43,17 +43,19 @@ spec = do
             $ shouldBe
                 (parseInput testInput)
                 (
-                    fromList [('1',"ZN"),('2',"MCD"),('3',"P")],
+                    fromList [("1","NZ"),("2","DCM"),("3","P")],
                     [
-                        RearrangementProcedure "1" 2 1,
-                        RearrangementProcedure "3" 1 3,
-                        RearrangementProcedure "2" 2 1,
-                        RearrangementProcedure "1" 1 2
+                        RearrangementProcedure 1 "2" "1",
+                        RearrangementProcedure 3 "1" "3",
+                        RearrangementProcedure 2 "2" "1",
+                        RearrangementProcedure 1 "1" "2"
                     ]
                 )
 
-    --describe "f" $ do
-    --    it "works"
-    --        $ shouldBe
-    --            42
-    --            42
+    describe "rearrange" $ do
+        it "works"
+            $ shouldBe
+                (uncurry rearrange $ parseInput testInput)
+                (
+                    fromList [("1","C"),("2","M"),("3","ZNDP")]
+                )
