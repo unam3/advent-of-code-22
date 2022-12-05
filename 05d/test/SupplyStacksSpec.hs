@@ -15,7 +15,19 @@ spec = do
                 (splitByEmptyLines $ lines splitByEmptyLinesTestData)
                 [["12","33"],["34","44"],["55"]]
 
-    --testInput <- runIO $ readFile "testInput"
+    testInput <- runIO $ readFile "testInput"
+
+    describe "preprocessStackOfCrates" $ do
+        it "works"
+            $ shouldBe
+                (preprocessStackOfCrates $ head $ splitByEmptyLines $ lines testInput)
+                ["1ZN","2MCD","3P"]
+
+    describe "parseStackOfCrates" $ do
+        it "works"
+            $ shouldBe
+                (parseStackOfCrates "1ZN")
+                ('1', "ZN")
 
     --input <- runIO $ readFile "input.txt"
 
