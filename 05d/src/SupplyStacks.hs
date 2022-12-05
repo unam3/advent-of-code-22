@@ -30,7 +30,7 @@ preprocessStackOfCrates =
         -- ["1ZN ","2MCD","3P  "]
         . fmap reverse
         -- [" NZ1","DCM2","  P3"]
-        . filter ((\ withoutWhitespaces -> if  withoutWhitespaces == [] then False else True ) . words)
+        . filter ((/= []) . words)
         -- ["    "," NZ1","    ","    ","    ","DCM2","    ","    ","    ","  P3","    "]
         . transpose
         . fmap
