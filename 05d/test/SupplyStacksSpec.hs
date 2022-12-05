@@ -41,6 +41,12 @@ spec = do
                     []
                 )
 
+    describe "parseRearrangementProcedure" $ do
+        it "works"
+            $ shouldBe
+                (parseRearrangementProcedure "move 3 from 5 to 2")
+                $ RearrangementProcedure "3" 5 2 
+
     --describe "f" $ do
     --    it "works"
     --        $ shouldBe

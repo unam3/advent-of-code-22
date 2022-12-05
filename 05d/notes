@@ -1,7 +1,7 @@
 P1.
 - implement parseInput
     + parseStackOfCrates
-    - parseRearrangementProcedure
+    + parseRearrangementProcedure
 - After (1) the rearrangement procedure completes, (2) what crate ends up on top of each stack?
 
 Will number of crates play out in part 2?

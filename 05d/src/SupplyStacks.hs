@@ -8,7 +8,7 @@ type StackOfCrates = (Char, String)
 type StacksOfCrates = Map Char String
 
 data RearrangementProcedure = RearrangementProcedure {
-    cratesQuantitityToMove :: Int,
+    cratesQuantitityToMove :: String,
     sourceStack :: Int,
     targetStack :: Int
 } deriving (Eq, Show)
@@ -44,6 +44,16 @@ preprocessStackOfCrates =
 parseStackOfCrates :: String -> StackOfCrates
 parseStackOfCrates (stackNumber : crates) = (stackNumber, crates)
 parseStackOfCrates nonMatchedInput = error $ "get non matched input: " ++ show nonMatchedInput
+
+takeOnlyNumerical :: [String] -> [String]
+takeOnlyNumerical = filter ((\ char -> any (== char) ['0'..'9'])  . head)
+
+parseRearrangementProcedure :: String -> RearrangementProcedure
+parseRearrangementProcedure string =
+    let [cratesQuantitityToMove', almostSourceStack', almostTargetStack'] = takeOnlyNumerical $ words string
+        sourceStack' = read almostSourceStack'
+        targetStack' = read almostTargetStack'
+    in RearrangementProcedure cratesQuantitityToMove' sourceStack' targetStack'
 
 parseInput :: String -> (StacksOfCrates, [RearrangementProcedure])
 parseInput input =
