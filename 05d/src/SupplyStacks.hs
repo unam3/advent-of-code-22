@@ -45,6 +45,7 @@ parseStackOfCrates :: String -> StackOfCrates
 parseStackOfCrates (stackNumber : crates) = (stackNumber, crates)
 parseStackOfCrates nonMatchedInput = error $ "get non matched input: " ++ show nonMatchedInput
 
+
 takeOnlyNumerical :: [String] -> [String]
 takeOnlyNumerical = filter ((\ char -> any (== char) ['0'..'9'])  . head)
 
@@ -55,11 +56,13 @@ parseRearrangementProcedure string =
         targetStack' = read almostTargetStack'
     in RearrangementProcedure cratesQuantitityToMove' sourceStack' targetStack'
 
+
 parseInput :: String -> (StacksOfCrates, [RearrangementProcedure])
 parseInput input =
     let [rawStacksOfCrates, rawRearrangementProcedures] = splitByEmptyLines $ lines input
         stacksOfCrates = fromList . fmap parseStackOfCrates $ preprocessStackOfCrates rawStacksOfCrates
-    in (stacksOfCrates, [])
+        rearrangementProcedures = fmap parseRearrangementProcedure rawRearrangementProcedures
+    in (stacksOfCrates, rearrangementProcedures)
 
 
 -- Crates are moved one at a time, so the first crate to be moved (D) ends up below the second and third crates
