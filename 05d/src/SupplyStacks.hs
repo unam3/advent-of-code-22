@@ -27,9 +27,10 @@ splitByEmptyLines = reverse . fmap reverse . foldl' group [[]]
 preprocessStackOfCrates :: [String] -> [String]
 preprocessStackOfCrates =
     -- ["1ZN","2MCD","3P"]
-    fmap (takeWhile (/= ' '))
+    fmap (takeWhile (/= ' ')
         -- ["1ZN ","2MCD","3P  "]
-        . fmap reverse
+        . reverse
+    )
         -- [" NZ1","DCM2","  P3"]
         . filter ((/= []) . words)
         -- ["    "," NZ1","    ","    ","    ","DCM2","    ","    ","    ","  P3","    "]
@@ -48,7 +49,7 @@ parseStackOfCrates nonMatchedInput = error $ "get non matched input: " ++ show n
 
 
 takeOnlyNumerical :: [String] -> [String]
-takeOnlyNumerical = filter ((\ char -> any (== char) ['0'..'9'])  . head)
+takeOnlyNumerical = filter ((\ char -> elem char ['0'..'9'])  . head)
 
 parseRearrangementProcedure :: String -> RearrangementProcedure
 parseRearrangementProcedure string =
