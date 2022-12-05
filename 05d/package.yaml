@@ -4,6 +4,7 @@ version:             0.1.0.0
 dependencies:
 # lts/20/2.yaml
 - base == 4.16.4.0
+- containers == 0.6.5.1
 
 ghc-options:
 - -threaded

@@ -1,5 +1,6 @@
 module SupplyStacksSpec where 
 
+import Data.Map.Strict (fromList)
 import Test.Hspec (Spec, describe, it, runIO, shouldBe)
 
 import SupplyStacks
@@ -31,11 +32,14 @@ spec = do
 
     --input <- runIO $ readFile "input.txt"
 
-    --describe "parseInput" $ do
-    --    it "works"
-    --        $ shouldBe
-    --            (parseInput testInput)
-    --            "42"
+    describe "parseInput" $ do
+        it "works"
+            $ shouldBe
+                (parseInput testInput)
+                (
+                    fromList [('1',"ZN"),('2',"MCD"),('3',"P")],
+                    []
+                )
 
     --describe "f" $ do
     --    it "works"

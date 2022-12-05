@@ -1,15 +1,17 @@
 module SupplyStacks where
 
 import Data.List (foldl', transpose)
+import Data.Map.Strict (Map, fromList)
 
 
 type StackOfCrates = (Char, String)
+type StacksOfCrates = Map Char String
 
 data RearrangementProcedure = RearrangementProcedure {
     cratesQuantitityToMove :: Int,
     sourceStack :: Int,
     targetStack :: Int
-}
+} deriving (Eq, Show)
 
 
 group :: [[String]] -> String -> [[String]]
@@ -39,15 +41,15 @@ preprocessStackOfCrates =
                     _ -> char
             ))
 
-
 parseStackOfCrates :: String -> StackOfCrates
 parseStackOfCrates (stackNumber : crates) = (stackNumber, crates)
 parseStackOfCrates nonMatchedInput = error $ "get non matched input: " ++ show nonMatchedInput
 
---parseInput :: String -> (StackOfCrates, [RearrangementProcedure])
-parseInput = fmap id . lines
--- split input into 2 parts: StackOfCratesSource, RearrangementProceduresSource
--- parse them parts
+parseInput :: String -> (StacksOfCrates, [RearrangementProcedure])
+parseInput input =
+    let [rawStacksOfCrates, rawRearrangementProcedures] = splitByEmptyLines $ lines input
+        stacksOfCrates = fromList . fmap parseStackOfCrates $ preprocessStackOfCrates rawStacksOfCrates
+    in (stacksOfCrates, [])
 
 
 -- Crates are moved one at a time, so the first crate to be moved (D) ends up below the second and third crates
