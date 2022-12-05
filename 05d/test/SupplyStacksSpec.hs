@@ -53,7 +53,7 @@ spec = do
     describe "rearrange" $ do
         it "works for testInput"
             $ shouldBe
-                (uncurry rearrange $ parseInput testInput)
+                (uncurry (rearrange reverse) $ parseInput testInput)
                 (
                     fromList [("1","C"),("2","M"),("3","ZNDP")]
                 )
@@ -63,5 +63,9 @@ spec = do
     describe "getTopCrates" $ do
         it "works for input.txt"
             $ shouldBe
-                (getTopCrates . uncurry rearrange $ parseInput input)
+                (getTopCrates . uncurry (rearrange reverse) $ parseInput input)
+                "MQSHJMWNH"
+        it "works for input.txt in part 2"
+            $ shouldBe
+                (getTopCrates . uncurry (rearrange id) $ parseInput input)
                 "MQSHJMWNH"

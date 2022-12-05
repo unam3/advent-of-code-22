@@ -5,5 +5,7 @@ P1.
 - After (1) the rearrangement procedure completes, (2) what crate ends up on top of each stack?
     + implement rearrangement
 
-Will number of crates play out in part 2?
++ Will number of crates play out in part 2? Nope.
 
+
+P2. Retain order of moved crates.

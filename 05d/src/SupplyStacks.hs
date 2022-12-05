@@ -66,17 +66,18 @@ parseInput input =
     in (stacksOfCrates, rearrangementProcedures)
 
 
-rearrange' :: StacksOfCrates -> RearrangementProcedure -> StacksOfCrates
-rearrange' stacksOfCrates (RearrangementProcedure quantity source target) =
+rearrange' ::  (String -> String) -> StacksOfCrates -> RearrangementProcedure -> StacksOfCrates
+rearrange' deltaCratesOrderingF stacksOfCrates (RearrangementProcedure quantity source target) =
         -- get qtt from source
     let delta = take quantity $ (!) stacksOfCrates source
         -- remove from source first qtty
         stackWithUpdatedSource = adjust (drop quantity) source stacksOfCrates
     -- add to target in reverse order
-    in adjust (reverse delta ++) target stackWithUpdatedSource
+    in adjust (deltaCratesOrderingF delta ++) target stackWithUpdatedSource
 
-rearrange :: StacksOfCrates -> [RearrangementProcedure] -> StacksOfCrates
-rearrange = foldl' rearrange'
+rearrange :: (String -> String) -> StacksOfCrates -> [RearrangementProcedure] -> StacksOfCrates
+rearrange deltaCratesOrderingF stacksOfCrates rearrangementProcedures = 
+    foldl' (rearrange' deltaCratesOrderingF) stacksOfCrates rearrangementProcedures
 
 getTopCrates :: StacksOfCrates -> String
 getTopCrates = M.foldl' (\ acc crate -> acc ++ [head crate]) ""
