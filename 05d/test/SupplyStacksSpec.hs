@@ -36,8 +36,6 @@ spec = do
                 (parseRearrangementProcedure "move 3 from 5 to 2")
                 $ RearrangementProcedure 3 "5" "2" 
 
-    --input <- runIO $ readFile "input.txt"
-
     describe "parseInput" $ do
         it "works"
             $ shouldBe
@@ -53,9 +51,17 @@ spec = do
                 )
 
     describe "rearrange" $ do
-        it "works"
+        it "works for testInput"
             $ shouldBe
                 (uncurry rearrange $ parseInput testInput)
                 (
                     fromList [("1","C"),("2","M"),("3","ZNDP")]
                 )
+
+    input <- runIO $ readFile "input.txt"
+
+    describe "getTopCrates" $ do
+        it "works for input.txt"
+            $ shouldBe
+                (getTopCrates . uncurry rearrange $ parseInput input)
+                "MQSHJMWNH"

@@ -2,6 +2,7 @@ module SupplyStacks where
 
 import Data.List (foldl', transpose)
 import Data.Map.Strict (Map, (!), adjust, fromList)
+import qualified Data.Map.Strict as M (foldl')
 
 
 type StackOfCrates = (String, String)
@@ -75,3 +76,6 @@ rearrange' stacksOfCrates (RearrangementProcedure quantity source target) =
 
 rearrange :: StacksOfCrates -> [RearrangementProcedure] -> StacksOfCrates
 rearrange = foldl' rearrange'
+
+getTopCrates :: StacksOfCrates -> String
+getTopCrates = M.foldl' (\ acc crate -> acc ++ [head crate]) ""
