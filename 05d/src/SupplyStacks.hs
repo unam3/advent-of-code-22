@@ -76,8 +76,8 @@ rearrange' deltaCratesOrderingF stacksOfCrates (RearrangementProcedure quantity 
     in adjust (deltaCratesOrderingF delta ++) target stackWithUpdatedSource
 
 rearrange :: (String -> String) -> StacksOfCrates -> [RearrangementProcedure] -> StacksOfCrates
-rearrange deltaCratesOrderingF stacksOfCrates rearrangementProcedures = 
-    foldl' (rearrange' deltaCratesOrderingF) stacksOfCrates rearrangementProcedures
+rearrange deltaCratesOrderingF = 
+    foldl' (rearrange' deltaCratesOrderingF)
 
 getTopCrates :: StacksOfCrates -> String
 getTopCrates = M.foldl' (\ acc crate -> acc ++ [head crate]) ""

@@ -8,4 +8,6 @@ P1.
 + Will number of crates play out in part 2? Nope.
 
 
-P2. Retain order of moved crates.
+P2. +Retain order of moved crates.
+
+TODO: check out GHC extension which enables one to add constraint to number of list elements

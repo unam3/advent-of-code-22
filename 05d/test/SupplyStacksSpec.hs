@@ -68,4 +68,4 @@ spec = do
         it "works for input.txt in part 2"
             $ shouldBe
                 (getTopCrates . uncurry (rearrange id) $ parseInput input)
-                "MQSHJMWNH"
+                "LLWJRBHVZ"
