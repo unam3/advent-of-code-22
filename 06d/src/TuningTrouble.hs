@@ -20,4 +20,4 @@ identifyFirstStartOfPacketMarker = identifyFirstMarker 4 4
 
 
 identifyFirstStartOfMessageMarker :: String -> (Int, String)
-identifyFirstStartOfMessageMarker buffer = identifyFirstMarker 14 14 buffer
+identifyFirstStartOfMessageMarker = identifyFirstMarker 14 14

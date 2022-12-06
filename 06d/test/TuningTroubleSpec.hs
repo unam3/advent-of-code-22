@@ -17,7 +17,7 @@ spec = do
                 (7, "jpqm")
         it "works for other test input"
             $ shouldBe
-                (fmap (fst . identifyFirstStartOfPacketMarker) $
+                (fmap (fst . identifyFirstStartOfPacketMarker)
                     [
                         "bvwbjplbgvbhsrlpgdmjqwftvncz",
                         "nppdvjthqldpwncqszvftbrmjlhg",
@@ -35,7 +35,8 @@ spec = do
     describe "identifyFirstStartOfMessageMarker" $ do
         it "works for other test input"
             $ shouldBe
-                (fmap (fst . identifyFirstStartOfMessageMarker) $
+                (fmap
+                    (fst . identifyFirstStartOfMessageMarker)
                     [
                         "mjqjpqmgbljsphdztnvjfqwrcgsmlb",
                         "bvwbjplbgvbhsrlpgdmjqwftvncz",
@@ -48,4 +49,4 @@ spec = do
         it "works for input.txt"
             $ shouldBe
                 (fst $ identifyFirstStartOfMessageMarker input)
-                (3298)
+                3298
