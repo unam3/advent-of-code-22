@@ -10,14 +10,19 @@ spec = do
 
     --input <- runIO $ readFile "input.txt"
 
-    describe "parseInput" $ do
-        it "works"
+    describe "identifyFirstPosition" $ do
+        it "works for testInput"
             $ shouldBe
-                (parseInput testInput)
-                "42"
-
-    describe "f" $ do
-        it "works"
+                (identifyFirstPosition testInput)
+                (7, "jpqm")
+        it "works for other test input"
             $ shouldBe
-                42
-                42
+                (fmap (fst . identifyFirstPosition) $
+                    [
+                        "bvwbjplbgvbhsrlpgdmjqwftvncz",
+                        "nppdvjthqldpwncqszvftbrmjlhg",
+                        "nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg",
+                        "zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw"
+                    ]
+                )
+                [5,6,10,11]
