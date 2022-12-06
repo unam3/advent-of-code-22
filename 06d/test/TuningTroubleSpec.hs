@@ -10,14 +10,14 @@ spec = do
 
     input <- runIO $ readFile "input.txt"
 
-    describe "identifyFirstPosition" $ do
+    describe "identifyFirstStartOfPacketMarker" $ do
         it "works for testInput"
             $ shouldBe
-                (identifyFirstPosition testInput)
+                (identifyFirstStartOfPacketMarker testInput)
                 (7, "jpqm")
         it "works for other test input"
             $ shouldBe
-                (fmap (fst . identifyFirstPosition) $
+                (fmap (fst . identifyFirstStartOfPacketMarker) $
                     [
                         "bvwbjplbgvbhsrlpgdmjqwftvncz",
                         "nppdvjthqldpwncqszvftbrmjlhg",
@@ -28,5 +28,5 @@ spec = do
                 [5,6,10,11]
         it "works for input.txt"
             $ shouldBe
-                (identifyFirstPosition input)
+                (identifyFirstStartOfPacketMarker input)
                 (1929, "cbls")
