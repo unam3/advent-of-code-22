@@ -8,7 +8,7 @@ spec :: Spec
 spec = do
     testInput <- runIO $ readFile "testInput"
 
-    --input <- runIO $ readFile "input.txt"
+    input <- runIO $ readFile "input.txt"
 
     describe "identifyFirstPosition" $ do
         it "works for testInput"
@@ -26,3 +26,7 @@ spec = do
                     ]
                 )
                 [5,6,10,11]
+        it "works for input.txt"
+            $ shouldBe
+                (identifyFirstPosition input)
+                (1929, "cbls")

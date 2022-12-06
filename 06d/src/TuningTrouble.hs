@@ -14,3 +14,5 @@ identifyFirstPosition' leftmostPosition nonMatchedInput =
 
 identifyFirstPosition :: String -> (Int, String)
 identifyFirstPosition = identifyFirstPosition' 4
+
+
