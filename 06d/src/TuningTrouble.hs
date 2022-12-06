@@ -20,8 +20,4 @@ identifyFirstStartOfPacketMarker = identifyFirstMarker 4 4
 
 
 identifyFirstStartOfMessageMarker :: String -> (Int, String)
-identifyFirstStartOfMessageMarker buffer =
-    let firstStartOfPacketMarkerPosition = fst $ identifyFirstStartOfPacketMarker buffer
-        restBuffer = drop firstStartOfPacketMarkerPosition buffer
-        (pos, message) = identifyFirstMarker 14 14 restBuffer
-        in (pos + firstStartOfPacketMarkerPosition, message)
+identifyFirstStartOfMessageMarker buffer = identifyFirstMarker 14 14 buffer
