@@ -1,2 +1,14 @@
-P1. Find all of the directories with a total size of at most 100000.
+P1.
+
+Implement parseInput.
+
+Find all of the directories with a total size of at most 100000.
+
 What is the sum of the total sizes of those directories?
+
+Remarks about input.txt:
+
+- no empty dirs: /ls .*\n\$ cd
+- no consecutive ls calls: /ls\n\$ ls
+
+Could we go into same dir in cd and get ls of it second time in input.txt?
