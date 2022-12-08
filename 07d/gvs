@@ -81,11 +81,11 @@ set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
-exe '1resize ' . ((&lines * 21 + 23) / 46)
-exe 'vert 1resize ' . ((&columns * 71 + 60) / 120)
-exe '2resize ' . ((&lines * 21 + 23) / 46)
-exe 'vert 2resize ' . ((&columns * 48 + 60) / 120)
-exe '3resize ' . ((&lines * 21 + 23) / 46)
+exe '1resize ' . ((&lines * 36 + 23) / 46)
+exe 'vert 1resize ' . ((&columns * 97 + 60) / 120)
+exe '2resize ' . ((&lines * 36 + 23) / 46)
+exe 'vert 2resize ' . ((&columns * 22 + 60) / 120)
+exe '3resize ' . ((&lines * 6 + 23) / 46)
 argglobal
 balt testInput
 setlocal keymap=
@@ -219,12 +219,12 @@ setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 23 - ((15 * winheight(0) + 10) / 21)
+let s:l = 20 - ((19 * winheight(0) + 18) / 36)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 23
-normal! 032|
+keepjumps 20
+normal! 0
 wincmd w
 argglobal
 if bufexists(fnamemodify("testInput", ":p")) | buffer testInput | else | edit testInput | endif
@@ -360,7 +360,7 @@ setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 18 - ((17 * winheight(0) + 10) / 21)
+let s:l = 18 - ((17 * winheight(0) + 18) / 36)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
@@ -501,18 +501,18 @@ setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 1 - ((0 * winheight(0) + 10) / 21)
+let s:l = 1 - ((0 * winheight(0) + 3) / 6)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
 keepjumps 1
 normal! 0
 wincmd w
-exe '1resize ' . ((&lines * 21 + 23) / 46)
-exe 'vert 1resize ' . ((&columns * 71 + 60) / 120)
-exe '2resize ' . ((&lines * 21 + 23) / 46)
-exe 'vert 2resize ' . ((&columns * 48 + 60) / 120)
-exe '3resize ' . ((&lines * 21 + 23) / 46)
+exe '1resize ' . ((&lines * 36 + 23) / 46)
+exe 'vert 1resize ' . ((&columns * 97 + 60) / 120)
+exe '2resize ' . ((&lines * 36 + 23) / 46)
+exe 'vert 2resize ' . ((&columns * 22 + 60) / 120)
+exe '3resize ' . ((&lines * 6 + 23) / 46)
 tabnext
 edit src/NoSpaceLeftOnDevice.hs
 argglobal
@@ -648,12 +648,12 @@ setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 21 - ((20 * winheight(0) + 22) / 44)
+let s:l = 25 - ((24 * winheight(0) + 22) / 44)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 21
-normal! 0
+keepjumps 25
+normal! 038|
 tabnext
 edit notes
 argglobal
@@ -795,7 +795,7 @@ keepjumps exe s:l
 normal! zt
 keepjumps 11
 normal! 030|
-tabnext 1
+tabnext 2
 set stal=1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0
   silent exe 'bwipe ' . s:wipebuf

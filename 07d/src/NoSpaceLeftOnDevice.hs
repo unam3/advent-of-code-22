@@ -1,28 +1,30 @@
 module NoSpaceLeftOnDevice where
 
+import qualified Data.List.NonEmpty as NEL
 
-type Name = String
+type AbsolutePath = [String]
 
 type Size = Int
 
---data FSEntity = Dir Name DirContent | File Name Size
+data FSEntity = Dir [AbsolutePath] | File Size
 
---data FSEntity1 = Dir DirContent | File Int | NotYetFilled
--- type AbsolutePath = [String]
--- type FS = Map AbsolutePath FSEntity1
+type DirContent = [FSEntity]
 
-data FSEntity = Dir Name | File Name Size
+type FS = Map AbsolutePath FSEntity
 
-type DirContent = [FSEntities]
 
-type ParsingState = (AbsolutePath, DirContent)
+type ParsingState = (AbsolutePath, DirContent, FS)
 
 -- currently parsing block:
 --  cd
 --  ls output
 
 --parse :: ParsingState -> String -> ParsingState
-parse (absolutePath, directoryContent) ('$':' ':'c':'d':' ':path) = 
+parse (absolutePath, directoryContent, ) ('$':' ':'c':'d':' ':path) =
+    case path of
+        "/" -> (["/"], directoryContent)
+        ".." -> (NEL.tail absolutePath, directoryContent)
+        dirName ->  (NEL.:|) dirName absolutePath , directoryContent)
 parse (absolutePath, directoryContent) ('d':'i':'r':' ':name) = dirName
 parse (absolutePath, directoryContent) fileString = words -- give us [lengthS, name]
 
