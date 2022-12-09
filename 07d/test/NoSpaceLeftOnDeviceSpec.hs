@@ -1,5 +1,7 @@
 module NoSpaceLeftOnDeviceSpec where 
 
+import qualified Data.List.NonEmpty as NEL
+import Data.Map.Strict (empty)
 import Test.Hspec (Spec, describe, it, runIO, shouldBe)
 
 import NoSpaceLeftOnDevice
@@ -10,14 +12,16 @@ spec = do
 
     --input <- runIO $ readFile "input.txt"
 
-    describe "parseInput" $ do
-        it "works"
-            $ shouldBe
-                (parseInput testInput)
-                "42"
+    let initialParsingState = (NEL.fromList ["/"], [], empty)
 
-    describe "f" $ do
-        it "works"
+    describe "parse" $ do
+        it "works for consecutive \"cd /\""
             $ shouldBe
-                42
-                42
+                (parse ["$ cd /", "$ cd /"])
+                initialParsingState
+
+    --describe "f" $ do
+    --    it "works"
+    --        $ shouldBe
+    --            42
+    --            42

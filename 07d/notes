@@ -1,6 +1,7 @@
 P1.
 
 Implement parseInput.
+After if we go into `cd` command and directoryContent is not empty — we should assign that content to path in fs.
 
 Find all of the directories with a total size of at most 100000.
 
