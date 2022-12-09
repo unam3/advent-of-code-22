@@ -2,7 +2,7 @@ module NoSpaceLeftOnDevice where
 
 import qualified Data.List as List (foldl')
 import qualified Data.List.NonEmpty as NEL
-import Data.Map.Strict (Map, singleton, insert, null)
+import Data.Map.Strict (Map, foldlWithKey', insert, null, singleton)
 
 
 type AbsolutePath = NEL.NonEmpty String
@@ -83,3 +83,10 @@ parseInput =
         -- removing all this lines because they're no use
         . filter (/= "$ ls")
         . lines
+
+
+addSizeIfHasPath :: AbsolutePath -> Int -> AbsolutePath -> FSEntity -> Int
+addSizeIfHasPath dirAbsolutePath totalSize k fsentity = 0
+
+getDirectorySize :: AbsolutePath -> FS -> Int
+getDirectorySize dirAbsolutePath = foldlWithKey' (addSizeIfHasPath dirAbsolutePath) 0

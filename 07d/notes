@@ -16,3 +16,6 @@ Remarks about input.txt:
 - no consecutive ls calls: /ls\n\$ ls
 
 Could we go into same dir in cd and get ls of it second time in input.txt?
+
+Need to implement function that will get directory size.
+How can we compare suffixes of AbsolutePaths?
