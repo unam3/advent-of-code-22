@@ -7,8 +7,8 @@ type Height = Int
 
 
 
-parseY :: String -> [(Int, Height)]
-parseY = zip [1..] . fmap read
+parseY :: Int -> String -> [((Int, Int), Height)]
+parseY x = zip (fmap (\ y -> (x, y)) [1..]) . fmap ((read :: String -> Int) . (:[]))
 
 --parseInput :: String -> Map Coords Height
 --parseInput =
