@@ -1,24 +1,28 @@
 module TreetopTreeHouseSpec where 
 
-import Data.Map.Strict (empty)
+import Data.Map.Strict (fromList)
 import Test.Hspec (Spec, describe, it, runIO, shouldBe)
 
 import TreetopTreeHouse
 
 spec :: Spec
 spec = do
-    describe "parseY" $ do
+    describe "parseX" $ do
         it "works"
             $ shouldBe
-                (parseY 1 "345")
-                [((1, 1), 3), ((1, 2), 4), ((1, 3), 5)]
+                (parseX 1 "345")
+                [((1, 1), 3), ((2, 1), 4), ((3, 1), 5)]
+
+    describe "parseInput" $ do
+        it "works"
+            $ shouldBe
+                (parseInput "345\n789")
+                $ fromList [
+                    ((1, 1), 3), ((2, 1), 4), ((3, 1), 5),
+                    ((1, 2), 7), ((2, 2), 8), ((3, 2), 9)
+                ]
 
     --testInput <- runIO $ readFile "testInput"
 
     --input <- runIO $ readFile "input.txt"
 
-    --describe "parseInput" $ do
-    --    it "works"
-    --        $ shouldBe
-    --            (parseInput testInput)
-    --            empty
