@@ -30,5 +30,11 @@ spec = do
                 (countTreesAroundEdge $ parseInput testInput)
                 16
 
+    describe "findInteriorVisibleTrees" $ do
+        it "works for testInput"
+            $ shouldBe
+                (findInteriorVisibleTrees $ parseInput testInput)
+                21
+
     --input <- runIO $ readFile "input.txt"
 
