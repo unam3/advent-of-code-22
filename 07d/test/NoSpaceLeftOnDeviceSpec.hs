@@ -138,3 +138,13 @@ spec = do
                 )
                 8381165
                 
+    describe "solveSecondPart" $ do
+        it "works for testInput"
+            $ shouldBe
+                (solveSecondPart testInput)
+                24933642
+                
+        it "works for input.txt"
+            $ shouldBe
+                (solveSecondPart input)
+                5649896

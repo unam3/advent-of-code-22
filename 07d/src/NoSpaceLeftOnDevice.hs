@@ -123,10 +123,13 @@ spaceToFreeUp :: Int -> Int
 spaceToFreeUp = (`subtract` requiredSpace)
 
 
---solveFirstPart :: String -> Int
---solveFirstPart = 
---    (\ (_, _, fs) ->
---            filter (<= 30000000)
---            (getDirectorySize fs
---                <$> getAllDirectories fs)
---    ) . parseInput
+solveSecondPart :: String -> Int
+solveSecondPart = 
+    (\ (_, _, fs) ->
+            let requiredSpaceForUpdate = spaceToFreeUp $ getUnusedSpace fs
+            in minimum
+                $ filter
+                    (>= requiredSpaceForUpdate)
+                    (getDirectorySize fs
+                        <$> getAllDirectories fs)
+    ) . parseInput
