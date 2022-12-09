@@ -107,3 +107,18 @@ solveFirstPart =
             (getDirectorySize fs
                 <$> getAllDirectories fs)
     ) . parseInput
+
+
+totalFSSize :: Int
+totalFSSize = 70000000
+
+getUnusedSpace :: FS -> Int
+getUnusedSpace fs = subtract (getDirectorySize fs $ NEL.fromList ["/"]) totalFSSize
+
+--solveFirstPart :: String -> Int
+--solveFirstPart = 
+--    (\ (_, _, fs) ->
+--            filter (<= 30000000)
+--            (getDirectorySize fs
+--                <$> getAllDirectories fs)
+--    ) . parseInput

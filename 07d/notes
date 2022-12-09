@@ -27,3 +27,17 @@ How can we compare suffixes of AbsolutePaths?
 ----
 - We can rid of NonEmpty list because it is no use.
 - We can store reversed AbsolutePath in the form of ["\", "pluh"].
+
+
+Part 2.
+Find the smallest directory that, if deleted, would free up enough space on the filesystem to run the update.
+What is the total size of that directory?
+
+1. Find out size of unused space: totalFSSize - (getDirectorySize "/").
+2. Find out how much space we need to free: requiredSpace - unusedSpace.
+3. Modify solveFirstPart: set filter condition to spaceToFreeUp.
+4. Run maximum on (3).
+
+
+totalFSSize =   70000000
+requiredSpace = 30000000

@@ -120,3 +120,12 @@ spec = do
             $ shouldBe
                 (solveFirstPart input)
                 1077191
+
+    describe "getUnusedSpace" $ do
+        it "works for testInput"
+            $ shouldBe
+                ((\ (_, _, fs) -> getUnusedSpace fs)
+                    $ parseInput testInput
+                )
+                21618835
+                
