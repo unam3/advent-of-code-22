@@ -17,10 +17,13 @@ Remarks about input.txt:
 
 Could we go into same dir in cd and get ls of it second time in input.txt?
 
-Need to implement function that will get directory size.
++ Need to implement function that will get directory size.
 How can we compare suffixes of AbsolutePaths?
 + use reverse and isPrefixOf.
 - Change NonEmpty lists to regular one and use isSuffixOf.
 
+- Get all directories size and filter them out.
+
+----
 - We can rid of NonEmpty list because it is no use.
 - We can store reversed AbsolutePath in the form of ["\", "pluh"].

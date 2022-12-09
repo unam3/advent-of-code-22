@@ -104,3 +104,9 @@ spec = do
                 ((\ (_, _, fs) -> getDirectorySize (NEL.fromList ["/"]) fs) $ parseInput testInput)
                 48381165
                 
+    describe "getAllDirectories" $ do
+        it "works for testInput"
+            $ shouldBe
+                ((\ (_, _, fs) -> getAllDirectories fs) $ parseInput testInput)
+                ["/" :| [],"a" :| ["/"],"d" :| ["/"],"e" :| ["a","/"]]
+                

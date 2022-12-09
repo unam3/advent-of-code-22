@@ -95,3 +95,6 @@ addSizeIfHasPath dirAbsolutePath totalSize k fsEntity =
 
 getDirectorySize :: AbsolutePath -> FS -> Int
 getDirectorySize dirAbsolutePath = foldlWithKey' (addSizeIfHasPath (reverse $ NEL.toList dirAbsolutePath)) 0
+
+getAllDirectories :: FS -> [AbsolutePath]
+getAllDirectories = foldlWithKey' (\ acc k v -> if v == Directory then acc ++ [k] else acc) []
