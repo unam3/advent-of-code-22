@@ -22,7 +22,13 @@ spec = do
                     ((1, 2), 7), ((2, 2), 8), ((3, 2), 9)
                 ]
 
-    --testInput <- runIO $ readFile "testInput"
+    testInput <- runIO $ readFile "testInput"
+
+    describe "countTreesAroundEdge" $ do
+        it "works for testInput"
+            $ shouldBe
+                (countTreesAroundEdge $ parseInput testInput)
+                16
 
     --input <- runIO $ readFile "input.txt"
 
