@@ -1,6 +1,7 @@
 module NoSpaceLeftOnDeviceSpec where 
 
 import qualified Data.List.NonEmpty as NEL
+import Data.List.NonEmpty ( NonEmpty( (:|) ) )
 import Data.Map.Strict (fromList, singleton)
 import Test.Hspec (Spec, describe, it, runIO, shouldBe)
 
@@ -53,13 +54,29 @@ spec = do
                 
         it "works for consecutive ls-output directories lines (dir pluh)"
             $ shouldBe
-                ((\(_, directoryContent, _) -> directoryContent) $ parse ["dir a", "dir b"])
-                [("a", Directory), ("b", Directory)]
+                (parse ["dir a", "dir b"])
+                (
+                    NEL.fromList ["/"],
+                    [],
+                    fromList [
+                        (NEL.fromList ["/"], Directory),
+                        (NEL.fromList ["a", "/"], Directory),
+                        (NEL.fromList ["b", "/"], Directory)
+                    ]
+                )
                 
         it "works for consecutive ls-output if files lines (123 pluh)"
             $ shouldBe
-                ((\(_, directoryContent, _) -> directoryContent) $ parse ["123 a", "321 b"])
-                [("a", File 123), ("b", File 321)]
+                (parse ["123 a", "321 b"])
+                (
+                    NEL.fromList ["/"],
+                    [],
+                    fromList [
+                        (NEL.fromList ["/"], Directory),
+                        (NEL.fromList ["a", "/"], File 123),
+                        (NEL.fromList ["b", "/"], File 321)
+                    ]
+                )
                 
         it "updates fs after ls-ouput block"
             $ shouldBe
@@ -75,8 +92,8 @@ spec = do
                 )
                 
 
-    --describe "f" $ do
-    --    it "works"
-    --        $ shouldBe
-    --            42
-    --            42
+    describe "parseInput" $ do
+        it "works for testInput (checked by hand)"
+            $ shouldBe
+                (parseInput testInput)
+                ("d" :| ["/"],[],fromList [("/" :| [],Directory),("a" :| ["/"],Directory),("b.txt" :| ["/"],File 14848514),("c.dat" :| ["/"],File 8504156),("d" :| ["/"],Directory),("d.ext" :| ["d","/"],File 5626152),("d.log" :| ["d","/"],File 8033020),("e" :| ["a","/"],Directory),("f" :| ["a","/"],File 29116),("g" :| ["a","/"],File 2557),("h.lst" :| ["a","/"],File 62596),("i" :| ["e","a","/"],File 584),("j" :| ["d","/"],File 4060174),("k" :| ["d","/"],File 7214296)])

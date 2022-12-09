@@ -4,6 +4,7 @@ Implement parseInput.
 After if we go into `cd` command and directoryContent is not empty — we should assign that content to path in fs.
 How to store directories and files in FS map?
 For files we can store just size. For directories we could just store list of directories and files names.
+What about last ls-block from testInput which does not have cd after it, so directory content will never be assigned?  Run processTempDirectoryContent in parse.
 
 Find all of the directories with a total size of at most 100000.
 

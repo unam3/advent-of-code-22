@@ -70,10 +70,14 @@ initialParsingState :: ParsingState
 initialParsingState = (NEL.fromList ["/"], [], singleton (NEL.fromList ["/"]) Directory)
 
 parse :: [String] -> ParsingState
-parse = List.foldl' parse' initialParsingState
+parse input =
+    let parsingState@(absolutePath, directoryContent, fs) = List.foldl' parse' initialParsingState input
+        -- if ls-block will be last we must add tempDirectoryContent to fs by hand
+        (tempDirectoryContent', fs') = processTempDirectoryContent parsingState
+    in (absolutePath, tempDirectoryContent', fs')
 
 
-parseInput :: String -> ParsingState --FSEntity
+parseInput :: String -> ParsingState
 parseInput =
     parse
         -- removing all this lines because they're no use
