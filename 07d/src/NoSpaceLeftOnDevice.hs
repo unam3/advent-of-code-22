@@ -31,7 +31,7 @@ parse' (absolutePath, directoryContent, fs) ('$':' ':'c':'d':' ':path) =
         
         "/" -> (NEL.fromList ["/"], directoryContent, fs)
 
-        --".." -> undefined --(NEL.tail absolutePath, directoryContent, fs)
+        ".." -> (NEL.fromList $ NEL.tail absolutePath, directoryContent, fs)
         
         dirName -> (NEL.cons dirName absolutePath, directoryContent, fs)
 
