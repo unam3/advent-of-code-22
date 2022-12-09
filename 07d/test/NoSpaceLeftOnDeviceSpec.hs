@@ -97,3 +97,10 @@ spec = do
             $ shouldBe
                 (parseInput testInput)
                 ("d" :| ["/"],[],fromList [("/" :| [],Directory),("a" :| ["/"],Directory),("b.txt" :| ["/"],File 14848514),("c.dat" :| ["/"],File 8504156),("d" :| ["/"],Directory),("d.ext" :| ["d","/"],File 5626152),("d.log" :| ["d","/"],File 8033020),("e" :| ["a","/"],Directory),("f" :| ["a","/"],File 29116),("g" :| ["a","/"],File 2557),("h.lst" :| ["a","/"],File 62596),("i" :| ["e","a","/"],File 584),("j" :| ["d","/"],File 4060174),("k" :| ["d","/"],File 7214296)])
+
+    describe "getDirectorySize" $ do
+        it "works for testInput \"/\""
+            $ shouldBe
+                ((\ (_, _, fs) -> getDirectorySize (NEL.fromList ["/"]) fs) $ parseInput testInput)
+                48381165
+                

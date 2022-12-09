@@ -85,8 +85,13 @@ parseInput =
         . lines
 
 
-addSizeIfHasPath :: AbsolutePath -> Int -> AbsolutePath -> FSEntity -> Int
-addSizeIfHasPath dirAbsolutePath totalSize k fsentity = 0
+addSizeIfHasPath :: [String] -> Int -> AbsolutePath -> FSEntity -> Int
+addSizeIfHasPath dirAbsolutePath totalSize k fsEntity =
+    if NEL.isPrefixOf dirAbsolutePath $ NEL.reverse k
+    then case fsEntity of
+        Directory -> totalSize
+        File size -> totalSize + size
+    else totalSize
 
 getDirectorySize :: AbsolutePath -> FS -> Int
-getDirectorySize dirAbsolutePath = foldlWithKey' (addSizeIfHasPath dirAbsolutePath) 0
+getDirectorySize dirAbsolutePath = foldlWithKey' (addSizeIfHasPath (reverse $ NEL.toList dirAbsolutePath)) 0
