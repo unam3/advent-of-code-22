@@ -11,7 +11,7 @@ spec :: Spec
 spec = do
     testInput <- runIO $ readFile "testInput"
 
-    --input <- runIO $ readFile "input.txt"
+    input <- runIO $ readFile "input.txt"
 
     describe "processTempDirectoryContent" $ do
         it "works"
@@ -101,7 +101,7 @@ spec = do
     describe "getDirectorySize" $ do
         it "works for testInput \"/\""
             $ shouldBe
-                ((\ (_, _, fs) -> getDirectorySize (NEL.fromList ["/"]) fs) $ parseInput testInput)
+                ((\ (_, _, fs) -> getDirectorySize fs (NEL.fromList ["/"])) $ parseInput testInput)
                 48381165
                 
     describe "getAllDirectories" $ do
@@ -109,4 +109,14 @@ spec = do
             $ shouldBe
                 ((\ (_, _, fs) -> getAllDirectories fs) $ parseInput testInput)
                 ["/" :| [],"a" :| ["/"],"d" :| ["/"],"e" :| ["a","/"]]
+
+    describe "solveFirstPart" $ do
+        it "works for testInput"
+            $ shouldBe
+                (solveFirstPart testInput)
+                95437
                 
+        it "works for input.txt"
+            $ shouldBe
+                (solveFirstPart input)
+                1077191

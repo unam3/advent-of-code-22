@@ -93,8 +93,17 @@ addSizeIfHasPath dirAbsolutePath totalSize k fsEntity =
         File size -> totalSize + size
     else totalSize
 
-getDirectorySize :: AbsolutePath -> FS -> Int
-getDirectorySize dirAbsolutePath = foldlWithKey' (addSizeIfHasPath (reverse $ NEL.toList dirAbsolutePath)) 0
+getDirectorySize :: FS -> AbsolutePath -> Int
+getDirectorySize fs dirAbsolutePath = foldlWithKey' (addSizeIfHasPath (reverse $ NEL.toList dirAbsolutePath)) 0 fs
 
 getAllDirectories :: FS -> [AbsolutePath]
 getAllDirectories = foldlWithKey' (\ acc k v -> if v == Directory then acc ++ [k] else acc) []
+
+solveFirstPart :: String -> Int
+solveFirstPart = 
+    (\ (_, _, fs) ->
+        sum
+            $ filter (<= 100000)
+            $ fmap (getDirectorySize fs)
+            $ getAllDirectories fs
+    ) . parseInput
