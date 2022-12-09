@@ -129,3 +129,12 @@ spec = do
                 )
                 21618835
                 
+    describe "spaceToFreeUp" $ do
+        it "works for testInput"
+            $ shouldBe
+                (spaceToFreeUp
+                    $ (\ (_, _, fs) -> getUnusedSpace fs)
+                    $ parseInput testInput
+                )
+                8381165
+                

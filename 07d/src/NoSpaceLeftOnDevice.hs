@@ -115,6 +115,14 @@ totalFSSize = 70000000
 getUnusedSpace :: FS -> Int
 getUnusedSpace fs = subtract (getDirectorySize fs $ NEL.fromList ["/"]) totalFSSize
 
+
+requiredSpace :: Int
+requiredSpace = 30000000
+
+spaceToFreeUp :: Int -> Int
+spaceToFreeUp = (`subtract` requiredSpace)
+
+
 --solveFirstPart :: String -> Int
 --solveFirstPart = 
 --    (\ (_, _, fs) ->
