@@ -18,12 +18,12 @@ spec = do
             $ shouldBe
                 (processTempDirectoryContent
                     (
-                        (NEL.fromList ["/"]),
+                        NEL.fromList ["/"],
                         [
                             ("a", File 123),
                             ("pluh", Directory)
                         ],
-                        (singleton (NEL.fromList ["/"]) Directory)
+                        singleton (NEL.fromList ["/"]) Directory
                     )
                 )
                 (

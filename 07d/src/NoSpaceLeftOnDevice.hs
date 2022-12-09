@@ -104,6 +104,6 @@ solveFirstPart =
     (\ (_, _, fs) ->
         sum
             $ filter (<= 100000)
-            $ fmap (getDirectorySize fs)
-            $ getAllDirectories fs
+            (getDirectorySize fs
+                <$> getAllDirectories fs)
     ) . parseInput
