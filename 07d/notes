@@ -2,6 +2,8 @@ P1.
 
 Implement parseInput.
 After if we go into `cd` command and directoryContent is not empty — we should assign that content to path in fs.
+How to store directories and files in FS map?
+For files we can store just size. For directories we could just store list of directories and files names.
 
 Find all of the directories with a total size of at most 100000.
 

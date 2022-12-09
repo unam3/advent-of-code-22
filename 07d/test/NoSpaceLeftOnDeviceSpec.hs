@@ -1,7 +1,7 @@
 module NoSpaceLeftOnDeviceSpec where 
 
 import qualified Data.List.NonEmpty as NEL
-import Data.Map.Strict (empty)
+import Data.Map.Strict (fromList, singleton)
 import Test.Hspec (Spec, describe, it, runIO, shouldBe)
 
 import NoSpaceLeftOnDevice
@@ -12,7 +12,28 @@ spec = do
 
     --input <- runIO $ readFile "input.txt"
 
-    let initialParsingState = (NEL.fromList ["/"], [], empty)
+    describe "processTempDirectoryContent" $ do
+        it "works"
+            $ shouldBe
+                (processTempDirectoryContent
+                    (
+                        (NEL.fromList ["/"]),
+                        [
+                            ("a", File 123),
+                            ("pluh", Directory)
+                        ],
+                        (singleton (NEL.fromList ["/"]) Directory)
+                    )
+                )
+                (
+                    [],
+                    fromList [
+                        (NEL.fromList ["/"], Directory),
+                        (NEL.fromList ["a", "/"], File 123),
+                        (NEL.fromList ["pluh", "/"], Directory)
+                    ]
+                )
+                
 
     describe "parse" $ do
         it "works for consecutive \"cd /\""
@@ -29,6 +50,29 @@ spec = do
             $ shouldBe
                 ((\(absolutePath, _, _) -> absolutePath) $ parse ["$ cd pluh", "$ cd meh", "$ cd ..", "$ cd .."])
                 (NEL.fromList ["/"])
+                
+        it "works for consecutive ls-output directories lines (dir pluh)"
+            $ shouldBe
+                ((\(_, directoryContent, _) -> directoryContent) $ parse ["dir a", "dir b"])
+                [("a", Directory), ("b", Directory)]
+                
+        it "works for consecutive ls-output if files lines (123 pluh)"
+            $ shouldBe
+                ((\(_, directoryContent, _) -> directoryContent) $ parse ["123 a", "321 b"])
+                [("a", File 123), ("b", File 321)]
+                
+        it "updates fs after ls-ouput block"
+            $ shouldBe
+                (parse ["123 a", "dir pluh", "$ cd pluh"])
+                (
+                    NEL.fromList ["pluh", "/"],
+                    [],
+                    fromList [
+                        (NEL.fromList ["/"], Directory),
+                        (NEL.fromList ["a", "/"], File 123),
+                        (NEL.fromList ["pluh", "/"], Directory)
+                    ]
+                )
                 
 
     --describe "f" $ do
