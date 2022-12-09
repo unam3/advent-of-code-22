@@ -20,6 +20,12 @@ spec = do
                 (parse ["$ cd /", "$ cd /"])
                 initialParsingState
 
+        it "works for directory names \"cd pluh\""
+            $ shouldBe
+                ((\(absolutePath, _, _) -> absolutePath) $ parse ["$ cd pluh", "$ cd meh"])
+                (NEL.fromList ["meh", "pluh", "/"])
+                
+
     --describe "f" $ do
     --    it "works"
     --        $ shouldBe

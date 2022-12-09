@@ -19,20 +19,22 @@ type FS = Map AbsolutePath FSEntity
 
 type ParsingState = (AbsolutePath, DirContent, FS)
 
--- currently parsing block:
---  cd
---  ls output
-
 --addToFS :: DirContent -> FS -> FS
 addToFS directoryContent fs absolutePath = undefined
 
 parse' :: ParsingState -> String -> ParsingState
 parse' (absolutePath, directoryContent, fs) ('$':' ':'c':'d':' ':path) =
+
     let fs' = addToFS directoryContent fs absolutePath
+
     in case path of
+        
         "/" -> (NEL.fromList ["/"], directoryContent, fs)
-        --".." -> (NEL.tail absolutePath, directoryContent, fs)
-        --dirName -> ((NEL.:|) dirName absolutePath, directoryContent, fs)
+
+        --".." -> undefined --(NEL.tail absolutePath, directoryContent, fs)
+        
+        dirName -> (NEL.cons dirName absolutePath, directoryContent, fs)
+
 --parse (absolutePath, directoryContent) ('d':'i':'r':' ':name) = dirName
 --parse (absolutePath, directoryContent) fileString = words -- give us [lengthS, name]
 
