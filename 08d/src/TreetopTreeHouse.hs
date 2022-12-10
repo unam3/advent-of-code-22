@@ -58,6 +58,17 @@ isTreeVisibleFromRight heigtMap (referenceX, referenceY) referenceTreeHeight =
         -- get all the elements height to the right from Coords
         $ filterWithKey (\ (x, y) _ -> referenceX < x && referenceY == y) heigtMap
     
+
+part1Foldl'Params :: ((Int -> Bool -> Int -> Bool), Bool)
+part1Foldl'Params =
+    let foldingFunction =
+            (\ referenceTreeHeight areAllTreesLower treeHeight ->
+                areAllTreesLower && referenceTreeHeight > treeHeight
+            )
+        initialAccValue = True
+    in (foldingFunction, initialAccValue)
+
+
 isTreeVisibleFromTop :: HeightMap -> Coords -> Int -> Bool
 isTreeVisibleFromTop heigtMap (referenceX, referenceY) referenceTreeHeight =
     -- y coordinate should decrease from bottom to top
@@ -111,3 +122,94 @@ countTreesVisibleFromOutside :: HeightMap -> Int
 -- :t :: [HeightMap -> Int]
 --countTreesVisibleFromOutside = sum . fmap [countTreesAroundEdge, findInteriorVisibleTrees]
 countTreesVisibleFromOutside heightMap = sum [countTreesAroundEdge heightMap, findInteriorVisibleTrees heightMap]
+
+
+-- (If a tree is right on the edge, at least one of its viewing distances will be zero.)
+getScenicScoreFromLeft :: HeightMap -> Coords -> Int -> Int
+getScenicScoreFromLeft heigtMap (referenceX, referenceY) referenceTreeHeight =
+    snd .
+        -- x coordinate should be less than right one (reference)
+        L.foldl'
+                (\ (areAllTreesLower, visibleTreeCount) treeHeight ->
+                    -- stop if you reach an edge
+                    -- or at the first tree that is the same height or taller than the tree under consideration.
+                    if areAllTreesLower && referenceTreeHeight > treeHeight
+                    then (True, visibleTreeCount + 1)
+                    else (False, visibleTreeCount)
+                )
+                (True, 0)
+        -- sort them in right order: from right to left
+        . reverse
+        -- get heightmap in ascending order of keys
+        . elems
+        -- get all the elements height to the left from Coords
+        $ filterWithKey (\ (x, y) _ -> referenceX > x && referenceY == y) heigtMap
+
+getScenicScoreFromRight :: HeightMap -> Coords -> Int -> Int
+getScenicScoreFromRight heigtMap (referenceX, referenceY) referenceTreeHeight =
+    snd . 
+        -- x coordinate should decrease from left to right
+        L.foldl'
+                (\ (areAllTreesLower, visibleTreeCount) treeHeight ->
+                    -- stop if you reach an edge
+                    -- or at the first tree that is the same height or taller than the tree under consideration.
+                    if areAllTreesLower && referenceTreeHeight > treeHeight
+                    then (True, visibleTreeCount + 1)
+                    else (False, visibleTreeCount)
+                )
+                (True, 0)
+        -- get heightmap in ascending order of keys
+        . elems
+        -- get all the elements height to the right from Coords
+        $ filterWithKey (\ (x, y) _ -> referenceX < x && referenceY == y) heigtMap
+    
+
+getScenicScoreFromTop :: HeightMap -> Coords -> Int -> Int
+getScenicScoreFromTop heigtMap (referenceX, referenceY) referenceTreeHeight =
+    snd . 
+        -- y coordinate should decrease from bottom to top
+        L.foldl'
+                (\ (areAllTreesLower, visibleTreeCount) treeHeight ->
+                    -- stop if you reach an edge
+                    -- or at the first tree that is the same height or taller than the tree under consideration.
+                    if areAllTreesLower && referenceTreeHeight > treeHeight
+                    then (True, visibleTreeCount + 1)
+                    else (False, visibleTreeCount)
+                )
+                (True, 0)
+        -- sort them in right order: from bottom to top
+        . reverse
+        -- get heightmap in ascending order of keys
+        . elems
+        -- get all the elements height to the top from Coords
+        $ filterWithKey (\ (x, y) _ -> referenceY > y && referenceX == x) heigtMap
+
+getScenicScoreFromBottom :: HeightMap -> Coords -> Int -> Int
+getScenicScoreFromBottom heigtMap (referenceX, referenceY) referenceTreeHeight =
+    snd . 
+        -- y coordinate should decrease from top to bottom
+        L.foldl'
+                (\ (areAllTreesLower, visibleTreeCount) treeHeight ->
+                    -- stop if you reach an edge
+                    -- or at the first tree that is the same height or taller than the tree under consideration.
+                    if areAllTreesLower && referenceTreeHeight > treeHeight
+                    then (True, visibleTreeCount + 1)
+                    else (False, visibleTreeCount)
+                )
+                (True, 0)
+        -- get heightmap in ascending order of keys
+        . elems
+        -- get all the elements height to the top from Coords
+        $ filterWithKey (\ (x, y) _ -> referenceY < y && referenceX == x) heigtMap
+
+getScenicScore :: HeightMap -> Coords -> [Int]
+getScenicScore heightMap coords =
+    let treeHeight = (!) heightMap coords
+    --in product [
+    in [
+        getScenicScoreFromLeft heightMap coords treeHeight
+        , getScenicScoreFromRight heightMap coords treeHeight
+        , getScenicScoreFromTop heightMap coords treeHeight
+        , getScenicScoreFromBottom heightMap coords treeHeight
+    ]
+

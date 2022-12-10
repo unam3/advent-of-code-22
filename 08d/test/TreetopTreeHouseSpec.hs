@@ -109,3 +109,15 @@ spec = do
         --    $ shouldBe
         --        (countTreesVisibleFromOutside $ parseInput input)
         --        1546
+
+    describe "getScenicScore" $ do
+        it "works for testInput: middle 5 in the second row"
+            $ shouldBe
+                (getScenicScore (parseInput testInput) (3, 2))
+                -- 4
+                [1, 2, 1, 2]
+        it "works for testInput: 5 in the middle of the fourth row"
+            $ shouldBe
+                (getScenicScore (parseInput testInput) (3, 4))
+                -- 8
+                [2, 2, 2, 1]

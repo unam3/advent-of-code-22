@@ -11,3 +11,15 @@ How many trees are visible from outside the grid?
 
 3. Implement countTreesVisibleFromOutside
 
+
+Part 2.
+
+Implement getScenicScore.
+
+    - modify isTreeVisibleFrom* to be able to check custom folding function to foldl'? dunno. sounds busy. mb at refactoring stage.
+    see part1Foldl'Params
+
+    + copypaste and modify isTreeVisibleFrom*
+
+What is the highest scenic score possible for any tree?
+
