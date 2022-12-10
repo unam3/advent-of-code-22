@@ -30,6 +30,16 @@ spec = do
                 (countTreesAroundEdge $ parseInput testInput)
                 16
 
+    describe "isTreeVisibleFromLeft" $ do
+        it "all are lower"
+            $ shouldBe
+                (isTreeVisibleFromLeft (fromList [((1, 1), 3), ((2, 1), 4), ((3, 1), 5)]) (3,1) 5)
+                True
+        it ""
+            $ shouldBe
+                (isTreeVisibleFromLeft (fromList [((1, 1), 4), ((2, 1), 4), ((3, 1), 5)]) (3,1) 5)
+                False
+
     describe "findInteriorVisibleTrees" $ do
         it "works for testInput"
             $ shouldBe

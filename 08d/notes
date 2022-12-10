@@ -7,3 +7,5 @@ How many trees are visible from outside the grid?
     countTreesAroundEdge
 2. Considor interior trees.
     findInteriorVisibleTrees
+- simple brute force
+

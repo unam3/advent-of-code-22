@@ -1,7 +1,7 @@
 module TreetopTreeHouse where
 
-import Data.List (foldl')
-import Data.Map.Strict (Map, (!), foldlWithKey', fromList)
+import qualified Data.List as L
+import Data.Map.Strict (Map, (!), elems, filterWithKey, foldl', foldlWithKey', fromList)
 
 type Coords = (Int, Int)
 type Height = Int
@@ -31,20 +31,34 @@ countTreesAroundEdge =
 
 
 isTreeVisibleFromLeft :: HeightMap -> Coords -> Int -> Bool
-isTreeVisibleFromLeft heigtmap coords treeHeight = False
-    -- x coordinate should decrease to minCoord
+isTreeVisibleFromLeft heigtMap (referenceX, _) referenceTreeHeight =
+    -- x coordinate should decrease from right to left
+    fst .
+        L.foldl'
+            (\ (areAllTreesLower, referenceTreeHeight') treeHeight ->
+                (areAllTreesLower && referenceTreeHeight' > treeHeight, treeHeight)
+            )
+            (True, referenceTreeHeight)
+        -- sort them in right order: from right to left
+        . reverse . elems
+        -- get all the elements height to the left from Coords
+        $ filterWithKey (\ (x, _) _ -> referenceX > x) heigtMap
+    
 
 isInteriorTreeVisible :: HeightMap -> Coords -> Bool
--- consecutive search: left, up, right and down
 isInteriorTreeVisible heightMap coords =
     let treeHeight = (!) heightMap coords
+    -- consecutive search: left, up, right and down
     in isTreeVisibleFromLeft heightMap coords treeHeight
+
+
 
 -- A tree is visible if all of the other trees between it and an edge of the grid are shorter than it
 findInteriorVisibleTrees :: HeightMap -> Int
 findInteriorVisibleTrees heightMap =
+    -- to exclude tree from the edges
     let minCoord = 2
         maxCoord = subtract 1
             $ foldlWithKey' findMaxX 2 heightMap
         interiorTreeCoords = concatMap (\ y -> zip [minCoord..maxCoord] (repeat y)) [minCoord..maxCoord]
-    in foldl' isInteriorTreeVisible 0 interiorTreeCoords
+    in length $ filter (isInteriorTreeVisible heightMap) interiorTreeCoords
