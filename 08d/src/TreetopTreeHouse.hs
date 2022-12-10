@@ -1,7 +1,7 @@
 module TreetopTreeHouse where
 
 import qualified Data.List as L
-import Data.Map.Strict (Map, (!), elems, filterWithKey, foldl', foldlWithKey', fromList)
+import Data.Map.Strict (Map, (!), elems, filterWithKey, foldlWithKey', fromList)
 
 type Coords = (Int, Int)
 type Height = Int
@@ -40,16 +40,34 @@ isTreeVisibleFromLeft heigtMap (referenceX, _) referenceTreeHeight =
             )
             (True, referenceTreeHeight)
         -- sort them in right order: from right to left
-        . reverse . elems
+        . reverse
+        -- get heightmap in ascending order of keys
+        . elems
         -- get all the elements height to the left from Coords
         $ filterWithKey (\ (x, _) _ -> referenceX > x) heigtMap
+    
+isTreeVisibleFromRight :: HeightMap -> Coords -> Int -> Bool
+isTreeVisibleFromRight heigtMap (referenceX, _) referenceTreeHeight =
+    -- x coordinate should decrease from left to right
+    fst .
+        L.foldl'
+            (\ (areAllTreesLower, referenceTreeHeight') treeHeight ->
+                (areAllTreesLower && referenceTreeHeight' > treeHeight, treeHeight)
+            )
+            (True, referenceTreeHeight)
+        -- get heightmap in ascending order of keys
+        . elems
+        -- get all the elements height to the right from Coords
+        $ filterWithKey (\ (x, _) _ -> referenceX < x) heigtMap
     
 
 isInteriorTreeVisible :: HeightMap -> Coords -> Bool
 isInteriorTreeVisible heightMap coords =
     let treeHeight = (!) heightMap coords
     -- consecutive search: left, up, right and down
-    in isTreeVisibleFromLeft heightMap coords treeHeight
+    in if isTreeVisibleFromLeft heightMap coords treeHeight
+    then True
+    else isTreeVisibleFromRight heightMap coords treeHeight
 
 
 

@@ -40,6 +40,16 @@ spec = do
                 (isTreeVisibleFromLeft (fromList [((1, 1), 4), ((2, 1), 4), ((3, 1), 5)]) (3,1) 5)
                 False
 
+    describe "isTreeVisibleFromRight" $ do
+        it "all are lower"
+            $ shouldBe
+                (isTreeVisibleFromRight (fromList [((1, 1), 5), ((2, 1), 4), ((3, 1), 2)]) (1,1) 5)
+                True
+        it ""
+            $ shouldBe
+                (isTreeVisibleFromRight (fromList [((1, 1), 4), ((2, 1), 4), ((3, 1), 1)]) (1,1) 4)
+                False
+
     describe "findInteriorVisibleTrees" $ do
         it "works for testInput"
             $ shouldBe
