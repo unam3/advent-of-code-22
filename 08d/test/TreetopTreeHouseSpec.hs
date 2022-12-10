@@ -35,10 +35,16 @@ spec = do
             $ shouldBe
                 (isTreeVisibleFromLeft (fromList [((1, 1), 3), ((2, 1), 4), ((3, 1), 5)]) (3,1) 5)
                 True
+
         it ""
             $ shouldBe
-                (isTreeVisibleFromLeft (fromList [((1, 1), 4), ((2, 1), 4), ((3, 1), 5)]) (3,1) 5)
+                (isTreeVisibleFromLeft (fromList [((1, 1), 5), ((2, 1), 4), ((3, 1), 5)]) (3,1) 5)
                 False
+
+        it "works for testInput top-left 5"
+            $ shouldBe
+                (isTreeVisibleFromLeft (parseInput testInput) (2,2) 5)
+                True
 
     describe "isTreeVisibleFromRight" $ do
         it "all are lower"
@@ -71,11 +77,25 @@ spec = do
                 False
 
 
+    describe "isInteriorTreeVisible" $ do
+        it "works for testInput top-left 5 (visible from left and top)"
+            $ shouldBe
+                (isInteriorTreeVisible (parseInput testInput) (2, 2))
+                True
+        it "works for testInput left-middle 5 (visible from the right)"
+            $ shouldBe
+                (isInteriorTreeVisible (parseInput testInput) (2, 3))
+                True
+        it "works for testInput bottom-middle 5 (visible from the bottom)"
+            $ shouldBe
+                (isInteriorTreeVisible (parseInput testInput) (3, 4))
+                True
+
     describe "findInteriorVisibleTrees" $ do
         it "works for testInput"
             $ shouldBe
                 (findInteriorVisibleTrees $ parseInput testInput)
-                21
+                5
 
     --input <- runIO $ readFile "input.txt"
 

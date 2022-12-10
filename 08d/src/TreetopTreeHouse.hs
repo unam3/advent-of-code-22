@@ -31,64 +31,60 @@ countTreesAroundEdge =
 
 
 isTreeVisibleFromLeft :: HeightMap -> Coords -> Int -> Bool
-isTreeVisibleFromLeft heigtMap (referenceX, _) referenceTreeHeight =
-    -- x coordinate should decrease from right to left
-    fst .
-        L.foldl'
-            (\ (areAllTreesLower, referenceTreeHeight') treeHeight ->
-                (areAllTreesLower && referenceTreeHeight' > treeHeight, treeHeight)
+isTreeVisibleFromLeft heigtMap (referenceX, referenceY) referenceTreeHeight =
+    -- x coordinate should be shorter than right one (reference)
+    L.foldl'
+            (\ areAllTreesLower treeHeight ->
+                areAllTreesLower && referenceTreeHeight > treeHeight
             )
-            (True, referenceTreeHeight)
+            True
         -- sort them in right order: from right to left
         . reverse
         -- get heightmap in ascending order of keys
         . elems
         -- get all the elements height to the left from Coords
-        $ filterWithKey (\ (x, _) _ -> referenceX > x) heigtMap
+        $ filterWithKey (\ (x, y) _ -> referenceX > x && referenceY == y) heigtMap
     
 isTreeVisibleFromRight :: HeightMap -> Coords -> Int -> Bool
-isTreeVisibleFromRight heigtMap (referenceX, _) referenceTreeHeight =
+isTreeVisibleFromRight heigtMap (referenceX, referenceY) referenceTreeHeight =
     -- x coordinate should decrease from left to right
-    fst .
-        L.foldl'
-            (\ (areAllTreesLower, referenceTreeHeight') treeHeight ->
-                (areAllTreesLower && referenceTreeHeight' > treeHeight, treeHeight)
+    L.foldl'
+            (\ areAllTreesLower treeHeight ->
+                areAllTreesLower && referenceTreeHeight > treeHeight
             )
-            (True, referenceTreeHeight)
+            True
         -- get heightmap in ascending order of keys
         . elems
         -- get all the elements height to the right from Coords
-        $ filterWithKey (\ (x, _) _ -> referenceX < x) heigtMap
+        $ filterWithKey (\ (x, y) _ -> referenceX < x && referenceY == y) heigtMap
     
 isTreeVisibleFromTop :: HeightMap -> Coords -> Int -> Bool
-isTreeVisibleFromTop heigtMap (_, referenceY) referenceTreeHeight =
+isTreeVisibleFromTop heigtMap (referenceX, referenceY) referenceTreeHeight =
     -- y coordinate should decrease from bottom to top
-    fst .
-        L.foldl'
-            (\ (areAllTreesLower, referenceTreeHeight') treeHeight ->
-                (areAllTreesLower && referenceTreeHeight' > treeHeight, treeHeight)
+    L.foldl'
+            (\ areAllTreesLower treeHeight ->
+                areAllTreesLower && referenceTreeHeight > treeHeight
             )
-            (True, referenceTreeHeight)
+            True
         -- sort them in right order: from bottom to top
         . reverse
         -- get heightmap in ascending order of keys
         . elems
         -- get all the elements height to the top from Coords
-        $ filterWithKey (\ (_, y) _ -> referenceY > y) heigtMap
+        $ filterWithKey (\ (x, y) _ -> referenceY > y && referenceX == x) heigtMap
 
 isTreeVisibleFromBottom :: HeightMap -> Coords -> Int -> Bool
-isTreeVisibleFromBottom heigtMap (_, referenceY) referenceTreeHeight =
+isTreeVisibleFromBottom heigtMap (referenceX, referenceY) referenceTreeHeight =
     -- y coordinate should decrease from top to bottom
-    fst .
-        L.foldl'
-            (\ (areAllTreesLower, referenceTreeHeight') treeHeight ->
-                (areAllTreesLower && referenceTreeHeight' > treeHeight, treeHeight)
+    L.foldl'
+            (\ areAllTreesLower treeHeight ->
+                areAllTreesLower && referenceTreeHeight > treeHeight
             )
-            (True, referenceTreeHeight)
+            True
         -- get heightmap in ascending order of keys
         . elems
         -- get all the elements height to the top from Coords
-        $ filterWithKey (\ (_, y) _ -> referenceY < y) heigtMap
+        $ filterWithKey (\ (x, y) _ -> referenceY < y && referenceX == x) heigtMap
 
 isInteriorTreeVisible :: HeightMap -> Coords -> Bool
 isInteriorTreeVisible heightMap coords =
