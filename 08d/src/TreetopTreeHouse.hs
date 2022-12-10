@@ -108,3 +108,9 @@ findInteriorVisibleTrees heightMap =
             $ foldlWithKey' findMaxX 2 heightMap
         interiorTreeCoords = concatMap (\ y -> zip [minCoord..maxCoord] (repeat y)) [minCoord..maxCoord]
     in length $ filter (isInteriorTreeVisible heightMap) interiorTreeCoords
+
+countTreesVisibleFromOutside :: HeightMap -> Int
+-- how we use point-free here? Applicative?
+-- :t :: [HeightMap -> Int]
+--countTreesVisibleFromOutside = sum . fmap [countTreesAroundEdge, findInteriorVisibleTrees]
+countTreesVisibleFromOutside heightMap = sum $ [countTreesAroundEdge heightMap, findInteriorVisibleTrees heightMap]

@@ -99,3 +99,10 @@ spec = do
 
     --input <- runIO $ readFile "input.txt"
 
+    describe "countTreesVisibleFromOutside" $ do
+        it "works for testInput"
+            $ shouldBe
+                (countTreesVisibleFromOutside $ parseInput testInput)
+                21
+    
+
