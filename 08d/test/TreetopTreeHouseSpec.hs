@@ -97,12 +97,15 @@ spec = do
                 (findInteriorVisibleTrees $ parseInput testInput)
                 5
 
-    --input <- runIO $ readFile "input.txt"
+    input <- runIO $ readFile "input.txt"
 
     describe "countTreesVisibleFromOutside" $ do
         it "works for testInput"
             $ shouldBe
                 (countTreesVisibleFromOutside $ parseInput testInput)
                 21
-    
 
+        it "works for input.txt"
+            $ shouldBe
+                (countTreesVisibleFromOutside $ parseInput input)
+                1546

@@ -26,7 +26,7 @@ countTreesAroundEdge :: HeightMap -> Int
 countTreesAroundEdge =
     (\ maxX ->
         let edgeTreesNumber = maxX - 1
-        in edgeTreesNumber * edgeTreesNumber
+        in edgeTreesNumber * 4
     ) . foldlWithKey' findMaxX 1
 
 
