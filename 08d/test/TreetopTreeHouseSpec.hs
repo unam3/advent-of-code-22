@@ -105,7 +105,7 @@ spec = do
                 (countTreesVisibleFromOutside $ parseInput testInput)
                 21
 
-        it "works for input.txt"
-            $ shouldBe
-                (countTreesVisibleFromOutside $ parseInput input)
-                1546
+        --it "works for input.txt"
+        --    $ shouldBe
+        --        (countTreesVisibleFromOutside $ parseInput input)
+        --        1546

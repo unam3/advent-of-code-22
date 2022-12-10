@@ -90,13 +90,10 @@ isInteriorTreeVisible :: HeightMap -> Coords -> Bool
 isInteriorTreeVisible heightMap coords =
     let treeHeight = (!) heightMap coords
     -- consecutive search: left, up, right and down
-    in if isTreeVisibleFromLeft heightMap coords treeHeight
-    then True
-    else if isTreeVisibleFromRight heightMap coords treeHeight
-    then True
-    else if isTreeVisibleFromTop heightMap coords treeHeight
-    then True
-    else isTreeVisibleFromBottom heightMap coords treeHeight
+    in isTreeVisibleFromLeft heightMap coords treeHeight
+        || isTreeVisibleFromRight heightMap coords treeHeight
+        || isTreeVisibleFromTop heightMap coords treeHeight
+        || isTreeVisibleFromBottom heightMap coords treeHeight
 
 
 -- A tree is visible if all of the other trees between it and an edge of the grid are shorter than it
@@ -106,11 +103,11 @@ findInteriorVisibleTrees heightMap =
     let minCoord = 2
         maxCoord = subtract 1
             $ foldlWithKey' findMaxX 2 heightMap
-        interiorTreeCoords = concatMap (\ y -> zip [minCoord..maxCoord] (repeat y)) [minCoord..maxCoord]
+        interiorTreeCoords = concatMap (zip [minCoord .. maxCoord] . repeat) [minCoord..maxCoord]
     in length $ filter (isInteriorTreeVisible heightMap) interiorTreeCoords
 
 countTreesVisibleFromOutside :: HeightMap -> Int
 -- how we use point-free here? Applicative?
 -- :t :: [HeightMap -> Int]
 --countTreesVisibleFromOutside = sum . fmap [countTreesAroundEdge, findInteriorVisibleTrees]
-countTreesVisibleFromOutside heightMap = sum $ [countTreesAroundEdge heightMap, findInteriorVisibleTrees heightMap]
+countTreesVisibleFromOutside heightMap = sum [countTreesAroundEdge heightMap, findInteriorVisibleTrees heightMap]
