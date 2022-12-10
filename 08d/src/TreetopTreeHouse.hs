@@ -60,6 +60,21 @@ isTreeVisibleFromRight heigtMap (referenceX, _) referenceTreeHeight =
         -- get all the elements height to the right from Coords
         $ filterWithKey (\ (x, _) _ -> referenceX < x) heigtMap
     
+isTreeVisibleFromTop :: HeightMap -> Coords -> Int -> Bool
+isTreeVisibleFromTop heigtMap (_, referenceY) referenceTreeHeight =
+    -- y coordinate should decrease from bottom to top
+    fst .
+        L.foldl'
+            (\ (areAllTreesLower, referenceTreeHeight') treeHeight ->
+                (areAllTreesLower && referenceTreeHeight' > treeHeight, treeHeight)
+            )
+            (True, referenceTreeHeight)
+        -- sort them in right order: from bottom to top
+        . reverse
+        -- get heightmap in ascending order of keys
+        . elems
+        -- get all the elements height to the top from Coords
+        $ filterWithKey (\ (_, y) _ -> referenceY > y) heigtMap
 
 isInteriorTreeVisible :: HeightMap -> Coords -> Bool
 isInteriorTreeVisible heightMap coords =
@@ -67,7 +82,9 @@ isInteriorTreeVisible heightMap coords =
     -- consecutive search: left, up, right and down
     in if isTreeVisibleFromLeft heightMap coords treeHeight
     then True
-    else isTreeVisibleFromRight heightMap coords treeHeight
+    else if isTreeVisibleFromRight heightMap coords treeHeight
+    then True
+    else isTreeVisibleFromTop heightMap coords treeHeight
 
 
 
