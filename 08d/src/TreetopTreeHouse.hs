@@ -76,6 +76,20 @@ isTreeVisibleFromTop heigtMap (_, referenceY) referenceTreeHeight =
         -- get all the elements height to the top from Coords
         $ filterWithKey (\ (_, y) _ -> referenceY > y) heigtMap
 
+isTreeVisibleFromBottom :: HeightMap -> Coords -> Int -> Bool
+isTreeVisibleFromBottom heigtMap (_, referenceY) referenceTreeHeight =
+    -- y coordinate should decrease from top to bottom
+    fst .
+        L.foldl'
+            (\ (areAllTreesLower, referenceTreeHeight') treeHeight ->
+                (areAllTreesLower && referenceTreeHeight' > treeHeight, treeHeight)
+            )
+            (True, referenceTreeHeight)
+        -- get heightmap in ascending order of keys
+        . elems
+        -- get all the elements height to the top from Coords
+        $ filterWithKey (\ (_, y) _ -> referenceY < y) heigtMap
+
 isInteriorTreeVisible :: HeightMap -> Coords -> Bool
 isInteriorTreeVisible heightMap coords =
     let treeHeight = (!) heightMap coords
@@ -84,8 +98,9 @@ isInteriorTreeVisible heightMap coords =
     then True
     else if isTreeVisibleFromRight heightMap coords treeHeight
     then True
-    else isTreeVisibleFromTop heightMap coords treeHeight
-
+    else if isTreeVisibleFromTop heightMap coords treeHeight
+    then True
+    else isTreeVisibleFromBottom heightMap coords treeHeight
 
 
 -- A tree is visible if all of the other trees between it and an edge of the grid are shorter than it
