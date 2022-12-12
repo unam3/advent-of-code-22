@@ -179,14 +179,19 @@ getScenicScoreFromTop heigtMap (referenceX, referenceY) referenceTreeHeight =
     snd . 
         -- y coordinate should decrease from bottom to top
         L.foldl'
-                (\ (areAllTreesLower, visibleTreeCount) treeHeight ->
+                (\ ((areAllTreesLower, hasEncounterSameHeightTree), visibleTreeCount) treeHeight ->
                     -- stop if you reach an edge
+                    if areAllTreesLower
+                        && not hasEncounterSameHeightTree
+                        && referenceTreeHeight > treeHeight
                     -- or at the first tree that is the same height or taller than the tree under consideration.
-                    if areAllTreesLower && referenceTreeHeight > treeHeight
-                    then (True, visibleTreeCount + 1)
-                    else (False, visibleTreeCount)
+                    then ((True, False), visibleTreeCount + 1)
+                    else if not hasEncounterSameHeightTree
+                        && referenceTreeHeight <= treeHeight
+                    then ((False, True), visibleTreeCount + 1)
+                    else ((False, True), visibleTreeCount)
                 )
-                (True, 0)
+                ((True, False), 0)
         -- sort them in right order: from bottom to top
         . reverse
         -- get heightmap in ascending order of keys
@@ -199,14 +204,19 @@ getScenicScoreFromBottom heigtMap (referenceX, referenceY) referenceTreeHeight =
     snd . 
         -- y coordinate should decrease from top to bottom
         L.foldl'
-                (\ (areAllTreesLower, visibleTreeCount) treeHeight ->
+                (\ ((areAllTreesLower, hasEncounterSameHeightTree), visibleTreeCount) treeHeight ->
                     -- stop if you reach an edge
+                    if areAllTreesLower
+                        && not hasEncounterSameHeightTree
+                        && referenceTreeHeight > treeHeight
                     -- or at the first tree that is the same height or taller than the tree under consideration.
-                    if areAllTreesLower && referenceTreeHeight > treeHeight
-                    then (True, visibleTreeCount + 1)
-                    else (False, visibleTreeCount)
+                    then ((True, False), visibleTreeCount + 1)
+                    else if not hasEncounterSameHeightTree
+                        && referenceTreeHeight <= treeHeight
+                    then ((False, True), visibleTreeCount + 1)
+                    else ((False, True), visibleTreeCount)
                 )
-                (True, 0)
+                ((True, False), 0)
         -- get heightmap in ascending order of keys
         . elems
         -- get all the elements height to the top from Coords
