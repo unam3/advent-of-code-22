@@ -19,7 +19,7 @@ spec = do
     describe "animate (U n)" $ do
         it "works with modelMotion"
             $ shouldBe
-                (modelMotion (U 4))
+                (modelMotion [(U 4)])
                 (
                     ((0, 4), (0, 3)),
                     [

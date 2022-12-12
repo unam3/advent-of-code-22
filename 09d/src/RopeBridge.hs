@@ -34,6 +34,7 @@ animate (U _) state@(((hx, hy), (tx, ty)), tailVisitedAtLeastOnce) _ =
     --        - to left, to right, to top, to bottom
     --        - diagonally adjacent:
     --            - diagonal NE, NW, SW, SE
+    -- consult the `animate file`
     -- overlapping
     if hx == tx && hy == ty
     then (((hx, hy + 1), (tx, ty)), tailVisitedAtLeastOnce)
@@ -76,5 +77,5 @@ modelMotion' state motion@(U number) =
     foldl' (animate motion) state [1..number]
 modelMotion' _ _ = undefined
 
-modelMotion :: Motion -> State
-modelMotion = modelMotion' (((0, 0), (0, 0)), [(0, 0)])
+modelMotion :: [Motion] -> State
+modelMotion = foldl' modelMotion' (((0, 0), (0, 0)), [(0, 0)])
