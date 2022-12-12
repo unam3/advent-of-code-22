@@ -1,0 +1,14 @@
+Part 1.
+
+Simulate series of motions.
+How many positions does the tail of the rope visit at least once?
+
+
+type Coords = (Int, Int
+type HeadTailCoords = (Coords, Coords)
+
+modelMotion :: Motion -> State -> State
+
+modelState :: ? -> State -> State
+
+I need to store positions of the tail visited at least once. In a list. For last visualisation check.
