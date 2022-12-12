@@ -38,16 +38,16 @@ animate (U _) state@(((hx, hy), (tx, ty)), tailVisitedAtLeastOnce) _ =
     -- overlapping
     if hx == tx && hy == ty
     then (((hx, hy + 1), (tx, ty)), tailVisitedAtLeastOnce)
-    -- touching: tail to the left from head
+    -- touching: head to the right from tail
     else if hy == ty && hx < tx
     then (((hx, hy + 1), (tx, ty)), tailVisitedAtLeastOnce)
-    -- touching: tail to the right from head
+    -- touching: head to the left from tail
     else if hy == ty && hx > tx
     then (((hx, hy + 1), (tx, ty)), tailVisitedAtLeastOnce)
-    -- touching: tail is above the head
+    -- touching: head is below the tail
     else if hy < ty && hx == tx
     then (((hx, hy + 1), (tx, ty)), tailVisitedAtLeastOnce)
-    -- touching: tail is below the head
+    -- touching: head is above the tail
     else if hy > ty && hx == tx
     then let newTailCoords = (tx, ty + 1)
         in (((hx, hy + 1), newTailCoords), union tailVisitedAtLeastOnce [newTailCoords])
@@ -65,7 +65,7 @@ animate (U _) state@(((hx, hy), (tx, ty)), tailVisitedAtLeastOnce) _ =
     -- touching (diagonally adjacent) head is to SE from tail
     else if hy > ty && hx > tx
     then (((hx, hy + 1), (tx, ty)), tailVisitedAtLeastOnce)
-    else error $ "unexpected head/tail configuration: " ++ show state
+    else error $ "animate U: unexpected head/tail configuration: " ++ show state
 
     
 animate _ _ _ = undefined
