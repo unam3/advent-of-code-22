@@ -8,8 +8,6 @@ spec :: Spec
 spec = do
     testInput <- runIO $ readFile "testInput"
 
-    --input <- runIO $ readFile "input.txt"
-
     describe "parseInput" $ do
         it "works"
             $ shouldBe
@@ -66,6 +64,8 @@ spec = do
                     ]
                 )
 
+    input <- runIO $ readFile "input.txt"
+
     describe "modelMotion" $ do
         it "works for testInput"
             $ shouldBe
@@ -76,3 +76,7 @@ spec = do
                     ((2, 2), (1, 2)),
                     13
                 )
+        it "works as solution input.txt"
+            $ shouldBe
+                (length . snd . modelMotion $ parseInput input)
+                6354
