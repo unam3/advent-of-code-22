@@ -222,10 +222,9 @@ getScenicScoreFromBottom heigtMap (referenceX, referenceY) referenceTreeHeight =
         -- get all the elements height to the top from Coords
         $ filterWithKey (\ (x, y) _ -> referenceY < y && referenceX == x) heigtMap
 
-getScenicScore :: HeightMap -> Coords -> [Int]
-getScenicScore heightMap coords =
+getScenicScore' :: HeightMap -> Coords -> [Int]
+getScenicScore' heightMap coords =
     let treeHeight = (!) heightMap coords
-    --in product [
     in [
         getScenicScoreFromLeft heightMap coords treeHeight
         , getScenicScoreFromRight heightMap coords treeHeight
@@ -233,3 +232,18 @@ getScenicScore heightMap coords =
         , getScenicScoreFromBottom heightMap coords treeHeight
     ]
 
+getScenicScore :: HeightMap -> Coords -> Int
+--getScenicScore = product . getScenicScore' 
+getScenicScore heightMap coords = product $ getScenicScore' heightMap coords
+
+getHighestScenicScore :: HeightMap -> Int
+getHighestScenicScore heightMap =
+    foldlWithKey'
+        (\ biggestScenicScore coords _ ->
+            let currentTreeScenciScore = getScenicScore heightMap coords
+            in if currentTreeScenciScore > biggestScenicScore
+            then currentTreeScenciScore
+            else biggestScenicScore
+        )
+        0
+        heightMap
