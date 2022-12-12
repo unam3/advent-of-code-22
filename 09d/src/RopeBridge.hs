@@ -67,15 +67,55 @@ animate (U _) state@(((hx, hy), (tx, ty)), tailVisitedAtLeastOnce) _ =
     then (((hx, hy + 1), (tx, ty)), tailVisitedAtLeastOnce)
     else error $ "animate U: unexpected head/tail configuration: " ++ show state
 
+animate (D _) state@(((hx, hy), (tx, ty)), tailVisitedAtLeastOnce) _ =
+    -- overlapping
+    if hx == tx && hy == ty
+    then (((hx, hy - 1), (tx, ty)), tailVisitedAtLeastOnce)
+    -- touching: head to the right from tail
+    else if hy == ty && hx < tx
+    then (((hx, hy - 1), (tx, ty)), tailVisitedAtLeastOnce)
+    -- touching: head to the left from tail
+    else if hy == ty && hx > tx
+    then (((hx, hy - 1), (tx, ty)), tailVisitedAtLeastOnce)
+    -- touching: head is below the tail
+    else if hy < ty && hx == tx
+    then let newTailCoords = (tx, ty - 1)
+        in (((hx, hy - 1), newTailCoords), union tailVisitedAtLeastOnce [newTailCoords])
+    -- touching: head is above the tail
+    else if hy > ty && hx == tx
+    then (((hx, hy - 1), (tx, ty)), tailVisitedAtLeastOnce)
+    -- touching (diagonally adjacent) head is to NE from tail
+    else if hy > ty && hx < tx
+    then (((hx, hy - 1), (tx, ty)), tailVisitedAtLeastOnce)
+    -- touching (diagonally adjacent) head is to NW from tail
+    else if hy > ty && hx < tx
+    then (((hx, hy - 1), (tx, ty)), tailVisitedAtLeastOnce)
+    -- touching (diagonally adjacent) head is to SW from tail
+    else if hy > ty && hx < tx
+    then let newTailCoords = (tx - 1, ty - 1)
+        in (((hx, hy - 1), newTailCoords), union tailVisitedAtLeastOnce [newTailCoords])
+    -- touching (diagonally adjacent) head is to SE from tail
+    else if hy > ty && hx > tx
+    then let newTailCoords = (tx + 1, ty - 1)
+        in (((hx, hy - 1), (tx, ty)), union tailVisitedAtLeastOnce [newTailCoords])
+    else error $ "animate U: unexpected head/tail configuration: " ++ show state
+
     
 animate _ _ _ = undefined
 
+-- should we implement getNumberOfSteps :: Motion -> [Int]?
+
+getNumberOfSteps :: Motion -> Int
+getNumberOfSteps (U n) = n
+getNumberOfSteps (D n) = n
+getNumberOfSteps (L n) = n
+getNumberOfSteps (R n) = n
+
 modelMotion' :: State -> Motion -> State
-modelMotion' state motion@(U number) =
+modelMotion' state motion =
     -- for debug
     -- foldl' (animate motion) state (reverse [1..number])
-    foldl' (animate motion) state [1..number]
-modelMotion' _ _ = undefined
+    foldl' (animate motion) state [1..getNumberOfSteps motion]
 
 modelMotion :: [Motion] -> State
 modelMotion = foldl' modelMotion' (((0, 0), (0, 0)), [(0, 0)])
