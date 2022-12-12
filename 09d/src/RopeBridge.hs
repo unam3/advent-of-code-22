@@ -182,3 +182,7 @@ modelMotion' state motion =
 
 modelMotion :: [Motion] -> State
 modelMotion = foldl' modelMotion' (((0, 0), (0, 0)), [(0, 0)])
+
+--type KnotsCoords = Map
+--type State = (KnotsCoords, TailVisitedAtLeastOnce)
+

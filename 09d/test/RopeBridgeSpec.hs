@@ -76,7 +76,7 @@ spec = do
                     ((2, 2), (1, 2)),
                     13
                 )
-        it "works as solution input.txt"
-            $ shouldBe
-                (length . snd . modelMotion $ parseInput input)
-                6354
+        --it "works as solution input.txt"
+        --    $ shouldBe
+        --        (length . snd . modelMotion $ parseInput input)
+        --        6354
