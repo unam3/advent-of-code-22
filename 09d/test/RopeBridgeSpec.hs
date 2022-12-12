@@ -65,3 +65,14 @@ spec = do
                         (-3, 0)
                     ]
                 )
+
+    describe "modelMotion" $ do
+        it "works for testInput"
+            $ shouldBe
+                ((\ (coords, tailVisitedAtLeastOnce) -> (coords, length tailVisitedAtLeastOnce))
+                    . modelMotion $ parseInput testInput
+                )
+                (
+                    ((2, 2), (1, 2)),
+                    13
+                )

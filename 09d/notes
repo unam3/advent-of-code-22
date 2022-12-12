@@ -14,4 +14,4 @@ modelState :: ? -> State -> State
 I need to store positions of the tail visited at least once. In a list. For last visualisation check.
 
 How do we "animate" motion steps?
-- fold?
++ fold?

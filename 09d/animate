@@ -1,3 +1,15 @@
+from head to tail direction:
+
+  NW              NE                SE                  SW 
+                                                           
+  H..             ..H               ...                 ...
+  .T.             .T.               .T.                 .T.
+  ...             ...               ..H                 H..
+                
+hx < tx         hx > tx           hx > tx              hx < tx 
+hy > ty         hy > ty           hy < ty              hy < ty
+
+
 when head is above the tail
 
 

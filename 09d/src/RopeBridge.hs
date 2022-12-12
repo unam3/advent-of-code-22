@@ -52,18 +52,18 @@ animate (U _) state@(((hx, hy), (tx, ty)), tailVisitedAtLeastOnce) _ =
     then let newTailCoords = (tx, ty + 1)
         in (((hx, hy + 1), newTailCoords), union tailVisitedAtLeastOnce [newTailCoords])
     -- touching (diagonally adjacent) head is to NE from tail
-    else if hy > ty && hx < tx
+    else if hx > tx && hy > ty
     then let newTailCoords = (tx + 1, ty + 1)
         in (((hx, hy + 1), newTailCoords), union tailVisitedAtLeastOnce [newTailCoords])
     -- touching (diagonally adjacent) head is to NW from tail
-    else if hy > ty && hx < tx
+    else if hx < tx  && hy > ty
     then let newTailCoords = (tx - 1, ty + 1)
         in (((hx, hy + 1), newTailCoords), union tailVisitedAtLeastOnce [newTailCoords])
     -- touching (diagonally adjacent) head is to SW from tail
-    else if hy > ty && hx < tx
+    else if hx < tx  && hy < ty
     then (((hx, hy + 1), (tx, ty)), tailVisitedAtLeastOnce)
     -- touching (diagonally adjacent) head is to SE from tail
-    else if hy > ty && hx > tx
+    else if hx > tx && hy < ty
     then (((hx, hy + 1), (tx, ty)), tailVisitedAtLeastOnce)
     else error $ "animate U: unexpected head/tail configuration: " ++ show state
 
@@ -85,17 +85,17 @@ animate (D _) state@(((hx, hy), (tx, ty)), tailVisitedAtLeastOnce) _ =
     else if hy > ty && hx == tx
     then (((hx, hy - 1), (tx, ty)), tailVisitedAtLeastOnce)
     -- touching (diagonally adjacent) head is to NE from tail
-    else if hy > ty && hx < tx
+    else if hx > tx && hy > ty
     then (((hx, hy - 1), (tx, ty)), tailVisitedAtLeastOnce)
     -- touching (diagonally adjacent) head is to NW from tail
-    else if hy > ty && hx < tx
+    else if hx < tx  && hy > ty
     then (((hx, hy - 1), (tx, ty)), tailVisitedAtLeastOnce)
     -- touching (diagonally adjacent) head is to SW from tail
-    else if hy > ty && hx < tx
+    else if hx < tx  && hy < ty
     then let newTailCoords = (tx - 1, ty - 1)
         in (((hx, hy - 1), newTailCoords), union tailVisitedAtLeastOnce [newTailCoords])
     -- touching (diagonally adjacent) head is to SE from tail
-    else if hy > ty && hx > tx
+    else if hx > tx && hy < ty
     then let newTailCoords = (tx + 1, ty - 1)
         in (((hx, hy - 1), newTailCoords), union tailVisitedAtLeastOnce [newTailCoords])
     else error $ "animate D: unexpected head/tail configuration: " ++ show state
@@ -118,18 +118,18 @@ animate (L _) state@(((hx, hy), (tx, ty)), tailVisitedAtLeastOnce) _ =
     else if hy > ty && hx == tx
     then (((hx - 1, hy), (tx, ty)), tailVisitedAtLeastOnce)
     -- touching (diagonally adjacent) head is to NE from tail
-    else if hy > ty && hx < tx
+    else if hx > tx && hy > ty
     then (((hx - 1, hy), (tx, ty)), tailVisitedAtLeastOnce)
     -- touching (diagonally adjacent) head is to NW from tail
-    else if hy > ty && hx < tx
+    else if hx < tx  && hy > ty
     then let newTailCoords = (tx - 1, ty + 1)
         in (((hx - 1, hy), newTailCoords), union tailVisitedAtLeastOnce [newTailCoords])
     -- touching (diagonally adjacent) head is to SW from tail
-    else if hy > ty && hx < tx
+    else if hx < tx  && hy < ty
     then let newTailCoords = (tx - 1, ty - 1)
         in (((hx - 1, hy), newTailCoords), union tailVisitedAtLeastOnce [newTailCoords])
     -- touching (diagonally adjacent) head is to SE from tail
-    else if hy > ty && hx > tx
+    else if hx > tx && hy < ty
     then (((hx - 1, hy), (tx, ty)), tailVisitedAtLeastOnce)
     else error $ "animate L: unexpected head/tail configuration: " ++ show state
 
@@ -151,20 +151,20 @@ animate (R _) state@(((hx, hy), (tx, ty)), tailVisitedAtLeastOnce) _ =
     else if hy > ty && hx == tx
     then (((hx + 1, hy), (tx, ty)), tailVisitedAtLeastOnce)
     -- touching (diagonally adjacent) head is to NE from tail
-    else if hy > ty && hx < tx
+    else if hx > tx && hy > ty
     then let newTailCoords = (tx + 1, ty + 1)
         in (((hx + 1, hy), newTailCoords), union tailVisitedAtLeastOnce [newTailCoords])
     -- touching (diagonally adjacent) head is to NW from tail
-    else if hy > ty && hx < tx
+    else if hx < tx  && hy > ty
     then (((hx + 1, hy), (tx, ty)), tailVisitedAtLeastOnce)
     -- touching (diagonally adjacent) head is to SW from tail
-    else if hy > ty && hx < tx
+    else if hx < tx  && hy < ty
     then (((hx + 1, hy), (tx, ty)), tailVisitedAtLeastOnce)
     -- touching (diagonally adjacent) head is to SE from tail
-    else if hy > ty && hx > tx
+    else if hx > tx && hy < ty
     then let newTailCoords = (tx + 1, ty - 1)
         in (((hx + 1, hy), newTailCoords), union tailVisitedAtLeastOnce [newTailCoords])
-    else error $ "animate L: unexpected head/tail configuration: " ++ show state
+    else error $ "animate R: unexpected head/tail configuration: " ++ show state
 
 -- should we implement getNumberOfSteps :: Motion -> [Int]?
 
