@@ -130,14 +130,19 @@ getScenicScoreFromLeft heigtMap (referenceX, referenceY) referenceTreeHeight =
     snd .
         -- x coordinate should be less than right one (reference)
         L.foldl'
-                (\ (areAllTreesLower, visibleTreeCount) treeHeight ->
+                (\ ((areAllTreesLower, hasEncounterSameHeightTree), visibleTreeCount) treeHeight ->
                     -- stop if you reach an edge
+                    if areAllTreesLower
+                        && not hasEncounterSameHeightTree
+                        && referenceTreeHeight > treeHeight
+                    then ((True, False), visibleTreeCount + 1)
                     -- or at the first tree that is the same height or taller than the tree under consideration.
-                    if areAllTreesLower && referenceTreeHeight > treeHeight
-                    then (True, visibleTreeCount + 1)
-                    else (False, visibleTreeCount)
+                    else if not hasEncounterSameHeightTree
+                        && referenceTreeHeight <= treeHeight
+                    then ((False, True), visibleTreeCount + 1)
+                    else ((False, True), visibleTreeCount)
                 )
-                (True, 0)
+                ((True, False), 0)
         -- sort them in right order: from right to left
         . reverse
         -- get heightmap in ascending order of keys
@@ -150,14 +155,19 @@ getScenicScoreFromRight heigtMap (referenceX, referenceY) referenceTreeHeight =
     snd . 
         -- x coordinate should decrease from left to right
         L.foldl'
-                (\ (areAllTreesLower, visibleTreeCount) treeHeight ->
+                (\ ((areAllTreesLower, hasEncounterSameHeightTree), visibleTreeCount) treeHeight ->
                     -- stop if you reach an edge
+                    if areAllTreesLower
+                        && not hasEncounterSameHeightTree
+                        && referenceTreeHeight > treeHeight
                     -- or at the first tree that is the same height or taller than the tree under consideration.
-                    if areAllTreesLower && referenceTreeHeight > treeHeight
-                    then (True, visibleTreeCount + 1)
-                    else (False, visibleTreeCount)
+                    then ((True, False), visibleTreeCount + 1)
+                    else if not hasEncounterSameHeightTree
+                        && referenceTreeHeight <= treeHeight
+                    then ((False, True), visibleTreeCount + 1)
+                    else ((False, True), visibleTreeCount)
                 )
-                (True, 0)
+                ((True, False), 0)
         -- get heightmap in ascending order of keys
         . elems
         -- get all the elements height to the right from Coords

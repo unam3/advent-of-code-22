@@ -20,6 +20,7 @@ Implement getScenicScore.
     see part1Foldl'Params
 
     + copypaste and modify isTreeVisibleFrom*
+    x compare results of (elems . filterWithKey) with foldlWithKey': do the preserve same order of elements?
 
 What is the highest scenic score possible for any tree?
 

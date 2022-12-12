@@ -115,7 +115,12 @@ spec = do
             $ shouldBe
                 (getScenicScore (parseInput testInput) (3, 2))
                 -- 4
-                [1, 2, 1, 2]
+                [
+                    1, -- L
+                    2, -- R
+                    1, -- U Top
+                    2  -- D Bottom
+                ]
         it "works for testInput: 5 in the middle of the fourth row"
             $ shouldBe
                 (getScenicScore (parseInput testInput) (3, 4))
