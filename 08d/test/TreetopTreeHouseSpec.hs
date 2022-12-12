@@ -137,3 +137,8 @@ spec = do
             $ shouldBe
                 (getHighestScenicScore (parseInput testInput))
                 8
+        it "works for input.txt"
+            $ shouldBe
+                (getHighestScenicScore (parseInput input))
+                519064
+
