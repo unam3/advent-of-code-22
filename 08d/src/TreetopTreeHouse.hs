@@ -59,7 +59,7 @@ isTreeVisibleFromRight heigtMap (referenceX, referenceY) referenceTreeHeight =
         $ filterWithKey (\ (x, y) _ -> referenceX < x && referenceY == y) heigtMap
     
 
-part1Foldl'Params :: ((Int -> Bool -> Int -> Bool), Bool)
+part1Foldl'Params :: (Int -> Bool -> Int -> Bool, Bool)
 part1Foldl'Params =
     let foldingFunction =
             (\ referenceTreeHeight areAllTreesLower treeHeight ->
