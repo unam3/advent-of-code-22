@@ -41,6 +41,18 @@ spec = do
                         (0, -3)
                     ]
                 )
+        it "animate (R n) works with modelMotion"
+            $ shouldBe
+                (modelMotion [(R 4)])
+                (
+                    ((4, 0), (3, 0)),
+                    [
+                        (0, 0),
+                        (1, 0),
+                        (2, 0),
+                        (3, 0)
+                    ]
+                )
         it "animate (L n) works with modelMotion"
             $ shouldBe
                 (modelMotion [(L 4)])
