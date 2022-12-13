@@ -111,3 +111,40 @@ spec = do
                     fromList [(4,0), (3,0), (2,0), (1,0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0)],
                     [(0,0)]
                 )
+        it "works for testInput"
+            $ shouldBe
+                (vmodelMotion $ parseInput testInput)
+                (
+                    fromList [
+                        {-
+                            .1H3..  (H covers 2, 4)
+                            .5....
+                            6.....  (6 covers 7, 8, 9, s)
+
+                        -}
+                        (2,2),  -- H
+                        (1,2),  -- 1
+                        (2,2),  -- 2
+                        (3,2),  -- 3
+                        (2, 2), -- 4
+                        (1, 1), -- 5
+                        (0, 0), -- 6
+                        (0, 0), -- 7
+                        (0, 0), -- 8
+                        (0, 0)  -- T
+                    ],
+                    [(0,0)]
+                )
+
+    describe "visualize" $ do
+        it "works for R 4"
+            $ shouldBe
+                (visualize $ vmodelMotion [R 4])
+                -- "......\n......\n......\n......\n#####.\n" ->
+                "#####\n"
+        it "works for [R 4, U 4]"
+            $ shouldBe
+                --(fst $ vmodelMotion [R 4, U 1])
+                --(fromList [])
+                (visualize $ vmodelMotion [R 4, U 2])
+                "....H\n....1\n..432\n.5...\n6....\n"

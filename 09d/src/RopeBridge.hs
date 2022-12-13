@@ -2,9 +2,9 @@ module RopeBridge where
 
 
 import Data.List (foldl', union)
-import Data.Vector (Vector, (//), fromList, slice, zip3)
+import Data.Vector (Vector, (//), elem, fromList, minimumBy, maximumBy, slice, zip3)
 import qualified Data.Vector as V (foldl')
-import Prelude hiding (zip3)
+import Prelude hiding (elem, zip3)
 
 data Motion = R Int | U Int | L Int | D Int
     deriving (Eq, Show)
@@ -386,8 +386,6 @@ vanimate' (R numberOfSteps) stepNumber state@(knotsV, tailVisitedAtLeastOnce) (h
         else ((//) knotsV [(headIndex, (rhx + 1, rhy))], tailVisitedAtLeastOnce)
     else error $ "animate R: unexpected head/tail configuration: " ++ show state
 
-vanimate' _ _ _ _ = undefined
-
 vanimate :: Motion -> VState -> Int -> VState
 -- check if stepNumber modifications still holds up
 vanimate motion state@(knotsCoords, _) stepNumber =
@@ -400,7 +398,6 @@ vanimate motion state@(knotsCoords, _) stepNumber =
         (vanimate' motion stepNumber)
         state
         knotPairs
-vanimate _ _ _ = undefined
 
 vmodelMotion' :: VState -> Motion -> VState
 vmodelMotion' state motion =
@@ -415,3 +412,38 @@ vmodelMotion =
             fromList $ replicate 10 (0, 0),
             [(0, 0)]
         )
+
+
+
+sharpOrDot :: KnotsCoords -> (Int, Int) -> String
+sharpOrDot knotsCoords (x, y) =
+    if elem (x, y) knotsCoords
+    then "#"
+    else "."
+    
+
+plot :: (Int, Int, Int, Int) -> ((Int, Int) -> String) -> String
+plot (minX, maxX, minY, maxY) f =
+    foldl'
+        (\ string y ->
+             (foldl'
+                (\ row x ->
+                    --let toPlot = show (x, y)
+                    let toPlot = f (x, y)
+                    in row ++ toPlot
+                )
+                ""
+                [minX..maxX]
+            ) ++ "\n" ++ string
+        )
+        ""
+        [minY..maxY]
+
+visualize :: VState -> String
+visualize (knotsCoords, _) = 
+    -- find out min/max of x/y
+    let minX = fst $ minimumBy (\ (x, _) (x1, _) -> compare x x1) knotsCoords
+        maxX = fst $ maximumBy (\ (x, _) (x1, _) -> compare x x1) knotsCoords
+        minY = snd $ minimumBy (\ (_, y) (_, y1) -> compare y y1) knotsCoords
+        maxY = snd $ maximumBy (\ (_, y) (_, y1) -> compare y y1) knotsCoords
+    in plot (minX, maxX, minY, maxY) (sharpOrDot knotsCoords)
