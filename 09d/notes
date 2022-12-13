@@ -21,12 +21,12 @@ Part 2.
 
 You now must simulate a rope consisting of ten knots.
 
-Not all knots will be moved at motion (of number is less than 10).
 
-How we can implement it?
+Not all knots will be moved at motion (if stepNumber is less than number of knots).
+
 
 Thinking lists for new KnotsCoords.
 
-How to to work with animate in such configuration?
-
 Is map a better option? Vector? Both definitely more suited for updates and lookups.
+
+How to still work pairs in animate?

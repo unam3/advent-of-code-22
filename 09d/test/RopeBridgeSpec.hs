@@ -1,5 +1,6 @@
 module RopeBridgeSpec where 
 
+import Data.Vector (fromList)
 import Test.Hspec (Spec, describe, it, runIO, shouldBe)
 
 import RopeBridge
@@ -64,19 +65,28 @@ spec = do
                     ]
                 )
 
-    input <- runIO $ readFile "input.txt"
+    --input <- runIO $ readFile "input.txt"
 
-    describe "modelMotion" $ do
-        it "works for testInput"
-            $ shouldBe
-                ((\ (coords, tailVisitedAtLeastOnce) -> (coords, length tailVisitedAtLeastOnce))
-                    . modelMotion $ parseInput testInput
-                )
-                (
-                    ((2, 2), (1, 2)),
-                    13
-                )
+    --describe "modelMotion" $ do
+        --it "works for testInput"
+        --    $ shouldBe
+        --        ((\ (coords, tailVisitedAtLeastOnce) -> (coords, length tailVisitedAtLeastOnce))
+        --            . modelMotion $ parseInput testInput
+        --        )
+        --        (
+        --            ((2, 2), (1, 2)),
+        --            13
+        --        )
         --it "works as solution input.txt"
         --    $ shouldBe
         --        (length . snd . modelMotion $ parseInput input)
         --        6354
+
+    describe "vmodelMotion" $ do
+        it "works for U 4"
+            $ shouldBe
+                (vmodelMotion [U 4])
+                (
+                    fromList [(0,4), (0,3), (0,2), (0, 1), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0)],
+                    [(0,0)]
+                )

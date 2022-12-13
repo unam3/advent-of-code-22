@@ -2,6 +2,9 @@ module RopeBridge where
 
 
 import Data.List (foldl', union)
+import Data.Vector (Vector, (//), fromList, slice, zip3)
+import qualified Data.Vector as V (foldl')
+import Prelude hiding (zip3)
 
 data Motion = R Int | U Int | L Int | D Int
     deriving (Eq, Show)
@@ -166,8 +169,6 @@ animate (R _) state@(((hx, hy), (tx, ty)), tailVisitedAtLeastOnce) _ =
         in (((hx + 1, hy), newTailCoords), union tailVisitedAtLeastOnce [newTailCoords])
     else error $ "animate R: unexpected head/tail configuration: " ++ show state
 
--- should we implement getNumberOfSteps :: Motion -> [Int]?
-
 getNumberOfSteps :: Motion -> Int
 getNumberOfSteps (U n) = n
 getNumberOfSteps (D n) = n
@@ -183,6 +184,87 @@ modelMotion' state motion =
 modelMotion :: [Motion] -> State
 modelMotion = foldl' modelMotion' (((0, 0), (0, 0)), [(0, 0)])
 
---type KnotsCoords = Map
---type State = (KnotsCoords, TailVisitedAtLeastOnce)
 
+type KnotsCoords = Vector Coords
+type VState = (KnotsCoords, TailVisitedAtLeastOnce)
+
+vanimate' :: Motion -> Int -> VState -> (Int, Coords, Coords) -> VState
+-- rhx — relative head x
+vanimate' (U numberOfSteps) stepNumber state@(knotsV, tailVisitedAtLeastOnce) (headIndex, (rhx, rhy), (rtx, rty)) =
+    let pairHasTail = stepNumber == numberOfSteps
+    -- overlapping
+    in if rhx == rtx && rhy == rty
+    then ((//) knotsV [(headIndex, (rhx, rhy + 1))], tailVisitedAtLeastOnce)
+    -- touching: head to the right from tail
+    else if rhy == rty && rhx < rtx
+    then ((//) knotsV [(headIndex, (rhx, rhy + 1))], tailVisitedAtLeastOnce)
+    -- touching: head to the left from tail
+    else if rhy == rty && rhx > rtx
+    then ((//) knotsV [(headIndex, (rhx, rhy + 1))], tailVisitedAtLeastOnce)
+    -- touching: head is below the tail
+    else if rhy < rty && rhx == rtx
+    then ((//) knotsV [(headIndex, (rhx, rhy + 1))], tailVisitedAtLeastOnce)
+    -- touching: head is above the tail
+    else if rhy > rty && rhx == rtx
+    then if pairHasTail
+        then let newTailCoords = (rtx, rty + 1)
+            in (
+                (//) knotsV [(headIndex, (rhx, rhy + 1)), (headIndex + 1, newTailCoords)],
+                union tailVisitedAtLeastOnce [newTailCoords]
+            )
+        else ((//) knotsV [(headIndex, (rhx, rhy + 1))], tailVisitedAtLeastOnce)
+    -- touching (diagonally adjacent) head is to NE from tail
+    else if rhx > rtx && rhy > rty
+    then if pairHasTail
+        then let newTailCoords = (rtx + 1, rty + 1)
+            in (
+                (//) knotsV [(headIndex, (rhx, rhy + 1)), (headIndex + 1, newTailCoords)],
+                union tailVisitedAtLeastOnce [newTailCoords]
+            )
+        else ((//) knotsV [(headIndex, (rhx, rhy + 1))], tailVisitedAtLeastOnce)
+    -- touching (diagonally adjacent) head is to NW from tail
+    else if rhx < rtx  && rhy > rty
+    then if pairHasTail
+        then let newTailCoords = (rtx - 1, rty + 1)
+            in (
+                (//) knotsV [(headIndex, (rhx, rhy + 1)), (headIndex + 1, newTailCoords)],
+                union tailVisitedAtLeastOnce [newTailCoords]
+            )
+        else ((//) knotsV [(headIndex, (rhx, rhy + 1))], tailVisitedAtLeastOnce)
+    -- touching (diagonally adjacent) head is to SW from tail
+    else if rhx < rtx  && rhy < rty
+    then ((//) knotsV [(headIndex, (rhx, rhy + 1))], tailVisitedAtLeastOnce)
+    -- touching (diagonally adjacent) head is to SE from tail
+    else if rhx > rtx && rhy < rty
+    then ((//) knotsV [(headIndex, (rhx, rhy + 1))], tailVisitedAtLeastOnce)
+    else error $ "animate U: unexpected head/tail configuration: " ++ show state
+
+vanimate' _ _ _ _ = undefined
+
+vanimate :: Motion -> VState -> Int -> VState
+-- check if stepNumber modifications still holds up
+vanimate motion state@(knotsCoords, _) stepNumber =
+    let knotsToAnimateAtThisStep = slice 0 (stepNumber + 1) knotsCoords
+        knotPairs = zip3
+            (fromList [0..stepNumber - 1])
+            knotsToAnimateAtThisStep
+            $ slice 1 (stepNumber - 1) knotsToAnimateAtThisStep
+    in V.foldl'
+        (vanimate' motion stepNumber)
+        state
+        knotPairs
+vanimate _ _ _ = undefined
+
+vmodelMotion' :: VState -> Motion -> VState
+vmodelMotion' state motion =
+    let lastStepNumber = getNumberOfSteps motion + 1
+    in foldl' (vanimate motion) state $ reverse [1..lastStepNumber]
+
+vmodelMotion :: [Motion] -> VState
+vmodelMotion =
+    foldl'
+        vmodelMotion'
+        (
+            fromList $ replicate 10 (0, 0),
+            [(0, 0)]
+        )
