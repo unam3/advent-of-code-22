@@ -104,27 +104,27 @@ spec = do
                     fromList [(0,4), (0,3), (0,2), (0, 1), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0)],
                     [(0,0)]
                 )
-    --    it "works for D 4"
-    --        $ shouldBe
-    --            (vmodelMotion [D 4])
-    --            (
-    --                fromList [(0,-4), (0,-3), (0,-2), (0,-1), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0)],
-    --                [(0,0)]
-    --            )
-    --    it "works for L 4"
-    --        $ shouldBe
-    --            (vmodelMotion [L 4])
-    --            (
-    --                fromList [(-4,0), (-3,0), (-2,0), (-1,0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0)],
-    --                [(0,0)]
-    --            )
-    --    it "works for R 4"
-    --        $ shouldBe
-    --            (vmodelMotion [R 4])
-    --            (
-    --                fromList [(4,0), (3,0), (2,0), (1,0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0)],
-    --                [(0,0)]
-    --            )
+        it "works for D 4"
+            $ shouldBe
+                (vmodelMotion [D 4])
+                (
+                    fromList [(0,-4), (0,-3), (0,-2), (0,-1), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0)],
+                    [(0,0)]
+                )
+        it "works for L 4"
+            $ shouldBe
+                (vmodelMotion [L 4])
+                (
+                    fromList [(-4,0), (-3,0), (-2,0), (-1,0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0)],
+                    [(0,0)]
+                )
+        it "works for R 4"
+            $ shouldBe
+                (vmodelMotion [R 4])
+                (
+                    fromList [(4,0), (3,0), (2,0), (1,0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0)],
+                    [(0,0)]
+                )
     --    it "works for testInput"
     --        $ shouldBe
     --            (vmodelMotion $ parseInput testInput)
