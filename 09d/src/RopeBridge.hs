@@ -2,7 +2,7 @@ module RopeBridge where
 
 
 import Data.List (foldl', union)
-import Data.Vector (Vector, (//), elem, fromList, minimumBy, maximumBy, slice, zip3)
+import Data.Vector (Vector, (//), (!), elem, fromList, minimumBy, maximumBy, slice, zip3)
 import qualified Data.Vector as V (foldl')
 import Prelude hiding (elem, zip3)
 
@@ -188,220 +188,300 @@ modelMotion = foldl' modelMotion' (((0, 0), (0, 0)), [(0, 0)])
 type KnotsCoords = Vector Coords
 type VState = (KnotsCoords, TailVisitedAtLeastOnce)
 
-vanimate' :: Motion -> Int -> VState -> (Int, Coords, Coords) -> VState
+getDifference :: Int -> Int -> Int
+getDifference = (abs .) . subtract
+
+isAdjacentOrOverlapped :: Int -> Int -> Bool
+--isAdjacentOrOverlapped coord coord1 = (>= 1) $ getDifference coord coord1
+isAdjacentOrOverlapped = ((<= 1) .) . getDifference
+
+vanimate' :: Motion -> Int -> VState -> Int -> VState
 -- rhx — relative head x
-vanimate' (U numberOfSteps) stepNumber state@(knotsV, tailVisitedAtLeastOnce) (headIndex, (rhx, rhy), (rtx, rty)) =
-    let pairHasTail = stepNumber == numberOfSteps
-    -- overlapping
-    in if rhx == rtx && rhy == rty
-    then ((//) knotsV [(headIndex, (rhx, rhy + 1))], tailVisitedAtLeastOnce)
-    -- touching: head to the right from tail
-    else if rhy == rty && rhx < rtx
-    then ((//) knotsV [(headIndex, (rhx, rhy + 1))], tailVisitedAtLeastOnce)
-    -- touching: head to the left from tail
-    else if rhy == rty && rhx > rtx
-    then ((//) knotsV [(headIndex, (rhx, rhy + 1))], tailVisitedAtLeastOnce)
-    -- touching: head is below the tail
-    else if rhy < rty && rhx == rtx
-    then ((//) knotsV [(headIndex, (rhx, rhy + 1))], tailVisitedAtLeastOnce)
-    -- touching: head is above the tail
-    else if rhy > rty && rhx == rtx
-    then if pairHasTail
-        then let newTailCoords = (rtx, rty + 1)
-            in (
-                (//) knotsV [(headIndex, (rhx, rhy + 1)), (headIndex + 1, newTailCoords)],
-                union tailVisitedAtLeastOnce [newTailCoords]
-            )
-        else ((//) knotsV [(headIndex, (rhx, rhy + 1))], tailVisitedAtLeastOnce)
-    -- touching (diagonally adjacent) head is to NE from tail
-    else if rhx > rtx && rhy > rty
-    then if pairHasTail
-        then let newTailCoords = (rtx + 1, rty + 1)
-            in (
-                (//) knotsV [(headIndex, (rhx, rhy + 1)), (headIndex + 1, newTailCoords)],
-                union tailVisitedAtLeastOnce [newTailCoords]
-            )
-        else ((//) knotsV [(headIndex, (rhx, rhy + 1))], tailVisitedAtLeastOnce)
-    -- touching (diagonally adjacent) head is to NW from tail
-    else if rhx < rtx  && rhy > rty
-    then if pairHasTail
-        then let newTailCoords = (rtx - 1, rty + 1)
-            in (
-                (//) knotsV [(headIndex, (rhx, rhy + 1)), (headIndex + 1, newTailCoords)],
-                union tailVisitedAtLeastOnce [newTailCoords]
-            )
-        else ((//) knotsV [(headIndex, (rhx, rhy + 1))], tailVisitedAtLeastOnce)
-    -- touching (diagonally adjacent) head is to SW from tail
-    else if rhx < rtx  && rhy < rty
-    then ((//) knotsV [(headIndex, (rhx, rhy + 1))], tailVisitedAtLeastOnce)
-    -- touching (diagonally adjacent) head is to SE from tail
-    else if rhx > rtx && rhy < rty
-    then ((//) knotsV [(headIndex, (rhx, rhy + 1))], tailVisitedAtLeastOnce)
-    else error $ "animate U: unexpected head/tail configuration: " ++ show state
+vanimate' (U numberOfSteps) stepNumber (knotsV, tailVisitedAtLeastOnce) rHeadPairIndex =
 
-vanimate' (D numberOfSteps) stepNumber state@(knotsV, tailVisitedAtLeastOnce) (headIndex, (rhx, rhy), (rtx, rty)) =
-    let pairHasTail = stepNumber == numberOfSteps
-    -- overlapping
-    in if rhx == rtx && rhy == rty
-    then ((//) knotsV [(headIndex, (rhx, rhy - 1))], tailVisitedAtLeastOnce)
-    -- touching: head to the right from tail
-    else if rhy == rty && rhx < rtx
-    then ((//) knotsV [(headIndex, (rhx, rhy - 1))], tailVisitedAtLeastOnce)
-    -- touching: head to the left from tail
-    else if rhy == rty && rhx > rtx
-    then ((//) knotsV [(headIndex, (rhx, rhy - 1))], tailVisitedAtLeastOnce)
-    -- touching: head is below the tail
-    else if rhy < rty && rhx == rtx
-    then if pairHasTail
-        then let newTailCoords = (rtx, rty - 1)
-            in (
-                (//) knotsV [(headIndex, (rhx, rhy - 1)), (headIndex + 1, newTailCoords)],
-                union tailVisitedAtLeastOnce [newTailCoords]
-            )
-        else ((//) knotsV [(headIndex, (rhx, rhy - 1))], tailVisitedAtLeastOnce)
-    -- touching: head is above the tail
-    else if rhy > rty && rhx == rtx
-    then ((//) knotsV [(headIndex, (rhx, rhy - 1))], tailVisitedAtLeastOnce)
-    -- touching (diagonally adjacent) head is to NE from tail
-    else if rhx > rtx && rhy > rty
-    then ((//) knotsV [(headIndex, (rhx, rhy - 1))], tailVisitedAtLeastOnce)
-    -- touching (diagonally adjacent) head is to NW from tail
-    else if rhx < rtx  && rhy > rty
-    then ((//) knotsV [(headIndex, (rhx, rhy - 1))], tailVisitedAtLeastOnce)
-    -- touching (diagonally adjacent) head is to SW from tail
-    else if rhx < rtx  && rhy < rty
-    then if pairHasTail
-        then let newTailCoords = (rtx - 1, rty - 1)
-            in (
-                (//) knotsV [(headIndex, (rhx, rhy - 1)), (headIndex + 1, newTailCoords)],
-                union tailVisitedAtLeastOnce [newTailCoords]
-            )
-        else ((//) knotsV [(headIndex, (rhx, rhy - 1))], tailVisitedAtLeastOnce)
-    -- touching (diagonally adjacent) head is to SE from tail
-    else if rhx > rtx && rhy < rty
-    then if pairHasTail
-        then let newTailCoords = (rtx + 1, rty - 1)
-            in (
-                (//) knotsV [(headIndex, (rhx, rhy - 1)), (headIndex + 1, newTailCoords)],
-                union tailVisitedAtLeastOnce [newTailCoords]
-            )
-        else ((//) knotsV [(headIndex, (rhx, rhy - 1))], tailVisitedAtLeastOnce)
-    else error $ "animate D: unexpected head/tail configuration: " ++ show state
+    let (rhx, rhy) = (!) knotsV rHeadPairIndex
+        (rtx, rty) = (!) knotsV $ rHeadPairIndex + 1
 
-vanimate' (L numberOfSteps) stepNumber state@(knotsV, tailVisitedAtLeastOnce) (headIndex, (rhx, rhy), (rtx, rty)) =
-    let pairHasTail = stepNumber == numberOfSteps
-    -- overlapping
-    in if rhx == rtx && rhy == rty
-    then ((//) knotsV [(headIndex, (rhx - 1, rhy))], tailVisitedAtLeastOnce)
-    -- touching: head to the right from tail
-    else if rhy == rty && rhx > rtx
-    then ((//) knotsV [(headIndex, (rhx - 1, rhy))], tailVisitedAtLeastOnce)
-    -- touching: head to the left from tail
-    else if rhy == rty && rhx < rtx
-    then if pairHasTail
-        then let newTailCoords = (rtx - 1, rty)
-            in (
-                (//) knotsV [(headIndex, (rhx - 1, rhy)), (headIndex + 1, newTailCoords)],
-                union tailVisitedAtLeastOnce [newTailCoords]
-            )
-        else ((//) knotsV [(headIndex, (rhx - 1, rhy))], tailVisitedAtLeastOnce)
-    -- touching: head is below the tail
-    else if rhy < rty && rhx == rtx
-    then ((//) knotsV [(headIndex, (rhx - 1, rhy))], tailVisitedAtLeastOnce)
-    -- touching: head is above the tail
-    else if rhy > rty && rhx == rtx
-    then ((//) knotsV [(headIndex, (rhx - 1, rhy))], tailVisitedAtLeastOnce)
-    -- touching (diagonally adjacent) head is to NE from tail
-    else if rhx > rtx && rhy > rty
-    then ((//) knotsV [(headIndex, (rhx - 1, rhy))], tailVisitedAtLeastOnce)
-    -- touching (diagonally adjacent) head is to NW from tail
-    else if rhx < rtx  && rhy > rty
-    then if pairHasTail
-        then let newTailCoords = (rtx - 1, rty + 1)
-            in (
-                (//) knotsV [(headIndex, (rhx - 1, rhy)), (headIndex + 1, newTailCoords)],
-                union tailVisitedAtLeastOnce [newTailCoords]
-            )
-        else ((//) knotsV [(headIndex, (rhx - 1, rhy))], tailVisitedAtLeastOnce)
-    -- touching (diagonally adjacent) head is to SW from tail
-    else if rhx < rtx  && rhy < rty
-    then if pairHasTail
-        then let newTailCoords = (rtx - 1, rty - 1)
-            in (
-                (//) knotsV [(headIndex, (rhx - 1, rhy)), (headIndex + 1, newTailCoords)],
-                union tailVisitedAtLeastOnce [newTailCoords]
-            )
-        else ((//) knotsV [(headIndex, (rhx - 1, rhy))], tailVisitedAtLeastOnce)
-    -- touching (diagonally adjacent) head is to SE from tail
-    else if rhx > rtx && rhy < rty
-    then ((//) knotsV [(headIndex, (rhx - 1, rhy))], tailVisitedAtLeastOnce)
-    else error $ "animate L: unexpected head/tail configuration: " ++ show state
+    -- head always moves
+    in if rHeadPairIndex == 0
 
-vanimate' (R numberOfSteps) stepNumber state@(knotsV, tailVisitedAtLeastOnce) (headIndex, (rhx, rhy), (rtx, rty)) =
-    let pairHasTail = stepNumber == numberOfSteps
-    -- overlapping
-    in if rhx == rtx && rhy == rty
-    then ((//) knotsV [(headIndex, (rhx + 1, rhy))], tailVisitedAtLeastOnce)
-    -- touching: head to the right from tail
-    else if rhy == rty && rhx > rtx
-    then if pairHasTail
-        then let newTailCoords = (rtx + 1, rty)
-            in (
-                (//) knotsV [(headIndex, (rhx + 1, rhy)), (headIndex + 1, newTailCoords)],
-                union tailVisitedAtLeastOnce [newTailCoords]
-            )
-        else ((//) knotsV [(headIndex, (rhx + 1, rhy))], tailVisitedAtLeastOnce)
-    -- touching: head to the left from tail
-    else if rhy == rty && rhx < rtx
-    then ((//) knotsV [(headIndex, (rhx + 1, rhy))], tailVisitedAtLeastOnce)
-    -- touching: head is below the tail
-    else if rhy < rty && rhx == rtx
-    then ((//) knotsV [(headIndex, (rhx + 1, rhy))], tailVisitedAtLeastOnce)
-    -- touching: head is above the tail
-    else if rhy > rty && rhx == rtx
-    then ((//) knotsV [(headIndex, (rhx + 1, rhy))], tailVisitedAtLeastOnce)
-    -- touching (diagonally adjacent) head is to NE from tail
-    else if rhx > rtx && rhy > rty
-    then if pairHasTail
-        then let newTailCoords = (rtx + 1, rty + 1)
-            in (
-                (//) knotsV [(headIndex, (rhx + 1, rhy)), (headIndex + 1, newTailCoords)],
-                union tailVisitedAtLeastOnce [newTailCoords]
-            )
-        else ((//) knotsV [(headIndex, (rhx + 1, rhy))], tailVisitedAtLeastOnce)
-    -- touching (diagonally adjacent) head is to NW from tail
-    else if rhx < rtx  && rhy > rty
-    then ((//) knotsV [(headIndex, (rhx + 1, rhy))], tailVisitedAtLeastOnce)
-    -- touching (diagonally adjacent) head is to SW from tail
-    else if rhx < rtx  && rhy < rty
-    then ((//) knotsV [(headIndex, (rhx + 1, rhy))], tailVisitedAtLeastOnce)
-    -- touching (diagonally adjacent) head is to SE from tail
-    else if rhx > rtx && rhy < rty
-    then if pairHasTail
-        then let newTailCoords = (rtx + 1, rty - 1)
-            in (
-                (//) knotsV [(headIndex, (rhx + 1, rhy)), (headIndex + 1, newTailCoords)],
-                union tailVisitedAtLeastOnce [newTailCoords]
-            )
-        else ((//) knotsV [(headIndex, (rhx + 1, rhy))], tailVisitedAtLeastOnce)
-    else error $ "animate R: unexpected head/tail configuration: " ++ show state
+    -- moving head
+    then let movedHeadKnotsV = (//) knotsV [(rHeadPairIndex, (rhx, rhy + 1))]
+
+        -- make move if new rhy and rty not adjacent after head move
+        in if isAdjacentOrOverlapped rhx rtx && isAdjacentOrOverlapped rhy rty
+
+            then (movedHeadKnotsV, tailVisitedAtLeastOnce)
+            
+            else if rhy > rty && rhx == rtx
+
+                then ((//) movedHeadKnotsV [(rHeadPairIndex + 1, (rtx, rty + 1))], tailVisitedAtLeastOnce)
+                
+                else if rhx > rtx && rhy > rty
+                
+                    then ((//) movedHeadKnotsV [(rHeadPairIndex + 1, (rtx + 1, rty + 1))], tailVisitedAtLeastOnce)
+
+                    else if rhx < rtx  && rhy > rty
+
+                        then ((//) movedHeadKnotsV [(rHeadPairIndex + 1, (rtx - 1, rty + 1))], tailVisitedAtLeastOnce)
+
+                        else error $ show (rhx, rtx,  rhy, rty, isAdjacentOrOverlapped rhx rtx, isAdjacentOrOverlapped rhy rty)
+
+    --  not pairs of knots without head
+    else let pairHasTail = rHeadPairIndex == 9
+
+        in if isAdjacentOrOverlapped rhx rtx && isAdjacentOrOverlapped rhy rty
+
+            then (knotsV, tailVisitedAtLeastOnce)
+            
+            else if rhy > rty && rhx == rtx
+
+                then
+                    let newTailCoords = (rtx, rty + 1)
+                        tailVisitedAtLeastOnce' =
+                            if pairHasTail
+                            then union tailVisitedAtLeastOnce [newTailCoords]
+                            else tailVisitedAtLeastOnce
+                        newKnotsV = (//) knotsV [(rHeadPairIndex + 1, newTailCoords)]
+                    in (newKnotsV, tailVisitedAtLeastOnce')
+                
+                else if rhx > rtx && rhy > rty
+                
+                    then
+                        let newTailCoords = (rtx + 1, rty + 1)
+                            tailVisitedAtLeastOnce' =
+                                if pairHasTail
+                                then union tailVisitedAtLeastOnce [newTailCoords]
+                                else tailVisitedAtLeastOnce
+                            newKnotsV = (//) knotsV [(rHeadPairIndex + 1, newTailCoords)]
+                        in (newKnotsV, tailVisitedAtLeastOnce')
+
+                    else if rhx < rtx  && rhy > rty
+
+                        then
+                            let newTailCoords = (rtx - 1, rty + 1)
+                                tailVisitedAtLeastOnce' =
+                                    if pairHasTail
+                                    then union tailVisitedAtLeastOnce [newTailCoords]
+                                    else tailVisitedAtLeastOnce
+                                newKnotsV = (//) knotsV [(rHeadPairIndex + 1, newTailCoords)]
+                            in (newKnotsV, tailVisitedAtLeastOnce')
+
+                        else error $ show (rhx, rtx,  rhy, rty, isAdjacentOrOverlapped rhx rtx, isAdjacentOrOverlapped rhy rty)
+
+--pluh =
+--    --in if (isAdjacentOrOverlapped rhx rtx) || (isAdjacentOrOverlapped rhy rty)
+--
+--    -- overlapping
+--    --if rhx == rtx && rhy == rty
+--
+--    -- touching: head to the right from tail
+--    -- else if rhy == rty && rhx < rtx
+--    
+--    -- touching: head to the left from tail
+--    --else if rhy == rty && rhx > rtx
+--
+--    -- touching: head is below the tail
+--    --else if rhy < rty && rhx == rtx
+--
+--    if True
+--    -- touching: head is above the tail
+--    then if rhy > rty && rhx == rtx
+--        then if pairHasTail
+--            then let newTailCoords = (rtx, rty + 1)
+--                in (
+--                    (//) knotsV [(rHeadIndex, (rhx, rhy + 1)), (rHeadIndex + 1, newTailCoords)],
+--                    union tailVisitedAtLeastOnce [newTailCoords]
+--                )
+--            else ((//) knotsV [(rHeadIndex, (rhx, rhy + 1))], tailVisitedAtLeastOnce)
+--
+--    -- touching (diagonally adjacent) head is to NE from tail
+--        else if rhx > rtx && rhy > rty
+--            then if pairHasTail
+--                then let newTailCoords = (rtx + 1, rty + 1)
+--                    in (
+--                        (//) knotsV [(rHeadIndex, (rhx, rhy + 1)), (rHeadIndex + 1, newTailCoords)],
+--                        union tailVisitedAtLeastOnce [newTailCoords]
+--                    )
+--                else ((//) knotsV [(rHeadIndex, (rhx, rhy + 1))], tailVisitedAtLeastOnce)
+--
+--    -- touching (diagonally adjacent) head is to NW from tail
+--        else if rhx < rtx  && rhy > rty
+--            then if pairHasTail
+--                then let newTailCoords = (rtx - 1, rty + 1)
+--                    in (
+--                        (//) knotsV [(rHeadIndex, (rhx, rhy + 1)), (rHeadIndex + 1, newTailCoords)],
+--                        union tailVisitedAtLeastOnce [newTailCoords]
+--                    )
+--                else ((//) knotsV [(rHeadIndex, (rhx, rhy + 1))], tailVisitedAtLeastOnce)
+--
+--    -- touching (diagonally adjacent) head is to SW from tail
+--    --else if rhx < rtx  && rhy < rty
+--
+--    -- touching (diagonally adjacent) head is to SE from tail
+--    --else if rhx > rtx && rhy < rty
+--
+--            else ((//) knotsV [(rHeadIndex, (rhx, rhy + 1))], tailVisitedAtLeastOnce)
+--    else ((//) knotsV [(rHeadIndex, (rhx, rhy + 1))], tailVisitedAtLeastOnce)
+
+--vanimate' (D numberOfSteps) stepNumber state@(knotsV, tailVisitedAtLeastOnce) (rHeadIndex, (rhx, rhy), (rtx, rty)) =
+--    let pairHasTail = stepNumber == numberOfSteps
+--    -- overlapping
+--    in if rhx == rtx && rhy == rty
+--    then ((//) knotsV [(rHeadIndex, (rhx, rhy - 1))], tailVisitedAtLeastOnce)
+--    -- touching: head to the right from tail
+--    else if rhy == rty && rhx < rtx
+--    then ((//) knotsV [(rHeadIndex, (rhx, rhy - 1))], tailVisitedAtLeastOnce)
+--    -- touching: head to the left from tail
+--    else if rhy == rty && rhx > rtx
+--    then ((//) knotsV [(rHeadIndex, (rhx, rhy - 1))], tailVisitedAtLeastOnce)
+--    -- touching: head is below the tail
+--    else if rhy < rty && rhx == rtx
+--    then if pairHasTail
+--        then let newTailCoords = (rtx, rty - 1)
+--            in (
+--                (//) knotsV [(rHeadIndex, (rhx, rhy - 1)), (rHeadIndex + 1, newTailCoords)],
+--                union tailVisitedAtLeastOnce [newTailCoords]
+--            )
+--        else ((//) knotsV [(rHeadIndex, (rhx, rhy - 1))], tailVisitedAtLeastOnce)
+--    -- touching: head is above the tail
+--    else if rhy > rty && rhx == rtx
+--    then ((//) knotsV [(rHeadIndex, (rhx, rhy - 1))], tailVisitedAtLeastOnce)
+--    -- touching (diagonally adjacent) head is to NE from tail
+--    else if rhx > rtx && rhy > rty
+--    then ((//) knotsV [(rHeadIndex, (rhx, rhy - 1))], tailVisitedAtLeastOnce)
+--    -- touching (diagonally adjacent) head is to NW from tail
+--    else if rhx < rtx  && rhy > rty
+--    then ((//) knotsV [(rHeadIndex, (rhx, rhy - 1))], tailVisitedAtLeastOnce)
+--    -- touching (diagonally adjacent) head is to SW from tail
+--    else if rhx < rtx  && rhy < rty
+--    then if pairHasTail
+--        then let newTailCoords = (rtx - 1, rty - 1)
+--            in (
+--                (//) knotsV [(rHeadIndex, (rhx, rhy - 1)), (rHeadIndex + 1, newTailCoords)],
+--                union tailVisitedAtLeastOnce [newTailCoords]
+--            )
+--        else ((//) knotsV [(rHeadIndex, (rhx, rhy - 1))], tailVisitedAtLeastOnce)
+--    -- touching (diagonally adjacent) head is to SE from tail
+--    else if rhx > rtx && rhy < rty
+--    then if pairHasTail
+--        then let newTailCoords = (rtx + 1, rty - 1)
+--            in (
+--                (//) knotsV [(rHeadIndex, (rhx, rhy - 1)), (rHeadIndex + 1, newTailCoords)],
+--                union tailVisitedAtLeastOnce [newTailCoords]
+--            )
+--        else ((//) knotsV [(rHeadIndex, (rhx, rhy - 1))], tailVisitedAtLeastOnce)
+--    else error $ "animate D: unexpected head/tail configuration: " ++ show state
+--
+--vanimate' (L numberOfSteps) stepNumber state@(knotsV, tailVisitedAtLeastOnce) (rHeadIndex, (rhx, rhy), (rtx, rty)) =
+--    let pairHasTail = stepNumber == numberOfSteps
+--    -- overlapping
+--    in if rhx == rtx && rhy == rty
+--    then ((//) knotsV [(rHeadIndex, (rhx - 1, rhy))], tailVisitedAtLeastOnce)
+--    -- touching: head to the right from tail
+--    else if rhy == rty && rhx > rtx
+--    then ((//) knotsV [(rHeadIndex, (rhx - 1, rhy))], tailVisitedAtLeastOnce)
+--    -- touching: head to the left from tail
+--    else if rhy == rty && rhx < rtx
+--    then if pairHasTail
+--        then let newTailCoords = (rtx - 1, rty)
+--            in (
+--                (//) knotsV [(rHeadIndex, (rhx - 1, rhy)), (rHeadIndex + 1, newTailCoords)],
+--                union tailVisitedAtLeastOnce [newTailCoords]
+--            )
+--        else ((//) knotsV [(rHeadIndex, (rhx - 1, rhy))], tailVisitedAtLeastOnce)
+--    -- touching: head is below the tail
+--    else if rhy < rty && rhx == rtx
+--    then ((//) knotsV [(rHeadIndex, (rhx - 1, rhy))], tailVisitedAtLeastOnce)
+--    -- touching: head is above the tail
+--    else if rhy > rty && rhx == rtx
+--    then ((//) knotsV [(rHeadIndex, (rhx - 1, rhy))], tailVisitedAtLeastOnce)
+--    -- touching (diagonally adjacent) head is to NE from tail
+--    else if rhx > rtx && rhy > rty
+--    then ((//) knotsV [(rHeadIndex, (rhx - 1, rhy))], tailVisitedAtLeastOnce)
+--    -- touching (diagonally adjacent) head is to NW from tail
+--    else if rhx < rtx  && rhy > rty
+--    then if pairHasTail
+--        then let newTailCoords = (rtx - 1, rty + 1)
+--            in (
+--                (//) knotsV [(rHeadIndex, (rhx - 1, rhy)), (rHeadIndex + 1, newTailCoords)],
+--                union tailVisitedAtLeastOnce [newTailCoords]
+--            )
+--        else ((//) knotsV [(rHeadIndex, (rhx - 1, rhy))], tailVisitedAtLeastOnce)
+--    -- touching (diagonally adjacent) head is to SW from tail
+--    else if rhx < rtx  && rhy < rty
+--    then if pairHasTail
+--        then let newTailCoords = (rtx - 1, rty - 1)
+--            in (
+--                (//) knotsV [(rHeadIndex, (rhx - 1, rhy)), (rHeadIndex + 1, newTailCoords)],
+--                union tailVisitedAtLeastOnce [newTailCoords]
+--            )
+--        else ((//) knotsV [(rHeadIndex, (rhx - 1, rhy))], tailVisitedAtLeastOnce)
+--    -- touching (diagonally adjacent) head is to SE from tail
+--    else if rhx > rtx && rhy < rty
+--    then ((//) knotsV [(rHeadIndex, (rhx - 1, rhy))], tailVisitedAtLeastOnce)
+--    else error $ "animate L: unexpected head/tail configuration: " ++ show state
+--
+--vanimate' (R numberOfSteps) stepNumber state@(knotsV, tailVisitedAtLeastOnce) (rHeadIndex, (rhx, rhy), (rtx, rty)) =
+--    let pairHasTail = stepNumber == numberOfSteps
+--    -- overlapping
+--    in if rhx == rtx && rhy == rty
+--    then ((//) knotsV [(rHeadIndex, (rhx + 1, rhy))], tailVisitedAtLeastOnce)
+--    -- touching: head to the right from tail
+--    else if rhy == rty && rhx > rtx
+--    then if pairHasTail
+--        then let newTailCoords = (rtx + 1, rty)
+--            in (
+--                (//) knotsV [(rHeadIndex, (rhx + 1, rhy)), (rHeadIndex + 1, newTailCoords)],
+--                union tailVisitedAtLeastOnce [newTailCoords]
+--            )
+--        else ((//) knotsV [(rHeadIndex, (rhx + 1, rhy))], tailVisitedAtLeastOnce)
+--    -- touching: head to the left from tail
+--    else if rhy == rty && rhx < rtx
+--    then ((//) knotsV [(rHeadIndex, (rhx + 1, rhy))], tailVisitedAtLeastOnce)
+--    -- touching: head is below the tail
+--    else if rhy < rty && rhx == rtx
+--    then ((//) knotsV [(rHeadIndex, (rhx + 1, rhy))], tailVisitedAtLeastOnce)
+--    -- touching: head is above the tail
+--    else if rhy > rty && rhx == rtx
+--    then ((//) knotsV [(rHeadIndex, (rhx + 1, rhy))], tailVisitedAtLeastOnce)
+--    -- touching (diagonally adjacent) head is to NE from tail
+--    else if rhx > rtx && rhy > rty
+--    then if pairHasTail
+--        then let newTailCoords = (rtx + 1, rty + 1)
+--            in (
+--                (//) knotsV [(rHeadIndex, (rhx + 1, rhy)), (rHeadIndex + 1, newTailCoords)],
+--                union tailVisitedAtLeastOnce [newTailCoords]
+--            )
+--        else ((//) knotsV [(rHeadIndex, (rhx + 1, rhy))], tailVisitedAtLeastOnce)
+--    -- touching (diagonally adjacent) head is to NW from tail
+--    else if rhx < rtx  && rhy > rty
+--    then ((//) knotsV [(rHeadIndex, (rhx + 1, rhy))], tailVisitedAtLeastOnce)
+--    -- touching (diagonally adjacent) head is to SW from tail
+--    else if rhx < rtx  && rhy < rty
+--    then ((//) knotsV [(rHeadIndex, (rhx + 1, rhy))], tailVisitedAtLeastOnce)
+--    -- touching (diagonally adjacent) head is to SE from tail
+--    else if rhx > rtx && rhy < rty
+--    then if pairHasTail
+--        then let newTailCoords = (rtx + 1, rty - 1)
+--            in (
+--                (//) knotsV [(rHeadIndex, (rhx + 1, rhy)), (rHeadIndex + 1, newTailCoords)],
+--                union tailVisitedAtLeastOnce [newTailCoords]
+--            )
+--        else ((//) knotsV [(rHeadIndex, (rhx + 1, rhy))], tailVisitedAtLeastOnce)
+--    else error $ "animate R: unexpected head/tail configuration: " ++ show state
 
 vanimate :: Motion -> VState -> Int -> VState
--- check if stepNumber modifications still holds up
 vanimate motion state@(knotsCoords, _) stepNumber =
-    let knotsToAnimateAtThisStep = slice 0 (stepNumber + 1) knotsCoords
-        knotPairs = zip3
-            (fromList [0..stepNumber - 1])
-            knotsToAnimateAtThisStep
-            $ slice 1 (stepNumber - 1) knotsToAnimateAtThisStep
-    in V.foldl'
+    let rHeadPairIndexes = fromList [0..8]
+    in foldl'
         (vanimate' motion stepNumber)
         state
-        knotPairs
+        rHeadPairIndexes
 
 vmodelMotion' :: VState -> Motion -> VState
 vmodelMotion' state motion =
-    let lastStepNumber = getNumberOfSteps motion + 1
+    let lastStepNumber = getNumberOfSteps motion
     in foldl' (vanimate motion) state $ reverse [1..lastStepNumber]
 
 vmodelMotion :: [Motion] -> VState

@@ -22,7 +22,11 @@ Part 2.
 You now must simulate a rope consisting of ten knots.
 
 
-Not all knots will be moved at motion (if stepNumber is less than number of knots).
+Not all knots must be moved in vanimate: only ones which required touching rule.
+How this rule can be represented in conditions?
+- overlapping is when same x and y coordinates.
+- touching is when difference between x-s and y-s is less or equal than 1.
+
 
 
 Thinking lists for new KnotsCoords.
