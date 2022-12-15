@@ -82,12 +82,19 @@ spec = do
         --        (length . snd . modelMotion $ parseInput input)
         --        6354
 
-    describe "vmodelMotion" $ do
+    describe "vmodelMotion/vanimate'" $ do
         it "works for U 1"
             $ shouldBe
                 (vmodelMotion [U 1])
                 (
                     fromList [(0,1), (0,0), (0,0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0)],
+                    [(0,0)]
+                )
+        it "works for U 2"
+            $ shouldBe
+                (vmodelMotion [U 2])
+                (
+                    fromList [(0,2), (0,1), (0,0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0)],
                     [(0,0)]
                 )
         it "works for U 4"

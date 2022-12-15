@@ -209,7 +209,7 @@ vanimate' (U numberOfSteps) stepNumber (knotsV, tailVisitedAtLeastOnce) rHeadPai
     then let movedHeadKnotsV = (//) knotsV [(rHeadPairIndex, (rhx, rhy + 1))]
 
         -- make move if new rhy and rty not adjacent after head move
-        in if isAdjacentOrOverlapped rhx rtx && isAdjacentOrOverlapped rhy rty
+        in if isAdjacentOrOverlapped rhx rtx && isAdjacentOrOverlapped (rhy + 1) rty
 
             then (movedHeadKnotsV, tailVisitedAtLeastOnce)
             
@@ -227,7 +227,7 @@ vanimate' (U numberOfSteps) stepNumber (knotsV, tailVisitedAtLeastOnce) rHeadPai
 
                         else error $ show (rhx, rtx,  rhy, rty, isAdjacentOrOverlapped rhx rtx, isAdjacentOrOverlapped rhy rty)
 
-    --  not pairs of knots without head
+    --  knot pairs without head
     else let pairHasTail = rHeadPairIndex == 9
 
         in if isAdjacentOrOverlapped rhx rtx && isAdjacentOrOverlapped rhy rty
