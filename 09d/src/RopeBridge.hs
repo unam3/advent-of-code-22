@@ -379,7 +379,7 @@ vanimate' (L numberOfSteps) stepNumber (knotsV, tailVisitedAtLeastOnce) rHeadPai
 
                         then ((//) movedHeadKnotsV [(rHeadPairIndex + 1, (rtx - 1, rty - 1))], tailVisitedAtLeastOnce)
 
-                        else error $ show (rhx, rtx,  rhy, rty, "rhi - 1")
+                        else error $ show (rhx, rtx,  rhy, rty, "rhx - 1")
 
     --  knot pairs without head
     else let pairHasTail = rHeadPairIndex == 9
@@ -424,7 +424,7 @@ vanimate' (L numberOfSteps) stepNumber (knotsV, tailVisitedAtLeastOnce) rHeadPai
                                 newKnotsV = (//) knotsV [(rHeadPairIndex + 1, newTailCoords)]
                             in (newKnotsV, tailVisitedAtLeastOnce')
 
-                        else error $ show (rhx, rtx,  rhy, rty, "rhx - 1")
+                        else error $ show (rhx, rtx,  rhy, rty, "rhx - 1", numberOfSteps)
             
 vanimate' (R numberOfSteps) stepNumber (knotsV, tailVisitedAtLeastOnce) rHeadPairIndex =
 
@@ -457,7 +457,7 @@ vanimate' (R numberOfSteps) stepNumber (knotsV, tailVisitedAtLeastOnce) rHeadPai
 
                         then ((//) movedHeadKnotsV [(rHeadPairIndex + 1, (rtx + 1, rty - 1))], tailVisitedAtLeastOnce)
 
-                        else error $ show (rhx, rtx,  rhy, rty, "rhi - 1")
+                        else error $ show (rhx, rtx,  rhy, rty, "rhx + 1")
 
     --  knot pairs without head
     else let pairHasTail = rHeadPairIndex == 9
@@ -502,7 +502,7 @@ vanimate' (R numberOfSteps) stepNumber (knotsV, tailVisitedAtLeastOnce) rHeadPai
                                 newKnotsV = (//) knotsV [(rHeadPairIndex + 1, newTailCoords)]
                             in (newKnotsV, tailVisitedAtLeastOnce')
 
-                        else error $ show (rhx, rtx,  rhy, rty, "rhi - 1")
+                        else error $ show (rhx, rtx,  rhy, rty, "rhx + 1")
 
 
 vanimate :: Motion -> VState -> Int -> VState

@@ -150,15 +150,23 @@ spec = do
     --                [(0,0)]
     --            )
 
-    --describe "visualize" $ do
-    --    it "works for R 4"
-    --        $ shouldBe
-    --            (visualize $ vmodelMotion [R 4])
-    --            -- "......\n......\n......\n......\n#####.\n" ->
-    --            "#####\n"
-    --    it "works for [R 4, U 4]"
-    --        $ shouldBe
-    --            --(fst $ vmodelMotion [R 4, U 1])
-    --            --(fromList [])
-    --            (visualize $ vmodelMotion [R 4, U 1])
-    --            "....H\n....1\n..432\n.5...\n6....\n"
+    testInput2 <- runIO $ readFile "testInput2"
+
+    describe "visualize must help to visually compare step results" $ do
+        --it "works for R 4"
+        --    $ shouldBe
+        --        (visualize $ vmodelMotion [R 4])
+        --        -- "......\n......\n......\n......\n#####.\n" goes
+        --        "#####\n"
+        --it "works for [R 4, U 4]"
+        --    $ shouldBe
+        --        (visualize $ vmodelMotion [R 4, U 4])
+        --        "....H\n....1\n..432\n.5...\n6....\n"
+        --it "works for testInput"
+        --    $ shouldBe
+        --        (visualize $ vmodelMotion $ parseInput testInput)
+        --        "....H\n....1\n..432\n.5...\n6....\n"
+        it "works for testInput2"
+            $ shouldBe
+                (visualize $ vmodelMotion $ parseInput testInput2)
+                ""
