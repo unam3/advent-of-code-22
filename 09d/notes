@@ -33,4 +33,7 @@ Thinking lists for new KnotsCoords.
 
 Is map a better option? Vector? Both definitely more suited for updates and lookups.
 
-How to still work pairs in animate?
+
+Fix vmodelMotion [R 5, U 8, L 4] error in animate.
+Take a look at L3 results (l3, l4_rhpi_5 files). Seems like we're not directly moving to the left with 6-knot.
+follow function should be implemented

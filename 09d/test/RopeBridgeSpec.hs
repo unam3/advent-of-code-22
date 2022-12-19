@@ -166,15 +166,20 @@ spec = do
         --    $ shouldBe
         --        (visualize $ vmodelMotion $ parseInput testInput)
         --        "....H\n....1\n..432\n.5...\n6....\n"
-        it "works for testInput2: [R 5, U 8, L 1]"
+        it "works for testInput2: [R 5, U 8, L 3]"
             $ shouldBe
-                (visualize $ vmodelMotion [R 5, U 8, L 1])
-                "....H.\n.....1\n.....2\n.....3\n....54\n...6..\n..7...\n.8....\n9.....\n"
+                (visualize $ vmodelMotion [R 5, U 8, L 3])
+                ""
 
-        it "works for testInput2: [R 5, U 8, L 2]"
+        it "works for testInput2: [R 5, U 8, L 4]"
             $ shouldBe
-                (visualize $ vmodelMotion [R 5, U 8, L 2])
+                (visualize $ vmodelMotion [R 5, U 8, L 4])
                 "...H1.\n.....2\n.....3\n.....4\n....5.\n...6..\n..7...\n.8....\n9.....\n"
+
+        --it "works for testInput2: [R 5, U 8, L 8]"
+        --    $ shouldBe
+        --        (visualize $ vmodelMotion [R 5, U 8, L 8])
+        --        "H1234\n....5\n....6\n....7\n....8\n....9\n"
 
         --it "works for testInput2"
         --    $ shouldBe
