@@ -2,9 +2,9 @@ module RopeBridge where
 
 
 import Data.List (foldl', union)
-import Data.Vector (Vector, (//), (!), elem, fromList, minimumBy, maximumBy, slice, zip3)
+import Data.Vector (Vector, (//), (!), elemIndex, fromList, minimumBy, maximumBy, slice, zip3)
 import qualified Data.Vector as V (foldl')
-import Prelude hiding (elem, zip3)
+import Prelude hiding (zip3)
 
 data Motion = R Int | U Int | L Int | D Int
     deriving (Eq, Show)
@@ -550,13 +550,10 @@ vmodelMotion =
         )
 
 
-
-sharpOrDot :: KnotsCoords -> (Int, Int) -> String
-sharpOrDot knotsCoords (x, y) =
-    if elem (x, y) knotsCoords
-    then "#"
-    else "."
-    
+labelOrDot :: Maybe Int -> String
+labelOrDot Nothing = "."
+labelOrDot (Just 0) = "H"
+labelOrDot (Just n) = show n
 
 plot :: (Int, Int, Int, Int) -> ((Int, Int) -> String) -> String
 plot (minX, maxX, minY, maxY) f =
@@ -582,4 +579,4 @@ visualize (knotsCoords, _) =
         maxX = fst $ maximumBy (\ (x, _) (x1, _) -> compare x x1) knotsCoords
         minY = snd $ minimumBy (\ (_, y) (_, y1) -> compare y y1) knotsCoords
         maxY = snd $ maximumBy (\ (_, y) (_, y1) -> compare y y1) knotsCoords
-    in plot (minX, maxX, minY, maxY) (sharpOrDot knotsCoords)
+    in plot (minX, maxX, minY, maxY) (labelOrDot . (`elemIndex` knotsCoords))

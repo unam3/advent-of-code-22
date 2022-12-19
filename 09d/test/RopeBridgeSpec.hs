@@ -67,20 +67,20 @@ spec = do
 
     --input <- runIO $ readFile "input.txt"
 
-    describe "modelMotion" $ do
-        it "works for testInput"
-            $ shouldBe
-                ((\ (coords, tailVisitedAtLeastOnce) -> (coords, length tailVisitedAtLeastOnce))
-                    . modelMotion $ parseInput testInput
-                )
-                (
-                    ((2, 2), (1, 2)),
-                    13
-                )
-        --it "works as solution input.txt"
-        --    $ shouldBe
-        --        (length . snd . modelMotion $ parseInput input)
-        --        6354
+    --describe "modelMotion" $ do
+    --    it "works for testInput"
+    --        $ shouldBe
+    --            ((\ (coords, tailVisitedAtLeastOnce) -> (coords, length tailVisitedAtLeastOnce))
+    --                . modelMotion $ parseInput testInput
+    --            )
+    --            (
+    --                ((2, 2), (1, 2)),
+    --                13
+    --            )
+    --    it "works as solution input.txt"
+    --        $ shouldBe
+    --            (length . snd . modelMotion $ parseInput input)
+    --            6354
 
     describe "vmodelMotion/vanimate'" $ do
         it "works for U 1"
@@ -169,12 +169,12 @@ spec = do
         it "works for testInput2: [R 5, U 8, L 1]"
             $ shouldBe
                 (visualize $ vmodelMotion [R 5, U 8, L 1])
-                "....#.\n.....#\n.....#\n.....#\n....##\n...#..\n..#...\n.#....\n#.....\n"
+                "....H.\n.....1\n.....2\n.....3\n....54\n...6..\n..7...\n.8....\n9.....\n"
 
         it "works for testInput2: [R 5, U 8, L 2]"
             $ shouldBe
                 (visualize $ vmodelMotion [R 5, U 8, L 2])
-                "...##.\n.....#\n.....#\n.....#\n....#.\n...#..\n..#...\n.#....\n#.....\n"
+                "...H1.\n.....2\n.....3\n.....4\n....5.\n...6..\n..7...\n.8....\n9.....\n"
 
         --it "works for testInput2"
         --    $ shouldBe
