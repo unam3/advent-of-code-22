@@ -86,10 +86,98 @@ spec = do
         it "works for L"
             $ let rt = (0, -2)
                 in shouldBe
-                    ((getModifier (-2, -2) 2 (0, -2) 0)
-                        (0, -2)
+                    ((getModifier (-2, -2) 2 rt 0)
+                        rt
                     )
                     (-1, -2)
+
+        it "works for R"
+            $ let rt = (-4, -2)
+                in shouldBe
+                    ((getModifier (-2, -2) 2 rt 0)
+                        rt
+                    )
+                    (-3, -2)
+
+        it "works for U"
+            $ let rt = (-2, -4)
+                in shouldBe
+                    ((getModifier (-2, -2) 0 rt 2)
+                        rt
+                    )
+                    (-2, -3)
+
+        it "works for D"
+            $ let rt = (-2, 0)
+                in shouldBe
+                    ((getModifier (-2, -2) 0 rt 2)
+                        rt
+                    )
+                    (-2, -1)
+
+        it "works for ↖ vertical rectangle"
+            $ let rt = (-1, -4)
+                in shouldBe
+                    ((getModifier (-2, -2) 1 rt 2)
+                        rt
+                    )
+                    (-2, -3)
+
+        it "works for ↖ horizontal rectangle"
+            $ let rt = (0, -3)
+                in shouldBe
+                    ((getModifier (-2, -2) 2 rt 1)
+                        rt
+                    )
+                    (-1, -2)
+
+        it "works for ↙ vertical rectangle"
+            $ let rt = (-1, 0)
+                in shouldBe
+                    ((getModifier (-2, -2) 1 rt 2)
+                        rt
+                    )
+                    (-2, -1)
+
+        it "works for ↙ horizontal rectangle"
+            $ let rt = (0, -1)
+                in shouldBe
+                    ((getModifier (-2, -2) 2 rt 1)
+                        rt
+                    )
+                    (-1, -2)
+
+        it "works for ↗ vertical rectangle"
+            $ let rt = (-3, -4)
+                in shouldBe
+                    ((getModifier (-2, -2) 1 rt 2)
+                        rt
+                    )
+                    (-2, -3)
+
+        it "works for ↗ horizontal rectangle"
+            $ let rt = (-4, -3)
+                in shouldBe
+                    ((getModifier (-2, -2) 2 rt 1)
+                        rt
+                    )
+                    (-3, -2)
+
+        it "works for ↘ vertical rectangle"
+            $ let rt = (-3, 0)
+                in shouldBe
+                    ((getModifier (-2, -2) 1 rt 2)
+                        rt
+                    )
+                    (-2, -1)
+
+        it "works for ↘ horizontal rectangle"
+            $ let rt = (-4, -1)
+                in shouldBe
+                    ((getModifier (-2, -2) 2 rt 1)
+                        rt
+                    )
+                    (-3, -2)
 
     describe "vmodelMotion/vanimate'" $ do
         it "works for U 1"

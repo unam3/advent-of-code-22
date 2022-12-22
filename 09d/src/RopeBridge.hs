@@ -220,14 +220,29 @@ isAdjacentOrOverlapped = ((<= 1) .) . getDifference
 getModifier :: Coords ->  Int -> Coords -> Int -> (Coords -> Coords)
 getModifier (rhx, rhy) xDifference (rtx, rty) yDifference =
     let minusOne = subtract 1
+        plusOne = (1 +)
     in case (
         compare rhx rtx,
         xDifference,
         compare rhy rty,
         yDifference
     ) of
-        (LT, _, EQ, _) -> bimap minusOne id
-        _ -> undefined
+        (LT, 2, EQ, 0) -> bimap minusOne id
+        (GT, 2, EQ, 0) -> bimap plusOne id
+        (EQ, 0, GT, 2) -> bimap id plusOne
+        (EQ, 0, LT, 2) -> bimap id minusOne
+
+        (LT, 1, GT, 2) -> bimap minusOne plusOne
+        (LT, 2, GT, 1) -> bimap minusOne plusOne
+        (LT, 1, LT, 2) -> bimap minusOne minusOne
+        (LT, 2, LT, 1) -> bimap minusOne minusOne
+
+        (GT, 1, GT, 2) -> bimap plusOne plusOne
+        (GT, 2, GT, 1) -> bimap plusOne plusOne
+        (GT, 1, LT, 2) -> bimap plusOne minusOne
+        (GT, 2, LT, 1) -> bimap plusOne minusOne
+
+        (cx, _, cy, _) -> error $ "undefined configuration: " ++ show (cx, xDifference, cy, yDifference)
 
 vanimate' :: Motion -> Int -> VState -> Int -> VState
 -- rhx — relative head x
