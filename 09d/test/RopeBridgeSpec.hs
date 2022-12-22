@@ -82,6 +82,15 @@ spec = do
     --            (length . snd . modelMotion $ parseInput input)
     --            6354
 
+    describe "getModifier" $ do
+        it "works for L"
+            $ let rt = (0, -2)
+                in shouldBe
+                    ((getModifier (-2, -2) 2 (0, -2) 0)
+                        (0, -2)
+                    )
+                    (-1, -2)
+
     describe "vmodelMotion/vanimate'" $ do
         it "works for U 1"
             $ shouldBe

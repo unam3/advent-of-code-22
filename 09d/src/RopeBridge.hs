@@ -1,6 +1,7 @@
 module RopeBridge where
 
 
+import Data.Bifunctor (bimap)
 import Data.List (foldl', union)
 import Data.Vector (Vector, (//), (!), elemIndex, fromList, minimumBy, maximumBy, slice, zip3)
 import qualified Data.Vector as V (foldl')
@@ -214,11 +215,19 @@ getDifference :: Int -> Int -> Int
 getDifference = (abs .) . subtract
 
 isAdjacentOrOverlapped :: Int -> Int -> Bool
---isAdjacentOrOverlapped coord coord1 = (<= 1) $ getDifference coord coord1
 isAdjacentOrOverlapped = ((<= 1) .) . getDifference
 
-follow :: Coords -> Coords -> Coords
-follow = undefined
+getModifier :: Coords ->  Int -> Coords -> Int -> (Coords -> Coords)
+getModifier (rhx, rhy) xDifference (rtx, rty) yDifference =
+    let minusOne = subtract 1
+    in case (
+        compare rhx rtx,
+        xDifference,
+        compare rhy rty,
+        yDifference
+    ) of
+        (LT, _, EQ, _) -> bimap minusOne id
+        _ -> undefined
 
 vanimate' :: Motion -> Int -> VState -> Int -> VState
 -- rhx — relative head x
