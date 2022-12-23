@@ -68,8 +68,14 @@ execute' (registerValue, cycleNumber, targetCycleStateList) Noop =
         targetCycleState' = update targetCycleStateList (cycleNumber', Just $ cycleNumber' * registerValue)
     in (registerValue, cycleNumber', targetCycleState')
 
-execute' (registerValue, cycleNumber, targetCycleState) (Addx value) =
-    undefined --(registerValue, cycleNumber, targetCycleState)
+execute' (registerValue, cycleNumber, targetCycleStateList) (Addx value) =
+    let cycleNumber1 = cycleNumber + 1
+        targetCycleStateList1 = update targetCycleStateList (cycleNumber1, Just $ cycleNumber1 * registerValue)
+        cycleNumber2 = cycleNumber1 + 1
+        targetCycleStateList2 = update targetCycleStateList1 (cycleNumber2, Just $ cycleNumber2 * registerValue)
+    in (registerValue + value, cycleNumber2, targetCycleStateList2)
+
+    
 
 executeInstructions' :: [Instruction] -> [(CycleNumber, Maybe Int)] -> Either String ExtendedState
 executeInstructions' instructions targetCycles = undefined -- Right $ foldl' execute' (1, 0, targetCycles) instructions

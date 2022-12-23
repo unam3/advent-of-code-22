@@ -75,8 +75,8 @@ spec = do
                 (execute' (12, 0, [(1, Nothing)]) Noop)
                 (12, 1, [(1, Just 12)])
 
-        --it "works for addx"
-        --    $ shouldBe
-        --        (execute' (1, 0) $ Addx (-2))
-        --        (-1, 2)
+        it "works for addx"
+            $ shouldBe
+                (execute' (12, 0, [(1, Nothing)]) (Addx 3))
+                (15, 2, [(1, Just 12)])
 
