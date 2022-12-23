@@ -76,10 +76,8 @@ execute' (registerValue, cycleNumber, targetCycleStateList) (Addx value) =
     in (registerValue + value, cycleNumber2, targetCycleStateList2)
 
     
-
-executeInstructions' :: [Instruction] -> [(CycleNumber, Maybe Int)] -> Either String ExtendedState
-executeInstructions' instructions targetCycles = undefined -- Right $ foldl' execute' (1, 0, targetCycles) instructions
-
+executeInstructions' :: [(CycleNumber, Maybe Int)] -> [Instruction] -> Either String ExtendedState
+executeInstructions' targetCycles = Right . foldl' execute' (1, 0, targetCycles)
 
 
 getSignalStrengthFor :: [Int] -> [Instruction] -> Int

@@ -80,3 +80,17 @@ spec = do
                 (execute' (12, 0, [(1, Nothing)]) (Addx 3))
                 (15, 2, [(1, Just 12)])
 
+
+    testInput2 <- runIO $ readFile "testInput2"
+
+    describe "executeInstructions'" $ do
+        --it "works for testInput"
+        --    $ shouldBe
+        --        (parseInput testInput >>= executeInstructions' (zip [20, 60, 100, 140, 180, 220] $ cycle [Nothing]))
+        --        (Right (-1, 5, []))
+
+        it "works for testInput2"
+            $ shouldBe
+                (parseInput testInput2 >>= executeInstructions' (zip [20, 60, 100, 140, 180, 220] $ cycle [Nothing]))
+                (Right (17,240,[(20,Just 420),(60,Just 1140),(100,Just 1800),(140,Just 2940),(180,Just 2880),(220,Just 3960)]))
+
