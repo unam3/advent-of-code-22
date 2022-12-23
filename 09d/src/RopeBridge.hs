@@ -1,11 +1,9 @@
 module RopeBridge where
 
 
-import Data.Bifunctor (bimap)
+import Data.Bifunctor (bimap, first, second)
 import Data.List (foldl', union)
-import Data.Vector (Vector, (//), (!), elemIndex, fromList, minimumBy, maximumBy, slice, zip3)
-import qualified Data.Vector as V (foldl')
-import Prelude hiding (zip3)
+import Data.Vector (Vector, (//), (!), elemIndex, fromList, minimumBy, maximumBy)
 
 data Motion = R Int | U Int | L Int | D Int
     deriving (Eq, Show)
@@ -230,10 +228,10 @@ getModifier (rhx, rhy) xDifference (rtx, rty) yDifference knotsV =
         compare rhy rty,
         yDifference
     ) of
-        (LT, 2, EQ, 0) -> bimap minusOne id
-        (GT, 2, EQ, 0) -> bimap plusOne id
-        (EQ, 0, GT, 2) -> bimap id plusOne
-        (EQ, 0, LT, 2) -> bimap id minusOne
+        (LT, 2, EQ, 0) -> first minusOne
+        (GT, 2, EQ, 0) -> first plusOne
+        (EQ, 0, GT, 2) -> second plusOne
+        (EQ, 0, LT, 2) -> second minusOne
 
         (LT, 1, GT, 2) -> bimap minusOne plusOne
         (LT, 2, GT, 1) -> bimap minusOne plusOne
@@ -465,7 +463,7 @@ vanimate' (R numberOfSteps) stepNumber (knotsV, tailVisitedAtLeastOnce) rHeadPai
 
 
 vanimate :: Motion -> VState -> Int -> VState
-vanimate motion state@(knotsCoords, _) stepNumber =
+vanimate motion state stepNumber =
     let rHeadPairIndexes = fromList [0..8]
     in foldl'
         (vanimate' motion stepNumber)
@@ -496,7 +494,7 @@ plot :: (Int, Int, Int, Int) -> ((Int, Int) -> String) -> String
 plot (minX, maxX, minY, maxY) f =
     foldl'
         (\ string y ->
-             (foldl'
+             foldl'
                 (\ row x ->
                     --let toPlot = show (x, y)
                     let toPlot = f (x, y)
@@ -504,7 +502,7 @@ plot (minX, maxX, minY, maxY) f =
                 )
                 ""
                 [minX..maxX]
-            ) ++ "\n" ++ string
+             ++ "\n" ++ string
         )
         ""
         [minY..maxY]

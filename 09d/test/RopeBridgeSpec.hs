@@ -18,7 +18,7 @@ spec = do
     describe "animate" $ do
         it "animate (U n) works with modelMotion"
             $ shouldBe
-                (modelMotion [(U 4)])
+                (modelMotion [U 4])
                 (
                     ((0, 4), (0, 3)),
                     [
@@ -30,7 +30,7 @@ spec = do
                 )
         it "animate (D n) works with modelMotion"
             $ shouldBe
-                (modelMotion [(D 4)])
+                (modelMotion [D 4])
                 (
                     ((0, -4), (0, -3)),
                     [
@@ -42,7 +42,7 @@ spec = do
                 )
         it "animate (R n) works with modelMotion"
             $ shouldBe
-                (modelMotion [(R 4)])
+                (modelMotion [R 4])
                 (
                     ((4, 0), (3, 0)),
                     [
@@ -54,7 +54,7 @@ spec = do
                 )
         it "animate (L n) works with modelMotion"
             $ shouldBe
-                (modelMotion [(L 4)])
+                (modelMotion [L 4])
                 (
                     ((-4, 0), (-3, 0)),
                     [
