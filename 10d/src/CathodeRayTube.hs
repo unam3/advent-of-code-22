@@ -85,3 +85,32 @@ getSignalStrengthFor :: [Int] -> [Instruction] -> Int
 getSignalStrengthFor cycleNumbers =
     (\ (Right (_, _, targetCycleStateList)) -> sum . catMaybes $ fmap snd targetCycleStateList)
         . executeInstructions' ((zip cycleNumbers $ cycle [Nothing]))
+
+
+type IsPixelLit = Bool
+type CRTState = [IsPixelLit]
+type PartIIState = (RegisterXValue, CycleNumber, CRTState)
+
+
+--updateCRTState :: 
+
+executeII :: PartIIState -> Instruction -> PartIIState
+executeII (registerValue, cycleNumber, crtState) Noop =
+    let cycleNumber' = cycleNumber + 1
+        --targetCycleState' = update targetCycleStateList (cycleNumber', Just $ cycleNumber' * registerValue)
+
+        -- check if sprite is positioned (via registerValue) in or near cycleNumber
+        isPixelLit = registerValue == cycleNumber'
+        crtState' = crtState ++ [isPixelLit]
+    in (registerValue, cycleNumber', crtState')
+
+--executeII (registerValue, cycleNumber, targetCycleStateList) (Addx value) =
+--    let cycleNumber1 = cycleNumber + 1
+--        targetCycleStateList1 = update targetCycleStateList (cycleNumber1, Just $ cycleNumber1 * registerValue)
+--        cycleNumber2 = cycleNumber1 + 1
+--        targetCycleStateList2 = update targetCycleStateList1 (cycleNumber2, Just $ cycleNumber2 * registerValue)
+--    in (registerValue + value, cycleNumber2, targetCycleStateList2)
+
+
+collectCRTStateAfter240Cycles :: [Instruction] -> String
+collectCRTStateAfter240Cycles = undefined

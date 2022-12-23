@@ -24,3 +24,24 @@ What is the sum of these six signal strengths?
 
 
 Prediction: in Part II cycles will be messed up somehow.
+
+
+Part II.
+
+X register controls the horizontal position of a sprite: the sprite is 3 pixels wide, and the X register sets the
+horizontal position of the middle of that sprite.
+
+The CRT draws a single pixel during each cycle.
+
+If the sprite is positioned such that one of its three pixels is the pixel currently being drawn, the screen produces a
+lit pixel (#); otherwise, the screen leaves the pixel dark (.).
+
+
+Collect "image" from first 240 cycles of input instructions execution.
+
+How to represent this image? [Bool]? Vector Bool? Monoid [Bool]?
+
+
+Render the image given by your program.
+
+What eight capital letters appear on your CRT?

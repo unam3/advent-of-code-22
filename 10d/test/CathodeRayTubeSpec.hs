@@ -99,3 +99,17 @@ spec = do
             $ shouldBe
                 (parseInput input >>= pure . getSignalStrengthFor [20, 60, 100, 140, 180, 220])
                 (Right 14760)
+
+    describe "executeII" $ do
+        it "works for Noop"
+            $ shouldBe
+                (
+                    executeII
+                        (1, 0, [False])
+                        Noop
+                )
+                (
+                    1,
+                    1,
+                    [False, True]
+                )
