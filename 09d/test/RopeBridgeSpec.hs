@@ -65,7 +65,7 @@ spec = do
                     ]
                 )
 
-    --input <- runIO $ readFile "input.txt"
+    input <- runIO $ readFile "input.txt"
 
     --describe "modelMotion" $ do
     --    it "works for testInput"
@@ -228,6 +228,11 @@ spec = do
             $ shouldBe
                 (length $ snd $ vmodelMotion $ parseInput testInput2)
                 36
+
+        it "works for input"
+            $ shouldBe
+                (length $ snd $ vmodelMotion $ parseInput input)
+                2651
 
     describe "visualize must help to visually compare step results" $ do
         it "works for testInput2"
