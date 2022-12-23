@@ -10,14 +10,32 @@ spec = do
 
     --input <- runIO $ readFile "input.txt"
 
-    describe "parseInput" $ do
-        it "works"
-            $ shouldBe
-                (parseInput testInput)
-                "42"
 
-    describe "f" $ do
-        it "works"
+    describe "parseInstruction" $ do
+        it "works for noop"
             $ shouldBe
-                42
-                42
+                (parseInstruction "noop")
+                (Right Noop)
+
+        it "works for valid addx input string"
+            $ shouldBe
+                (parseInstruction "addx -12")
+                (Right $ Addx (-12))
+        
+        it "works for not supported instruction"
+            $ let notSupportedInstruction = "pluh -12"
+                in shouldBe
+                (parseInstruction notSupportedInstruction)
+                (Left $ "parseInstruction non-matched input: " ++ show notSupportedInstruction)
+        
+        it "works for instruction with wrong value"
+            $ let notSupportedInstruction = "pluh meh"
+                in shouldBe
+                (parseInstruction notSupportedInstruction)
+                (Left $ "parseInstruction non-matched input: " ++ show notSupportedInstruction)
+
+    --describe "parseInput" $ do
+    --    it "works"
+    --        $ shouldBe
+    --            (parseInput testInput)
+    --            "42"
