@@ -34,8 +34,8 @@ spec = do
                 (parseInstruction notSupportedInstruction)
                 (Left $ "parseInstruction non-matched input: " ++ show notSupportedInstruction)
 
-    --describe "parseInput" $ do
-    --    it "works"
-    --        $ shouldBe
-    --            (parseInput testInput)
-    --            "42"
+    describe "parseInput" $ do
+        it "works for testInput"
+            $ shouldBe
+                (parseInput testInput)
+                (Right [Noop, Addx 3, Addx (-5)])
