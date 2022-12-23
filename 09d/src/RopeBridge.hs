@@ -285,7 +285,7 @@ vanimate' (U numberOfSteps) stepNumber (knotsV, tailVisitedAtLeastOnce) rHeadPai
                         else error $ show (rhx, rtx,  rhy, rty, isAdjacentOrOverlapped' rhx rtx, isAdjacentOrOverlapped' (rhy + 1) rty)
 
     --  knot pairs without head
-    else let pairHasTail = rHeadPairIndex == 9
+    else let pairHasTail = rHeadPairIndex == 8
              xDifference = getDifference rhx rtx
              yDifference = getDifference rhy rty
 
@@ -338,7 +338,7 @@ vanimate' (D numberOfSteps) stepNumber (knotsV, tailVisitedAtLeastOnce) rHeadPai
                         else error $ show (rhx, rtx,  rhy, rty, isAdjacentOrOverlapped' rhx rtx, isAdjacentOrOverlapped' (rhy - 1) rty)
 
     --  knot pairs without head
-    else let pairHasTail = rHeadPairIndex == 9
+    else let pairHasTail = rHeadPairIndex == 8
              xDifference = getDifference rhx rtx
              yDifference = getDifference rhy rty
 
@@ -390,7 +390,7 @@ vanimate' (L numberOfSteps) stepNumber (knotsV, tailVisitedAtLeastOnce) rHeadPai
                         else error $ show (rhx, rtx,  rhy, rty, "L error head pair", rHeadPairIndex)
 
     --  knot pairs without head
-    else let pairHasTail = rHeadPairIndex == 9
+    else let pairHasTail = rHeadPairIndex == 8
              xDifference = getDifference rhx rtx
              yDifference = getDifference rhy rty
 
@@ -444,7 +444,7 @@ vanimate' (R numberOfSteps) stepNumber (knotsV, tailVisitedAtLeastOnce) rHeadPai
                         else error $ show (rhx, rtx,  rhy, rty, "rhx + 1")
 
     --  knot pairs without head
-    else let pairHasTail = rHeadPairIndex == 9
+    else let pairHasTail = rHeadPairIndex == 8
              xDifference = getDifference rhx rtx
              yDifference = getDifference rhy rty
 
