@@ -1,0 +1,10 @@
+Part 1.
+
+
+Implement instruction parsing in parseInput.
+
+For now consider the signal strength (the cycle number multiplied by the value of the X register)
+
+Find the signal strength during the 20th, 60th, 100th, 140th, 180th, and 220th cycles.
+
+What is the sum of these six signal strengths?
