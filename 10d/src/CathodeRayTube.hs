@@ -3,7 +3,8 @@ module CathodeRayTube where
 
 import Data.Bifunctor (second)
 import Data.Either (partitionEithers)
-import Data.List (elemIndex, foldl', stripPrefix)
+import Data.List (foldl', stripPrefix)
+import Data.Maybe (catMaybes)
 import Text.Read (readMaybe)
 
 data Instruction = Noop | Addx Int
@@ -81,5 +82,6 @@ executeInstructions' targetCycles = Right . foldl' execute' (1, 0, targetCycles)
 
 
 getSignalStrengthFor :: [Int] -> [Instruction] -> Int
-getSignalStrengthFor cycleNumbers instructions = undefined
-    
+getSignalStrengthFor cycleNumbers =
+    (\ (Right (_, _, targetCycleStateList)) -> sum . catMaybes $ fmap snd targetCycleStateList)
+        . executeInstructions' ((zip cycleNumbers $ cycle [Nothing]))

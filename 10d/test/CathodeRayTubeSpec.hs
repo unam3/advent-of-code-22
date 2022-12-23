@@ -8,9 +8,6 @@ spec :: Spec
 spec = do
     testInput <- runIO $ readFile "testInput"
 
-    --input <- runIO $ readFile "input.txt"
-
-
     describe "parseInstruction" $ do
         it "works for noop"
             $ shouldBe
@@ -84,13 +81,21 @@ spec = do
     testInput2 <- runIO $ readFile "testInput2"
 
     describe "executeInstructions'" $ do
-        --it "works for testInput"
-        --    $ shouldBe
-        --        (parseInput testInput >>= executeInstructions' (zip [20, 60, 100, 140, 180, 220] $ cycle [Nothing]))
-        --        (Right (-1, 5, []))
-
         it "works for testInput2"
             $ shouldBe
                 (parseInput testInput2 >>= executeInstructions' (zip [20, 60, 100, 140, 180, 220] $ cycle [Nothing]))
                 (Right (17,240,[(20,Just 420),(60,Just 1140),(100,Just 1800),(140,Just 2940),(180,Just 2880),(220,Just 3960)]))
 
+
+    input <- runIO $ readFile "input.txt"
+
+    describe "getSignalStrengthFor" $ do
+        it "works for testInput2"
+            $ shouldBe
+                (parseInput testInput2 >>= pure . getSignalStrengthFor [20, 60, 100, 140, 180, 220])
+                (Right 13140)
+
+        it "works for testInput2"
+            $ shouldBe
+                (parseInput input >>= pure . getSignalStrengthFor [20, 60, 100, 140, 180, 220])
+                (Right 14760)
