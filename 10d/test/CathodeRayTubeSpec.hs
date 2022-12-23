@@ -63,3 +63,9 @@ spec = do
                 (updateF (1, Just 12) [] (1, Nothing))
                 [(1, Just 12)]
 
+    describe "update" $ do
+        it "works"
+            $ shouldBe
+                (update [(1, Nothing), (3, Nothing), (4, Nothing)] (3, Just 12))
+                [(1, Nothing), (3, Just 12), (4, Nothing)]
+

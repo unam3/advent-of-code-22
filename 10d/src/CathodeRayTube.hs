@@ -58,17 +58,9 @@ updateF newTargetCycleState acc currentTargetCycleState =
             else currentTargetCycleState
     in acc ++ [whatToAdd]
 
---update :: [TargetCycleState] -> TargetCycleState -> Int -> [TargetCycleState]
---update list newTargetCycleState = foldl' (updateF newTargetCycleState) [] list
+update :: [TargetCycleState] -> TargetCycleState -> [TargetCycleState]
+update list newTargetCycleState = foldl' (updateF newTargetCycleState) [] list
 
-
---f :: CycleNumber -> RegisterXValue -> [TargetCycleState] -> TargetCycleState -> [TargetCycleState]
---f cycleNumber rValue acc currentTuple =
---    if currentTuple == (cycleNumber, Nothing)
---    then acc ++ [(cycleNumber, Just rValue)]
---    else currentTuple
-
---foldl' (f currentCycleNumber registerValue) [] list
 
 execute' :: ExtendedState -> Instruction -> ExtendedState
 execute' (registerValue, cycleNumber, targetCycleState) Noop =
