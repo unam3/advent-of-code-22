@@ -69,3 +69,14 @@ spec = do
                 (update [(1, Nothing), (3, Nothing), (4, Nothing)] (3, Just 12))
                 [(1, Nothing), (3, Just 12), (4, Nothing)]
 
+    describe "execute'" $ do
+        it "works for noop"
+            $ shouldBe
+                (execute' (12, 0, [(1, Nothing)]) Noop)
+                (12, 1, [(1, Just 12)])
+
+        --it "works for addx"
+        --    $ shouldBe
+        --        (execute' (1, 0) $ Addx (-2))
+        --        (-1, 2)
+

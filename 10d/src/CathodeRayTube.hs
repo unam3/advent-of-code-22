@@ -63,10 +63,9 @@ update list newTargetCycleState = foldl' (updateF newTargetCycleState) [] list
 
 
 execute' :: ExtendedState -> Instruction -> ExtendedState
-execute' (registerValue, cycleNumber, targetCycleState) Noop =
+execute' (registerValue, cycleNumber, targetCycleStateList) Noop =
     let cycleNumber' = cycleNumber + 1
-        -- update targetCycleState element if cycleNumber is in it
-        targetCycleState' = undefined -- foldl' () [] targetCycleState
+        targetCycleState' = update targetCycleStateList (cycleNumber', Just $ cycleNumber' * registerValue)
     in (registerValue, cycleNumber', targetCycleState')
 
 execute' (registerValue, cycleNumber, targetCycleState) (Addx value) =
