@@ -220,8 +220,8 @@ isAdjacentOrOverlapped = (<= 1)
 isAdjacentOrOverlapped' :: Int -> Int -> Bool
 isAdjacentOrOverlapped' = (isAdjacentOrOverlapped .) . getDifference
 
-getModifier :: Coords ->  Int -> Coords -> Int -> (Coords -> Coords)
-getModifier (rhx, rhy) xDifference (rtx, rty) yDifference =
+getModifier :: Coords ->  Int -> Coords -> Int -> KnotsCoords -> (Coords -> Coords)
+getModifier (rhx, rhy) xDifference (rtx, rty) yDifference knotsV =
     let minusOne = subtract 1
         plusOne = (1 +)
     in case (
@@ -245,7 +245,12 @@ getModifier (rhx, rhy) xDifference (rtx, rty) yDifference =
         (GT, 1, LT, 2) -> bimap plusOne minusOne
         (GT, 2, LT, 1) -> bimap plusOne minusOne
 
-        (cx, _, cy, _) -> error $ "undefined configuration: " ++ show (cx, xDifference, cy, yDifference)
+        (GT, 2, GT, 2) -> bimap plusOne plusOne     -- NE
+        (GT, 2, LT, 2) -> bimap plusOne minusOne    -- NW
+        (LT, 2, LT, 2) -> bimap minusOne minusOne   -- SW
+        (LT, 2, GT, 2) -> bimap minusOne plusOne    -- SE
+
+        (cx, _, cy, _) -> error $ "undefined configuration: " ++ show ((rhx, rhy), (rtx, rty), cx, xDifference, cy, yDifference, knotsV)
 
 vanimate' :: Motion -> Int -> VState -> Int -> VState
 -- rhx — relative head x
@@ -288,7 +293,7 @@ vanimate' (U numberOfSteps) stepNumber (knotsV, tailVisitedAtLeastOnce) rHeadPai
 
              then (knotsV, tailVisitedAtLeastOnce)
              
-             else let modifier = getModifier (rhx, rhy) xDifference (rtx, rty) yDifference
+             else let modifier = getModifier (rhx, rhy) xDifference (rtx, rty) yDifference knotsV
 
                       newTailCoords = modifier (rtx, rty)
                       tailVisitedAtLeastOnce' =
@@ -341,7 +346,7 @@ vanimate' (D numberOfSteps) stepNumber (knotsV, tailVisitedAtLeastOnce) rHeadPai
 
             then (knotsV, tailVisitedAtLeastOnce)
             
-             else let modifier = getModifier (rhx, rhy) xDifference (rtx, rty) yDifference
+             else let modifier = getModifier (rhx, rhy) xDifference (rtx, rty) yDifference knotsV
 
                       newTailCoords = modifier (rtx, rty)
                       tailVisitedAtLeastOnce' =
@@ -393,7 +398,7 @@ vanimate' (L numberOfSteps) stepNumber (knotsV, tailVisitedAtLeastOnce) rHeadPai
 
              then (knotsV, tailVisitedAtLeastOnce)
              
-             else let modifier = getModifier (rhx, rhy) xDifference (rtx, rty) yDifference
+             else let modifier = getModifier (rhx, rhy) xDifference (rtx, rty) yDifference knotsV
 
                       newTailCoords = modifier (rtx, rty)
                       tailVisitedAtLeastOnce' =
@@ -447,7 +452,7 @@ vanimate' (R numberOfSteps) stepNumber (knotsV, tailVisitedAtLeastOnce) rHeadPai
 
              then (knotsV, tailVisitedAtLeastOnce)
              
-             else let modifier = getModifier (rhx, rhy) xDifference (rtx, rty) yDifference
+             else let modifier = getModifier (rhx, rhy) xDifference (rtx, rty) yDifference knotsV
 
                       newTailCoords = modifier (rtx, rty)
                       tailVisitedAtLeastOnce' =

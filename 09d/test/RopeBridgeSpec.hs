@@ -82,102 +82,104 @@ spec = do
     --            (length . snd . modelMotion $ parseInput input)
     --            6354
 
-    describe "getModifier" $ do
-        it "works for L"
-            $ let rt = (0, -2)
-                in shouldBe
-                    ((getModifier (-2, -2) 2 rt 0)
-                        rt
-                    )
-                    (-1, -2)
+    --describe "getModifier" $ do
+    --    it "works for L"
+    --        $ let rt = (0, -2)
+    --            in shouldBe
+    --                ((getModifier (-2, -2) 2 rt 0)
+    --                    rt
+    --                )
+    --                (-1, -2)
 
-        it "works for R"
-            $ let rt = (-4, -2)
-                in shouldBe
-                    ((getModifier (-2, -2) 2 rt 0)
-                        rt
-                    )
-                    (-3, -2)
+    --    it "works for R"
+    --        $ let rt = (-4, -2)
+    --            in shouldBe
+    --                ((getModifier (-2, -2) 2 rt 0)
+    --                    rt
+    --                )
+    --                (-3, -2)
 
-        it "works for U"
-            $ let rt = (-2, -4)
-                in shouldBe
-                    ((getModifier (-2, -2) 0 rt 2)
-                        rt
-                    )
-                    (-2, -3)
+    --    it "works for U"
+    --        $ let rt = (-2, -4)
+    --            in shouldBe
+    --                ((getModifier (-2, -2) 0 rt 2)
+    --                    rt
+    --                )
+    --                (-2, -3)
 
-        it "works for D"
-            $ let rt = (-2, 0)
-                in shouldBe
-                    ((getModifier (-2, -2) 0 rt 2)
-                        rt
-                    )
-                    (-2, -1)
+    --    it "works for D"
+    --        $ let rt = (-2, 0)
+    --            in shouldBe
+    --                ((getModifier (-2, -2) 0 rt 2)
+    --                    rt
+    --                )
+    --                (-2, -1)
 
-        it "works for ↖ vertical rectangle"
-            $ let rt = (-1, -4)
-                in shouldBe
-                    ((getModifier (-2, -2) 1 rt 2)
-                        rt
-                    )
-                    (-2, -3)
+--        it "works for ↖ vertical rectangle"
+--            $ let rt = (-1, -4)
+--                in shouldBe
+--                    ((getModifier (-2, -2) 1 rt 2)
+--                        rt
+--                    )
+--                    (-2, -3)
+--
+--        it "works for ↖ horizontal rectangle"
+--            $ let rt = (0, -3)
+--                in shouldBe
+--                    ((getModifier (-2, -2) 2 rt 1)
+--                        rt
+--                    )
+--                    (-1, -2)
+--
+--        it "works for ↙ vertical rectangle"
+--            $ let rt = (-1, 0)
+--                in shouldBe
+--                    ((getModifier (-2, -2) 1 rt 2)
+--                        rt
+--                    )
+--                    (-2, -1)
+--
+--        it "works for ↙ horizontal rectangle"
+--            $ let rt = (0, -1)
+--                in shouldBe
+--                    ((getModifier (-2, -2) 2 rt 1)
+--                        rt
+--                    )
+--                    (-1, -2)
+--
+--        it "works for ↗ vertical rectangle"
+--            $ let rt = (-3, -4)
+--                in shouldBe
+--                    ((getModifier (-2, -2) 1 rt 2)
+--                        rt
+--                    )
+--                    (-2, -3)
+--
+--        it "works for ↗ horizontal rectangle"
+--            $ let rt = (-4, -3)
+--                in shouldBe
+--                    ((getModifier (-2, -2) 2 rt 1)
+--                        rt
+--                    )
+--                    (-3, -2)
+--
+--        it "works for ↘ vertical rectangle"
+--            $ let rt = (-3, 0)
+--                in shouldBe
+--                    ((getModifier (-2, -2) 1 rt 2)
+--                        rt
+--                    )
+--                    (-2, -1)
+--
+--        it "works for ↘ horizontal rectangle"
+--            $ let rt = (-4, -1)
+--                in shouldBe
+--                    ((getModifier (-2, -2) 2 rt 1)
+--                        rt
+--                    )
+--                    (-3, -2)
 
-        it "works for ↖ horizontal rectangle"
-            $ let rt = (0, -3)
-                in shouldBe
-                    ((getModifier (-2, -2) 2 rt 1)
-                        rt
-                    )
-                    (-1, -2)
-
-        it "works for ↙ vertical rectangle"
-            $ let rt = (-1, 0)
-                in shouldBe
-                    ((getModifier (-2, -2) 1 rt 2)
-                        rt
-                    )
-                    (-2, -1)
-
-        it "works for ↙ horizontal rectangle"
-            $ let rt = (0, -1)
-                in shouldBe
-                    ((getModifier (-2, -2) 2 rt 1)
-                        rt
-                    )
-                    (-1, -2)
-
-        it "works for ↗ vertical rectangle"
-            $ let rt = (-3, -4)
-                in shouldBe
-                    ((getModifier (-2, -2) 1 rt 2)
-                        rt
-                    )
-                    (-2, -3)
-
-        it "works for ↗ horizontal rectangle"
-            $ let rt = (-4, -3)
-                in shouldBe
-                    ((getModifier (-2, -2) 2 rt 1)
-                        rt
-                    )
-                    (-3, -2)
-
-        it "works for ↘ vertical rectangle"
-            $ let rt = (-3, 0)
-                in shouldBe
-                    ((getModifier (-2, -2) 1 rt 2)
-                        rt
-                    )
-                    (-2, -1)
-
-        it "works for ↘ horizontal rectangle"
-            $ let rt = (-4, -1)
-                in shouldBe
-                    ((getModifier (-2, -2) 2 rt 1)
-                        rt
-                    )
-                    (-3, -2)
+    testInput2 <- runIO $ readFile "testInput2"
 
     describe "vmodelMotion/vanimate'" $ do
         it "works for U 1"
@@ -247,38 +249,8 @@ spec = do
     --                [(0,0)]
     --            )
 
-    testInput2 <- runIO $ readFile "testInput2"
-
     describe "visualize must help to visually compare step results" $ do
-        --it "works for R 4"
-        --    $ shouldBe
-        --        (visualize $ vmodelMotion [R 4])
-        --        -- "......\n......\n......\n......\n#####.\n" goes
-        --        "#####\n"
-        --it "works for [R 4, U 4]"
-        --    $ shouldBe
-        --        (visualize $ vmodelMotion [R 4, U 4])
-        --        "....H\n....1\n..432\n.5...\n6....\n"
-        --it "works for testInput"
-        --    $ shouldBe
-        --        (visualize $ vmodelMotion $ parseInput testInput)
-        --        "....H\n....1\n..432\n.5...\n6....\n"
-        it "works for testInput2: [R 5, U 8, L 3]"
+        it "works for testInput2"
             $ shouldBe
-                (visualize $ vmodelMotion [R 5, U 8, L 3])
-                ""
-
-        it "works for testInput2: [R 5, U 8, L 4]"
-            $ shouldBe
-                (visualize $ vmodelMotion [R 5, U 8, L 4])
-                "...H1.\n.....2\n.....3\n.....4\n....5.\n...6..\n..7...\n.8....\n9.....\n"
-
-        --it "works for testInput2: [R 5, U 8, L 8]"
-        --    $ shouldBe
-        --        (visualize $ vmodelMotion [R 5, U 8, L 8])
-        --        "H1234\n....5\n....6\n....7\n....8\n....9\n"
-
-        --it "works for testInput2"
-        --    $ shouldBe
-        --        (visualize $ vmodelMotion $ parseInput testInput2)
-        --        ""
+                (visualize $ vmodelMotion $ parseInput testInput2)
+                "H\n1\n2\n3\n4\n5\n6\n7\n8\n9\n"
