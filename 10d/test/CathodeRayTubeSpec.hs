@@ -57,3 +57,9 @@ spec = do
                 (parseInput testInput >>= executeInstructions)
                 (Right (-1, 5))
 
+    describe "updateF" $ do
+        it "works"
+            $ shouldBe
+                (updateF (1, Just 12) [] (1, Nothing))
+                [(1, Just 12)]
+

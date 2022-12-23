@@ -5,7 +5,16 @@ Implement instruction parsing in parseInput.
 
 Implement execute function.
 
-Track cycles duriong execution.
+Track cycles during execution.
+
+Implement getSignalStrength.
+
+Implement function which will took the number of cycles, executeInstructions and get the signal strength for specified
+numbers of cycles.
+
+Extend State type synonym to (RegisterXValue, CycleNumber, [(CycleNumber, Maybe Int)] and inject getSignalStrength into
+executeInstrucitons?
+
 
 For now consider the signal strength (the cycle number multiplied by the value of the X register).
 
