@@ -39,3 +39,21 @@ spec = do
             $ shouldBe
                 (parseInput testInput)
                 (Right [Noop, Addx 3, Addx (-5)])
+
+    describe "execute" $ do
+        it "works for noop"
+            $ shouldBe
+                (execute (1, 0) Noop)
+                (1, 1)
+
+        it "works for addx"
+            $ shouldBe
+                (execute (1, 0) $ Addx (-2))
+                (-1, 2)
+
+    describe "executeInstructions" $ do
+        it "works for testInput"
+            $ shouldBe
+                (parseInput testInput >>= executeInstructions)
+                (Right (-1, 5))
+
