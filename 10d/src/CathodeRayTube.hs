@@ -141,7 +141,10 @@ boolToPixel False = '.'
 
 pixelToBool :: Char -> Bool
 pixelToBool '#' = True
-pixelToBool '.' = False
+pixelToBool _ = False
+
+fmapBoolToPixel :: PartIIState -> (RegisterXValue, CycleNumber, String)
+fmapBoolToPixel (registerValue, cycleNumber, crtState) = (registerValue, cycleNumber, fmap boolToPixel crtState)
 
 
 splitCRTStateInSix :: CRTState -> [CRTState]
@@ -152,6 +155,22 @@ splitCRTStateInSix crtState = --foldl' (\ acc _ = splitAt 40) 1 [1..6]
         (fourthForty, rest80) = splitAt 40 rest120
         (fifthForty, rest40) = splitAt 40 rest80
     in [forty, secondForty, thirdForty, fourthForty, fifthForty, rest40]
+
+
+f :: (CycleNumber, [(CycleNumber, Instruction)]) -> Instruction -> (CycleNumber, [(CycleNumber, Instruction)])
+f (cycleCounter, accList) instruction =
+    let cycleCounter' = cycleCounter + 1
+        pluh = case instruction of
+            Noop -> [(cycleCounter', instruction)]
+            _ -> [(cycleCounter', instruction), (cycleCounter' + 1, instruction)]
+    in (cycleCounter, accList ++ pluh)
+
+mapCycleNumbers :: [Instruction] -> [(CycleNumber, Instruction)]
+mapCycleNumbers =
+    snd
+        . foldl'
+            f
+            (0, [])
 
 
 collectCRTStateAfter240Cycles :: [Instruction] -> String

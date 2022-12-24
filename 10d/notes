@@ -54,6 +54,8 @@ Collect "image" from first 240 cycles of input instructions execution.
 
 How to represent this image? [Bool]? Vector Bool? Monoid [Bool]? [Bool]
 
+Need a map instruction to cycleNumber to tell on which instructions executeII fails: mapCycleNumbers.
+
 
 Render the image given by your program.
 

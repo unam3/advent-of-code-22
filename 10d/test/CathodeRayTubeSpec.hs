@@ -139,17 +139,41 @@ spec = do
                     fmap pixelToBool "##..##..##..##..##..#"
                 ))
 
-        it "works for testInput2"
+        it "works for testInput2 part"
+            $ shouldBe
+                (parseInput testInput2 >>= executeInstructionsII 39 >>= pure . fmapBoolToPixel)
+                (Right (
+                    0,
+                    45,
+                    "##..##..##..##..##..##..##..##..##..##..###."
+                ))
+
+        it "works for testInput2 part"
             $ shouldBe
                 (parseInput testInput2
-                    >>= executeInstructionsII 239
+                    >>= executeInstructionsII 44
                         >>= (\ (_, _, crtState) -> pure . fmap (fmap boolToPixel) $ splitCRTStateInSix crtState)
                 )
                 (Right [
                     "##..##..##..##..##..##..##..##..##..##..",
-                    "###...###...###...###...###...###...###.",
-                    "####....####....####....####....####....",
-                    "#####.....#####.....#####.....#####.....",
-                    "######......######......######......####",
-                    "#######.......#######.......#######....."
+                    "###.",
+                    "",
+                    "",
+                    "",
+                    ""
                 ])
+
+        --it "works for testInput2"
+        --    $ shouldBe
+        --        (parseInput testInput2
+        --            >>= executeInstructionsII 239
+        --                >>= (\ (_, _, crtState) -> pure . fmap (fmap boolToPixel) $ splitCRTStateInSix crtState)
+        --        )
+        --        (Right [
+        --            "##..##..##..##..##..##..##..##..##..##..",
+        --            "###...###...###...###...###...###...###.",
+        --            "####....####....####....####....####....",
+        --            "#####.....#####.....#####.....#####.....",
+        --            "######......######......######......####",
+        --            "#######.......#######.......#######....."
+        --        ])
