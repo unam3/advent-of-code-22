@@ -105,6 +105,7 @@ spec = do
             $ shouldBe
                 (
                     executeII
+                        2
                         (1, 0, [False])
                         Noop
                 )
@@ -118,6 +119,7 @@ spec = do
             $ shouldBe
                 (
                     executeII
+                        5
                         (16, 3, [])
                         (Addx (-11))
                 )
@@ -126,3 +128,28 @@ spec = do
                     5,
                     [False, False]
                 )
+
+    describe "executeInstructionsII" $ do
+        it "works for testInput2 short listing"
+            $ shouldBe
+                (parseInput testInput2 >>= executeInstructionsII 21)
+                (Right (
+                    20,
+                    22,
+                    fmap pixelToBool "##..##..##..##..##..#"
+                ))
+
+        it "works for testInput2"
+            $ shouldBe
+                (parseInput testInput2
+                    >>= executeInstructionsII 239
+                        >>= (\ (_, _, crtState) -> pure . fmap (fmap boolToPixel) $ splitCRTStateInSix crtState)
+                )
+                (Right [
+                    "##..##..##..##..##..##..##..##..##..##..",
+                    "###...###...###...###...###...###...###.",
+                    "####....####....####....####....####....",
+                    "#####.....#####.....#####.....#####.....",
+                    "######......######......######......####",
+                    "#######.......#######.......#######....."
+                ])

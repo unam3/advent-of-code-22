@@ -52,7 +52,7 @@ lit pixel (#); otherwise, the screen leaves the pixel dark (.).
 
 Collect "image" from first 240 cycles of input instructions execution.
 
-How to represent this image? [Bool]? Vector Bool? Monoid [Bool]?
+How to represent this image? [Bool]? Vector Bool? Monoid [Bool]? [Bool]
 
 
 Render the image given by your program.

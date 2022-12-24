@@ -99,14 +99,20 @@ haveToLightPixel spriteMiddle pixelCurrentlyBeingDrawnNumber =
         || pixelCurrentlyBeingDrawnNumber == spriteMiddleInCycles
         || pixelCurrentlyBeingDrawnNumber == 1 + spriteMiddleInCycles
 
-executeII :: PartIIState -> Instruction -> PartIIState
-executeII (registerValue, cycleNumber, crtState) Noop =
-    let cycleNumber' = cycleNumber + 1
-        isPixelLit = haveToLightPixel registerValue cycleNumber'
-        crtState' = crtState ++ [isPixelLit]
-    in (registerValue, cycleNumber', crtState')
+executeII :: CycleNumber -> PartIIState -> Instruction -> PartIIState
+executeII targetCycleNumber state@(registerValue, cycleNumber, crtState) Noop =
 
-executeII (registerValue, cycleNumber, crtState) (Addx value) =
+    if cycleNumber == targetCycleNumber
+    
+        then state
+        
+        else 
+            let cycleNumber' = cycleNumber + 1
+                isPixelLit = haveToLightPixel registerValue cycleNumber'
+                crtState' = crtState ++ [isPixelLit]
+            in (registerValue, cycleNumber', crtState')
+
+executeII targetCycleNumber state@(registerValue, cycleNumber, crtState) (Addx value) =
     let cycleNumber1 = cycleNumber + 1
         isPixelLit1 = haveToLightPixel registerValue cycleNumber1
         crtState1 = crtState ++ [isPixelLit1]
@@ -115,7 +121,37 @@ executeII (registerValue, cycleNumber, crtState) (Addx value) =
         isPixelLit2 = haveToLightPixel registerValue cycleNumber2
         crtState2 = crtState1 ++ [isPixelLit2]
 
-    in (registerValue + value, cycleNumber2, crtState2)
+    in if cycleNumber == targetCycleNumber
+    
+        then state
+
+        else if cycleNumber1 == targetCycleNumber
+
+            then (registerValue, cycleNumber1, crtState1)
+
+            else (registerValue + value, cycleNumber2, crtState2)
+
+
+executeInstructionsII :: Int -> [Instruction] -> Either String PartIIState
+executeInstructionsII targetCycleNumber = Right . foldl' (executeII targetCycleNumber) (1, 0, [])
+
+boolToPixel :: Bool -> Char
+boolToPixel True = '#'
+boolToPixel False = '.'
+
+pixelToBool :: Char -> Bool
+pixelToBool '#' = True
+pixelToBool '.' = False
+
+
+splitCRTStateInSix :: CRTState -> [CRTState]
+splitCRTStateInSix crtState = --foldl' (\ acc _ = splitAt 40) 1 [1..6]
+    let (forty, rest200) = splitAt 40 crtState
+        (secondForty, rest160) = splitAt 40 rest200
+        (thirdForty, rest120) = splitAt 40 rest160
+        (fourthForty, rest80) = splitAt 40 rest120
+        (fifthForty, rest40) = splitAt 40 rest80
+    in [forty, secondForty, thirdForty, fourthForty, fifthForty, rest40]
 
 
 collectCRTStateAfter240Cycles :: [Instruction] -> String
