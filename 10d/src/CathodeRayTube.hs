@@ -92,12 +92,12 @@ type CRTState = [IsPixelLit]
 type PartIIState = (RegisterXValue, CycleNumber, CRTState)
 
 
-haveToLightPixel :: Int -> Int -> Bool
+haveToLightPixel :: RegisterXValue -> CycleNumber -> Bool
 haveToLightPixel spriteMiddle pixelCurrentlyBeingDrawnNumber =
-    -- If the sprite is positioned such that one of its three pixels is the pixel currently being drawn
-    pixelCurrentlyBeingDrawnNumber == (subtract 1 spriteMiddle)
-        || pixelCurrentlyBeingDrawnNumber == spriteMiddle
-        || pixelCurrentlyBeingDrawnNumber == 1 + spriteMiddle
+    let spriteMiddleInCycles = spriteMiddle + 1
+    in pixelCurrentlyBeingDrawnNumber == (subtract 1 spriteMiddleInCycles)
+        || pixelCurrentlyBeingDrawnNumber == spriteMiddleInCycles
+        || pixelCurrentlyBeingDrawnNumber == 1 + spriteMiddleInCycles
 
 executeII :: PartIIState -> Instruction -> PartIIState
 executeII (registerValue, cycleNumber, crtState) Noop =

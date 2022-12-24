@@ -113,3 +113,16 @@ spec = do
                     1,
                     [False, True]
                 )
+
+        it "works for Addx -11"
+            $ shouldBe
+                (
+                    executeII
+                        (16, 3, [])
+                        (Addx (-11))
+                )
+                (
+                    5,
+                    5,
+                    [False, False]
+                )

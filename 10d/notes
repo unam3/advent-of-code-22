@@ -33,8 +33,21 @@ horizontal position of the middle of that sprite.
 
 The CRT draws a single pixel during each cycle.
 
+The left-most pixel in each row is in position 0, and the right-most pixel in each row is in position 39.
+
 If the sprite is positioned such that one of its three pixels is the pixel currently being drawn, the screen produces a
 lit pixel (#); otherwise, the screen leaves the pixel dark (.).
+
+|— position 0, cycle 1
+||— position 1, cycle 2
+||
+###..................................... initial sprite position X = 1 => C 2
+
+
+               |— position 15, cycle 16
+               ||— position 16, cycle 17
+               ||
+...............###...................... X = 16 => C 17
 
 
 Collect "image" from first 240 cycles of input instructions execution.
