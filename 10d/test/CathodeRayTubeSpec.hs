@@ -129,6 +129,12 @@ spec = do
                     [False, False]
                 )
 
+    describe "mapCycleNumbers" $ do
+        it "works for testInput"
+            $ shouldBe
+                (parseInput testInput >>= Right . mapCycleNumbers)
+                (Right [(1,Noop),(2,Addx 3),(3,Addx 3),(4,Addx (-5)),(5,Addx (-5))])
+
     describe "executeInstructionsII" $ do
         it "works for testInput2 short listing"
             $ shouldBe

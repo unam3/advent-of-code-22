@@ -157,19 +157,31 @@ splitCRTStateInSix crtState = --foldl' (\ acc _ = splitAt 40) 1 [1..6]
     in [forty, secondForty, thirdForty, fourthForty, fifthForty, rest40]
 
 
-f :: (CycleNumber, [(CycleNumber, Instruction)]) -> Instruction -> (CycleNumber, [(CycleNumber, Instruction)])
-f (cycleCounter, accList) instruction =
+assignCycleNumber :: (CycleNumber, [(CycleNumber, Instruction)])
+    -> Instruction
+    -> (CycleNumber, [(CycleNumber, Instruction)])
+assignCycleNumber (cycleCounter, accList) instruction =
+
     let cycleCounter' = cycleCounter + 1
-        pluh = case instruction of
-            Noop -> [(cycleCounter', instruction)]
-            _ -> [(cycleCounter', instruction), (cycleCounter' + 1, instruction)]
-    in (cycleCounter, accList ++ pluh)
+        cycleCounter'' = cycleCounter + 2
+        isNoop = instruction == Noop
+        newCycleCounter =
+            if isNoop
+            then cycleCounter'
+            else cycleCounter''
+        listToAdd =
+            if isNoop
+            then [(cycleCounter', instruction)]
+            else [(cycleCounter', instruction), (cycleCounter'', instruction)]
+
+
+    in (newCycleCounter, accList ++ listToAdd)
 
 mapCycleNumbers :: [Instruction] -> [(CycleNumber, Instruction)]
 mapCycleNumbers =
     snd
         . foldl'
-            f
+            assignCycleNumber
             (0, [])
 
 
