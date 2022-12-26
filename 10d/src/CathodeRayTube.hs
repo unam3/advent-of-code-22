@@ -102,7 +102,7 @@ haveToLightPixel spriteMiddle pixelCurrentlyBeingDrawnNumber =
 executeII :: CycleNumber -> PartIIState -> Instruction -> PartIIState
 executeII targetCycleNumber state@(registerValue, cycleNumber, crtState) Noop =
 
-    if cycleNumber == targetCycleNumber
+    if cycleNumber >= targetCycleNumber
     
         then state
         
@@ -121,11 +121,11 @@ executeII targetCycleNumber state@(registerValue, cycleNumber, crtState) (Addx v
         isPixelLit2 = haveToLightPixel registerValue cycleNumber2
         crtState2 = crtState1 ++ [isPixelLit2]
 
-    in if cycleNumber == targetCycleNumber
+    in if cycleNumber >= targetCycleNumber
     
         then state
 
-        else if cycleNumber1 == targetCycleNumber
+        else if cycleNumber1 >= targetCycleNumber
 
             then (registerValue, cycleNumber1, crtState1)
 
