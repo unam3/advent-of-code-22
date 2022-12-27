@@ -2,7 +2,7 @@ module MonkeyInTheMiddle where
 
 
 import Data.List (isPrefixOf, foldl', stripPrefix)
-import Data.Vector (Vector, (//), fromList)
+import Data.Vector (Vector, (!), (//), fromList)
 import Text.Read (readMaybe)
 
 type Round = Int
@@ -107,25 +107,31 @@ inspectItem (itemWorryLevels, operation, (divisibleBy, throwIfTrueTo, throwIfFal
         Item with worry level 500 is thrown to monkey 3.
     -}
     let worryLevel' = modify itemWorryLevel operation
-        worryLevelAfterGetBored = round ((fromInteger $ toInteger worryLevel') / 3)
+        worryLevelAfterGetBored = floor ((fromInteger $ toInteger worryLevel') / 3)
         isDivisibleByTestNumber = (rem worryLevelAfterGetBored divisibleBy) == 0
+        monkeyToThrow =
+            if isDivisibleByTestNumber
+            then throwIfTrueTo
+            else throwIfFalseTo
+         -- monkeyToThrowState
+        (itemWorryLevels', operation', divideThenThrow') = (!) inputData monkeyToThrow
+        newItemWorryLevels' = itemWorryLevels' ++ [worryLevelAfterGetBored]
 
-        -- empty the list for current monky
-        -- need monkey index!
-        inputDataWithCurrentMunkeyEmptyItemsList = undefined -- (//) inputData [(, [])]
+    in (//)
+        inputData
+        [(monkeyToThrow, (newItemWorryLevels', operation', divideThenThrow'))]
 
-    in if isDivisibleByTestNumber
-
-        -- add item with worryLevelAfterGetBored to monkey from throwIfTrueTo/throwIfFalseTo
-        then undefined --- throw to monkey number throwIfTrueTo
-
-        else undefined --- throw to monkey number throwIfFalseTo
-
-
-
-inspect :: InputData -> MonkeyState -> InputData
-inspect inputData state@(itemWorryLevels, _, _) =
-    let pluh = foldl' (inspectItem state) inputData itemWorryLevels
-    in undefined
+inspect :: InputData -> Int -> MonkeyState -> InputData
+inspect inputData monkeyIndex state@(itemWorryLevels, operation, divideThenThrow) =
+    let newInputData = foldl' (inspectItem state) inputData itemWorryLevels
+        newInputDataWithoutInspectedItems = (//)
+            newInputData
+            [(
+                monkeyIndex,
+                ([], operation, divideThenThrow)
+            )]
+    in newInputDataWithoutInspectedItems
     
+-- to pass index of monkey
+-- ifoldl' :: (a -> Int -> b -> a) -> a -> Vector b -> a
 
