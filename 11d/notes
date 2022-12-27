@@ -1,0 +1,19 @@
+Part I.
+
+parseInput.
+
+Split input to sections for each monkey. ../05d/src/SupplyStacks: group and splitByEmptyLines.
+
+Parse each monkey section and add to InputData accumulator with foldl'.
+
+
+Monkey 0 goes first, then monkey 1, and so on until each monkey has had one turn.
+
+The process of each monkey taking a single turn is called a round.
+
+How many items monkeys inspected?
+
+monkey business = multiplication of the numbers two most active monkeys inspected items.
+
+Figure out which monkeys to chase by counting how many items they inspect over 20 rounds.
+What is the level of monkey business after 20 rounds?
