@@ -16,6 +16,9 @@ On a single monkey's turn, it inspects and throws all of the items it is holding
 
 If a monkey is holding no items at the start of its turn, its turn ends.
 
+How to implement throwing?
+We always throw all tthe items, so we can just use empty list for current monkey.
+
 Monkey 0 goes first, then monkey 1, and so on until each monkey has had one turn.
 
 The process of each monkey taking a single turn is called a round.
