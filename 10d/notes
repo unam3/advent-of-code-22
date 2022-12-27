@@ -57,6 +57,7 @@ How to represent this image? [Bool]? Vector Bool? Monoid [Bool]? [Bool]
 Need a map instruction to cycleNumber to tell on which instructions executeII fails: mapCycleNumbers.
 
 cycleNumber should be zeroed after 40 each time.
+getAdjustedCycleNumber: mod 40
 
 
 Render the image given by your program.

@@ -135,6 +135,12 @@ spec = do
                 (parseInput testInput >>= Right . mapCycleNumbers)
                 (Right [(1,Noop),(2,Addx 3),(3,Addx 3),(4,Addx (-5)),(5,Addx (-5))])
 
+    describe "adjustCycleNumber" $ do
+        it "works"
+            $ shouldBe
+                (fmap adjustCycleNumber [1, 40, 41, 80, 81, 119])
+                [1, 40, 1, 40, 1, 39]
+
     describe "executeInstructionsII" $ do
         it "works for testInput2 short listing"
             $ shouldBe

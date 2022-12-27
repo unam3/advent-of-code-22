@@ -99,6 +99,15 @@ haveToLightPixel spriteMiddle pixelCurrentlyBeingDrawnNumber =
         || pixelCurrentlyBeingDrawnNumber == spriteMiddleInCycles
         || pixelCurrentlyBeingDrawnNumber == 1 + spriteMiddleInCycles
 
+adjustCycleNumber :: CycleNumber -> CycleNumber
+adjustCycleNumber n
+    | n <= 40 = n
+    | otherwise =
+        let nMod40 = mod n 40
+        in if nMod40 == 0
+            then 40
+            else nMod40
+
 executeII :: CycleNumber -> PartIIState -> Instruction -> PartIIState
 executeII targetCycleNumber state@(registerValue, cycleNumber, crtState) Noop =
 
