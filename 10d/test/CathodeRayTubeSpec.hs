@@ -202,3 +202,11 @@ spec = do
                     "######......######......######......####",
                     "#######.......#######.......#######....."
                 ])
+
+        it "works for input"
+            $ shouldBe
+                (parseInput input
+                    >>= executeInstructionsII 240
+                        >>= (\ (_, _, crtState) -> pure . fmap (fmap boolToPixel) $ splitCRTStateInSix crtState)
+                )
+                (Right [])
