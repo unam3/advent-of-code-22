@@ -1,5 +1,7 @@
 module CathodeRayTubeSpec where 
 
+import Control.Monad ((>=>))
+import Data.Functor ((<&>))
 import Test.Hspec (Spec, describe, it, runIO, shouldBe)
 
 import CathodeRayTube
@@ -83,7 +85,7 @@ spec = do
     describe "executeInstructions'" $ do
         it "works for testInput2"
             $ shouldBe
-                (parseInput testInput2 >>= executeInstructions' (zip [20, 60, 100, 140, 180, 220] $ cycle [Nothing]))
+                (parseInput testInput2 >>= executeInstructions' (zip [20, 60, 100, 140, 180, 220] $ repeat Nothing))
                 (Right (17,240,[(20,Just 420),(60,Just 1140),(100,Just 1800),(140,Just 2940),(180,Just 2880),(220,Just 3960)]))
 
 
@@ -92,12 +94,12 @@ spec = do
     describe "getSignalStrengthFor" $ do
         it "works for testInput2"
             $ shouldBe
-                (parseInput testInput2 >>= pure . getSignalStrengthFor [20, 60, 100, 140, 180, 220])
+                (parseInput testInput2 <&> getSignalStrengthFor [20, 60, 100, 140, 180, 220])
                 (Right 13140)
 
         it "works for testInput2"
             $ shouldBe
-                (parseInput input >>= pure . getSignalStrengthFor [20, 60, 100, 140, 180, 220])
+                (parseInput input <&> getSignalStrengthFor [20, 60, 100, 140, 180, 220])
                 (Right 14760)
 
     describe "executeII" $ do
@@ -154,9 +156,12 @@ spec = do
         it "works for testInput2 first row (40)"
             $ shouldBe
                 (parseInput testInput2
-                    >>= ( \ instructions ->
-                        executeInstructionsII 40 instructions
-                            >>= (\ (_, cycleNumber, crtState) -> Right (cycleNumber, crtState))
+                    -- >>= ( \ instructions ->
+                    --     executeInstructionsII 40 instructions
+                    --         >>= (\ (_, cycleNumber, crtState) -> Right (cycleNumber, crtState))
+                    -- )
+                    >>= (executeInstructionsII 40
+                        >=> (\ (_, cycleNumber, crtState) -> Right (cycleNumber, crtState))
                     )
                 )
                 (Right (

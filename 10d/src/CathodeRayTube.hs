@@ -4,7 +4,7 @@ module CathodeRayTube where
 import Data.Bifunctor (second)
 import Data.Either (partitionEithers)
 import Data.List (foldl', stripPrefix)
-import Data.Maybe (catMaybes)
+import Data.Maybe (mapMaybe)
 import Text.Read (readMaybe)
 
 data Instruction = Noop | Addx Int
@@ -83,8 +83,8 @@ executeInstructions' targetCycles = Right . foldl' execute' (1, 0, targetCycles)
 
 getSignalStrengthFor :: [Int] -> [Instruction] -> Int
 getSignalStrengthFor cycleNumbers =
-    (\ (Right (_, _, targetCycleStateList)) -> sum . catMaybes $ fmap snd targetCycleStateList)
-        . executeInstructions' ((zip cycleNumbers $ cycle [Nothing]))
+    (\ (Right (_, _, targetCycleStateList)) -> sum $ mapMaybe snd targetCycleStateList)
+        . executeInstructions' (zip cycleNumbers $ repeat Nothing)
 
 
 type IsPixelLit = Bool
@@ -95,7 +95,7 @@ type PartIIState = (RegisterXValue, CycleNumber, CRTState)
 haveToLightPixel :: RegisterXValue -> CycleNumber -> Bool
 haveToLightPixel spriteMiddle pixelCurrentlyBeingDrawnNumber =
     let spriteMiddleInCycles = spriteMiddle + 1
-    in pixelCurrentlyBeingDrawnNumber == (subtract 1 spriteMiddleInCycles)
+    in pixelCurrentlyBeingDrawnNumber == subtract 1 spriteMiddleInCycles
         || pixelCurrentlyBeingDrawnNumber == spriteMiddleInCycles
         || pixelCurrentlyBeingDrawnNumber == 1 + spriteMiddleInCycles
 
