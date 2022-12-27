@@ -2,7 +2,8 @@ module MonkeyInTheMiddle where
 
 
 import Data.List (isPrefixOf, foldl', stripPrefix)
-import Data.Vector (Vector, (!), (//), fromList)
+import Data.Vector (Vector, (!), (//), fromList, ifoldl')
+import Prelude hiding (round)
 import Text.Read (readMaybe)
 
 type Round = Int
@@ -94,11 +95,8 @@ modify itemWorryLevel (Add n) = n + itemWorryLevel
 modify itemWorryLevel (MultiplyBy n) = n * itemWorryLevel
 
 
-throw :: InputData -> ItemWorryLevel -> Int -> InputData
-throw inputData itemWorryLevel monkeyToThrow = undefined 
-
 inspectItem :: MonkeyState -> InputData -> Int -> InputData
-inspectItem (itemWorryLevels, operation, (divisibleBy, throwIfTrueTo, throwIfFalseTo)) inputData itemWorryLevel =
+inspectItem (_, operation, (divisibleBy, throwIfTrueTo, throwIfFalseTo)) inputData itemWorryLevel =
     {-
         Monkey inspects an item with a worry level of 79.
         Worry level is multiplied by 19 to 1501.
@@ -121,6 +119,7 @@ inspectItem (itemWorryLevels, operation, (divisibleBy, throwIfTrueTo, throwIfFal
         inputData
         [(monkeyToThrow, (newItemWorryLevels', operation', divideThenThrow'))]
 
+
 inspect :: InputData -> Int -> MonkeyState -> InputData
 inspect inputData monkeyIndex state@(itemWorryLevels, operation, divideThenThrow) =
     let newInputData = foldl' (inspectItem state) inputData itemWorryLevels
@@ -131,7 +130,7 @@ inspect inputData monkeyIndex state@(itemWorryLevels, operation, divideThenThrow
                 ([], operation, divideThenThrow)
             )]
     in newInputDataWithoutInspectedItems
-    
--- to pass index of monkey
--- ifoldl' :: (a -> Int -> b -> a) -> a -> Vector b -> a
 
+
+round :: InputData -> InputData
+round inputData = ifoldl' inspect inputData inputData
