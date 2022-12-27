@@ -2,7 +2,7 @@ module MonkeyInTheMiddle where
 
 
 import Data.List (isPrefixOf, foldl', stripPrefix)
-import Data.Vector (Vector)
+import Data.Vector (Vector, fromList)
 import Text.Read (readMaybe)
 
 type Round = Int
@@ -38,14 +38,14 @@ splitByEmptyLines :: [String] -> [[String]]
 splitByEmptyLines = reverse . fmap reverse . foldl' group [[]]
 
 
-parseMonkeySection :: [String] -> (Int, StartingItems, Operation, DivideThenThrow)
-parseMonkeySection [monkeyNumberS, startingItemsS, operationS, divisibleByS, throwIfTrueToS, throwIfFalseToS] =
+parseMonkeySection :: [String] -> (StartingItems, Operation, DivideThenThrow)
+parseMonkeySection [_, startingItemsS, operationS, divisibleByS, throwIfTrueToS, throwIfFalseToS] =
 
-    let (Just monkeyNumber) =
-            stripPrefix "Monkey " monkeyNumberS
-                -- removing closing ":"
-                >>= Just . init
-                >>= readMaybe
+    let --(Just monkeyNumber) =
+        --    stripPrefix "Monkey " monkeyNumberS
+        --        -- removing closing ":"
+        --        >>= Just . init
+        --        >>= readMaybe
 
         -- Starting items: 62, 68, 56, 65, 94, 78
         (Just startingItems) =
@@ -76,12 +76,13 @@ parseMonkeySection [monkeyNumberS, startingItemsS, operationS, divisibleByS, thr
             stripPrefix "    If false: throw to monkey " throwIfFalseToS
                 >>= readMaybe
 
-    in (monkeyNumber, startingItems, operation, (divisibleBy, throwIfTrueTo, throwIfFalseTo))
+    --in (monkeyNumber, startingItems, operation, (divisibleBy, throwIfTrueTo, throwIfFalseTo))
+    in (startingItems, operation, (divisibleBy, throwIfTrueTo, throwIfFalseTo))
 
 parseMonkeySection nonMatched = error $ "non matched input list: " ++ show nonMatched
 
 
---parseInput :: String -> InputData
-parseInput = fmap id . lines
+parseInput :: String -> InputData
+parseInput = fromList . fmap parseMonkeySection . splitByEmptyLines . lines
 
 
