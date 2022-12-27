@@ -164,14 +164,14 @@ spec = do
                     fmap pixelToBool "##..##..##..##..##..##..##..##..##..##.."
                 ))
 
-        it "works for testInput2 part"
-            $ shouldBe
-                (parseInput testInput2 >>= executeInstructionsII 42 >>= pure . fmapBoolToPixel)
-                (Right (
-                    0,
-                    45,
-                    "##..##..##..##..##..##..##..##..##..##..###."
-                ))
+        --it "works for testInput2 part"
+        --    $ shouldBe
+        --        (parseInput testInput2 >>= executeInstructionsII 42 >>= pure . fmapBoolToPixel)
+        --        (Right (
+        --            0,
+        --            45,
+        --            "##..##..##..##..##..##..##..##..##..##..###."
+        --        ))
 
         --it "works for testInput2 part"
         --    $ shouldBe
@@ -188,17 +188,17 @@ spec = do
         --            ""
         --        ])
 
-        --it "works for testInput2"
-        --    $ shouldBe
-        --        (parseInput testInput2
-        --            >>= executeInstructionsII 239
-        --                >>= (\ (_, _, crtState) -> pure . fmap (fmap boolToPixel) $ splitCRTStateInSix crtState)
-        --        )
-        --        (Right [
-        --            "##..##..##..##..##..##..##..##..##..##..",
-        --            "###...###...###...###...###...###...###.",
-        --            "####....####....####....####....####....",
-        --            "#####.....#####.....#####.....#####.....",
-        --            "######......######......######......####",
-        --            "#######.......#######.......#######....."
-        --        ])
+        it "works for testInput2"
+            $ shouldBe
+                (parseInput testInput2
+                    >>= executeInstructionsII 240
+                        >>= (\ (_, _, crtState) -> pure . fmap (fmap boolToPixel) $ splitCRTStateInSix crtState)
+                )
+                (Right [
+                    "##..##..##..##..##..##..##..##..##..##..",
+                    "###...###...###...###...###...###...###.",
+                    "####....####....####....####....####....",
+                    "#####.....#####.....#####.....#####.....",
+                    "######......######......######......####",
+                    "#######.......#######.......#######....."
+                ])

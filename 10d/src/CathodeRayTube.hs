@@ -117,17 +117,17 @@ executeII targetCycleNumber state@(registerValue, cycleNumber, crtState) Noop =
         
         else 
             let cycleNumber' = cycleNumber + 1
-                isPixelLit = haveToLightPixel registerValue cycleNumber'
+                isPixelLit = haveToLightPixel registerValue $ adjustCycleNumber cycleNumber'
                 crtState' = crtState ++ [isPixelLit]
             in (registerValue, cycleNumber', crtState')
 
 executeII targetCycleNumber state@(registerValue, cycleNumber, crtState) (Addx value) =
     let cycleNumber1 = cycleNumber + 1
-        isPixelLit1 = haveToLightPixel registerValue cycleNumber1
+        isPixelLit1 = haveToLightPixel registerValue $ adjustCycleNumber cycleNumber1
         crtState1 = crtState ++ [isPixelLit1]
 
         cycleNumber2 = cycleNumber1 + 1
-        isPixelLit2 = haveToLightPixel registerValue cycleNumber2
+        isPixelLit2 = haveToLightPixel registerValue $ adjustCycleNumber cycleNumber2
         crtState2 = crtState1 ++ [isPixelLit2]
 
     in if cycleNumber >= targetCycleNumber
