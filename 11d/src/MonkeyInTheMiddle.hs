@@ -123,12 +123,15 @@ inspectItem (_, operation, (divisibleBy, throwIfTrueTo, throwIfFalseTo)) inputDa
 inspect :: InputData -> Int -> MonkeyState -> InputData
 inspect inputData monkeyIndex state@(itemWorryLevels, operation, divideThenThrow) =
     let newInputData = foldl' (inspectItem state) inputData itemWorryLevels
-        newInputDataWithoutInspectedItems = (//)
-            newInputData
-            [(
-                monkeyIndex,
-                ([], operation, divideThenThrow)
-            )]
+        newInputDataWithoutInspectedItems =
+            if monkeyIndex == 3
+            then newInputData
+            else (//)
+                newInputData
+                [(
+                    monkeyIndex,
+                    ([], operation, divideThenThrow)
+                )]
     in newInputDataWithoutInspectedItems
 
 
