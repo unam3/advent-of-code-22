@@ -1,9 +1,10 @@
 module MonkeyInTheMiddle where
 
 
+import Data.Function (fix)
 import Data.List (isPrefixOf, foldl', stripPrefix)
-import Data.Vector (Vector, (!), (//), fromList, ifoldl')
-import Prelude hiding (round)
+import Data.Vector (Vector, (!), (//), fromList, ifoldl', length)
+import Prelude hiding (length, round)
 import Text.Read (readMaybe)
 
 type Round = Int
@@ -130,11 +131,17 @@ inspect inputData monkeyIndex state@(itemWorryLevels, operation, divideThenThrow
                     monkeyIndex,
                     ([], operation, divideThenThrow)
                 )]
-    --in newInputDataWithoutInspectedItems
-    in if monkeyIndex == 3
-        then error $ show (state, inputData, newInputDataWithoutInspectedItems)
-        else newInputDataWithoutInspectedItems
+    in newInputDataWithoutInspectedItems
+    --n if monkeyIndex == 3
+    --   then error $ show (state, inputData, newInputDataWithoutInspectedItems)
+    --   else newInputDataWithoutInspectedItems
 
+inspectWrapper :: InputData -> Int -> InputData
+inspectWrapper inputData monkeyIndex =
+    inspect
+        inputData
+        monkeyIndex
+        $ (!) inputData monkeyIndex
 
 round :: InputData -> InputData
-round inputData = ifoldl' inspect inputData inputData
+round inputData = foldl' inspectWrapper inputData [0 .. subtract 1 $ length inputData]
