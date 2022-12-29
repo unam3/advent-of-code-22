@@ -177,17 +177,17 @@ spec = do
                 (getMonkeyBusinessLevel . runNRounds dropWorryLevel 19 $ parseInput input)
                 55944
 
-        it "works for part 2 on testInput"
+        it "works for part 2 1000 on testInput"
             $ shouldBe
-                (getMonkeyBusinessLevel . runNRounds id 9999 $ parseInput testInput)
-                2713310158
-
-        it "works for part 2 4999 on testInput"
-            $ shouldBe
-                (runNRounds id 4999 $ parseInput testInput)
+                (runNRounds id 999 $ parseInput testInput)
                 $ fromList []
 
-        it "works for part 2 on input.txt"
-            $ shouldBe
-                (getMonkeyBusinessLevel . runNRounds id 9999 $ parseInput input)
-                2713310158
+        --it "works for part 2 on testInput"
+        --    $ shouldBe
+        --        (getMonkeyBusinessLevel . runNRounds id 9999 $ parseInput testInput)
+        --        2713310158
+
+        --it "works for part 2 on input.txt"
+        --    $ shouldBe
+        --        (getMonkeyBusinessLevel . runNRounds id 9999 $ parseInput input)
+        --        2713310158

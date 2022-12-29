@@ -16,14 +16,14 @@ type InspectedItems = Vector Int
 type State = (Round, InspectedItems)
 
 
-type ItemWorryLevel = Int
+type ItemWorryLevel = Integer
 
-type NumberOfInspectedItems = Int
+type NumberOfInspectedItems = Integer
 
 data Operation = MultiplyBy Int | Add Int | Sqr
     deriving (Eq, Show)
 
-type DivisibleBy = Int
+type DivisibleBy = Integer
 
 type ThrowIfTrueTo = Int
 
@@ -103,13 +103,13 @@ parseInput = fromList . fmap parseMonkeySection . splitByEmptyLines . lines
 
 modify :: ItemWorryLevel -> Operation -> ItemWorryLevel
 modify itemWorryLevel Sqr = itemWorryLevel * itemWorryLevel
-modify itemWorryLevel (Add n) = n + itemWorryLevel
-modify itemWorryLevel (MultiplyBy n) = n * itemWorryLevel
+modify itemWorryLevel (Add n) = toInteger n + itemWorryLevel
+modify itemWorryLevel (MultiplyBy n) = toInteger n * itemWorryLevel
 
 
-type WorryLevelModifier = (Int -> Int)
+type WorryLevelModifier = (Integer -> Integer)
 
-inspectItem :: WorryLevelModifier -> Int -> MonkeyState -> InputData -> Int -> InputData
+inspectItem :: WorryLevelModifier -> Int -> MonkeyState -> InputData -> Integer -> InputData
 inspectItem
     worryLevelModifier
     monkeyIndex
@@ -149,7 +149,7 @@ inspect
     state@(operation, divideThenThrow, numberOfInspectedItems, itemWorryLevels) =
 
     let newInputData = foldl' (inspectItem worryLevelModifier monkeyIndex state) inputData itemWorryLevels
-        newNumberOfInspectedItems = numberOfInspectedItems + L.length itemWorryLevels
+        newNumberOfInspectedItems = numberOfInspectedItems + (toInteger $ L.length itemWorryLevels)
         newInputDataWithoutInspectedItems =
             (//)
                 newInputData
@@ -186,7 +186,7 @@ round worryLevelModifier inputData = foldl' (inspectWrapper worryLevelModifier) 
 runNRounds :: WorryLevelModifier -> Int -> InputData -> InputData
 runNRounds worryLevelModifier n inputData = foldl' (\ accV _ -> round worryLevelModifier accV) inputData [0..n]
 
-getMonkeyBusinessLevel :: InputData -> Int
+getMonkeyBusinessLevel :: InputData -> Integer
 getMonkeyBusinessLevel =
     product
         . take 2
@@ -196,5 +196,5 @@ getMonkeyBusinessLevel =
             []
 
 
-dropWorryLevel :: Int -> Int
-dropWorryLevel worryLevel = fromInteger $ floor ((fromInteger $ toInteger worryLevel) / 3)
+dropWorryLevel :: Integer -> Integer
+dropWorryLevel worryLevel = floor ((fromInteger $ toInteger worryLevel) / 3)
