@@ -158,7 +158,7 @@ spec = do
 
         it "works for testInput 20 rounds"
             $ shouldBe
-                (foldl' (\ accV _ -> round accV) (parseInput testInput) [0..19])
+                (runNRounds (parseInput testInput) 19)
                 $ fromList [
                     ([10, 12, 14, 26, 34], MultiplyBy 19, (23, 2, 3)),
                     ([245, 93, 53, 199, 115], Add 6, (19, 2, 0)),

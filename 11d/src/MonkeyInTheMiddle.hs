@@ -157,3 +157,6 @@ round inputData = foldl' inspectWrapper inputData [0 .. subtract 1 $ length inpu
 --
 --round :: InputData -> InputData
 --round inputData = mutatingAccIfoldl inspect inputData
+
+runNRounds :: InputData -> Int -> InputData
+runNRounds inputData n = foldl' (\ accV _ -> round accV) inputData [0..n]
