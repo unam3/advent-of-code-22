@@ -12,7 +12,7 @@ spec = do
 
     testInput <- runIO $ readFile "testInput"
 
-    --input <- runIO $ readFile "input.txt"
+    input <- runIO $ readFile "input.txt"
 
     describe "parseMonkeySection" $ do
         it "parses first monkey section of testInput"
@@ -171,3 +171,8 @@ spec = do
             $ shouldBe
                 (getMonkeyBusinessLevel . runNRounds 19 $ parseInput testInput)
                 10605
+
+        it "works for testInput"
+            $ shouldBe
+                (getMonkeyBusinessLevel . runNRounds 19 $ parseInput input)
+                55944
