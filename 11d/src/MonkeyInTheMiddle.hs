@@ -107,8 +107,11 @@ modify itemWorryLevel (Add n) = n + itemWorryLevel
 modify itemWorryLevel (MultiplyBy n) = n * itemWorryLevel
 
 
-inspectItem :: Int -> MonkeyState -> InputData -> Int -> InputData
+type WorryLevelModifier = (Int -> Int)
+
+inspectItem :: WorryLevelModifier -> Int -> MonkeyState -> InputData -> Int -> InputData
 inspectItem
+    worryLevelModifier
     monkeyIndex
     (operation, (divisibleBy, throwIfTrueTo, throwIfFalseTo), numberOfInspectedItems, _)
     inputData
@@ -121,7 +124,7 @@ inspectItem
         Item with worry level 500 is thrown to monkey 3.
     -}
     let worryLevel' = modify itemWorryLevel operation
-        worryLevelAfterGetBored = floor ((fromInteger $ toInteger worryLevel') / 3)
+        worryLevelAfterGetBored = worryLevelModifier worryLevel'
         isDivisibleByTestNumber = (rem worryLevelAfterGetBored divisibleBy) == 0
         monkeyToThrow =
             if isDivisibleByTestNumber
@@ -138,9 +141,14 @@ inspectItem
             [(monkeyToThrow, (operation', divideThenThrow', numberOfInspectedItems, newItemWorryLevels'))]
 
 
-inspect :: InputData -> Int -> MonkeyState -> InputData
-inspect inputData monkeyIndex state@(operation, divideThenThrow, numberOfInspectedItems, itemWorryLevels) =
-    let newInputData = foldl' (inspectItem monkeyIndex state) inputData itemWorryLevels
+inspect :: WorryLevelModifier -> InputData -> Int -> MonkeyState -> InputData
+inspect
+    worryLevelModifier
+    inputData
+    monkeyIndex
+    state@(operation, divideThenThrow, numberOfInspectedItems, itemWorryLevels) =
+
+    let newInputData = foldl' (inspectItem worryLevelModifier monkeyIndex state) inputData itemWorryLevels
         newNumberOfInspectedItems = numberOfInspectedItems + L.length itemWorryLevels
         newInputDataWithoutInspectedItems =
             (//)
@@ -151,15 +159,16 @@ inspect inputData monkeyIndex state@(operation, divideThenThrow, numberOfInspect
                 )]
     in newInputDataWithoutInspectedItems
 
-inspectWrapper :: InputData -> Int -> InputData
-inspectWrapper inputData monkeyIndex =
+inspectWrapper :: WorryLevelModifier -> InputData -> Int -> InputData
+inspectWrapper worryLevelModifier inputData monkeyIndex =
     inspect
+        worryLevelModifier
         inputData
         monkeyIndex
         $ (!) inputData monkeyIndex
 
-round :: InputData -> InputData
-round inputData = foldl' inspectWrapper inputData [0 .. subtract 1 $ length inputData]
+round :: WorryLevelModifier -> InputData -> InputData
+round worryLevelModifier inputData = foldl' (inspectWrapper worryLevelModifier) inputData [0 .. subtract 1 $ length inputData]
 
 --mutatingAccIfoldl :: (Vector a -> Int -> a -> Vector a) -> Vector a -> Vector a
 --mutatingAccIfoldl f acc =
@@ -174,8 +183,8 @@ round inputData = foldl' inspectWrapper inputData [0 .. subtract 1 $ length inpu
 --round :: InputData -> InputData
 --round inputData = mutatingAccIfoldl inspect inputData
 
-runNRounds :: Int -> InputData -> InputData
-runNRounds n inputData = foldl' (\ accV _ -> round accV) inputData [0..n]
+runNRounds :: WorryLevelModifier -> Int -> InputData -> InputData
+runNRounds worryLevelModifier n inputData = foldl' (\ accV _ -> round worryLevelModifier accV) inputData [0..n]
 
 getMonkeyBusinessLevel :: InputData -> Int
 getMonkeyBusinessLevel =
@@ -185,3 +194,7 @@ getMonkeyBusinessLevel =
         . V.foldl'
             (\ acc (_, _, numberOfInspectedItems, _) -> acc ++ [numberOfInspectedItems])
             []
+
+
+dropWorryLevel :: Int -> Int
+dropWorryLevel worryLevel = fromInteger $ floor ((fromInteger $ toInteger worryLevel) / 3)

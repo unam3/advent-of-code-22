@@ -148,7 +148,7 @@ spec = do
 
         it "works for testInput first round"
             $ shouldBe
-                (round $ parseInput testInput)
+                (round dropWorryLevel $ parseInput testInput)
                 $ fromList [
                     (MultiplyBy 19, (23, 2, 3), 2, [20, 23, 27, 26]),
                     (Add 6, (19, 2, 0), 4, [2080, 25, 167, 207, 401, 1046]),
@@ -158,7 +158,7 @@ spec = do
 
         it "works for testInput 20 rounds"
             $ shouldBe
-                (runNRounds 19 (parseInput testInput))
+                (runNRounds dropWorryLevel 19 (parseInput testInput))
                 $ fromList [
                     (MultiplyBy 19, (23, 2, 3), 101, [10, 12, 14, 26, 34]),
                     (Add 6, (19, 2, 0), 95, [245, 93, 53, 199, 115]),
@@ -169,10 +169,25 @@ spec = do
     describe "getMonkeyBusinessLevel" $ do
         it "works for testInput"
             $ shouldBe
-                (getMonkeyBusinessLevel . runNRounds 19 $ parseInput testInput)
+                (getMonkeyBusinessLevel . runNRounds dropWorryLevel 19 $ parseInput testInput)
                 10605
 
-        it "works for testInput"
+        it "works for input.txt"
             $ shouldBe
-                (getMonkeyBusinessLevel . runNRounds 19 $ parseInput input)
+                (getMonkeyBusinessLevel . runNRounds dropWorryLevel 19 $ parseInput input)
                 55944
+
+        it "works for part 2 on testInput"
+            $ shouldBe
+                (getMonkeyBusinessLevel . runNRounds id 9999 $ parseInput testInput)
+                2713310158
+
+        it "works for part 2 4999 on testInput"
+            $ shouldBe
+                (runNRounds id 4999 $ parseInput testInput)
+                $ fromList []
+
+        it "works for part 2 on input.txt"
+            $ shouldBe
+                (getMonkeyBusinessLevel . runNRounds id 9999 $ parseInput input)
+                2713310158
