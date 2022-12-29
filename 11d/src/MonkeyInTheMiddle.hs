@@ -132,9 +132,6 @@ inspect inputData monkeyIndex state@(itemWorryLevels, operation, divideThenThrow
                     ([], operation, divideThenThrow)
                 )]
     in newInputDataWithoutInspectedItems
-    --n if monkeyIndex == 3
-    --   then error $ show (state, inputData, newInputDataWithoutInspectedItems)
-    --   else newInputDataWithoutInspectedItems
 
 inspectWrapper :: InputData -> Int -> InputData
 inspectWrapper inputData monkeyIndex =
@@ -145,3 +142,16 @@ inspectWrapper inputData monkeyIndex =
 
 round :: InputData -> InputData
 round inputData = foldl' inspectWrapper inputData [0 .. subtract 1 $ length inputData]
+
+--mutatingAccIfoldl :: (Vector a -> Int -> a -> Vector a) -> Vector a -> Vector a
+--mutatingAccIfoldl f acc =
+--
+--    let fWrapper acc index = f
+--            acc
+--            index
+--            $ (!) acc index
+--    
+--    in foldl' fWrapper acc [0 .. subtract 1 $ length acc]
+--
+--round :: InputData -> InputData
+--round inputData = mutatingAccIfoldl inspect inputData
