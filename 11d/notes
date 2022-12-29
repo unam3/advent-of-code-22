@@ -22,6 +22,7 @@ We always throw all tthe items, so we can just use empty list for current monkey
 Monkey 0 goes first, then monkey 1, and so on until each monkey has had one turn.
 
 Why items that were thrown to monkey 3 doesn't end up in monkey 1 items?
+Because ifoldl' uses initial inputData, and not accumulator one.
 
 Will we encounter throwing to current monkey itself?
 

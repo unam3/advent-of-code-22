@@ -124,15 +124,16 @@ inspect :: InputData -> Int -> MonkeyState -> InputData
 inspect inputData monkeyIndex state@(itemWorryLevels, operation, divideThenThrow) =
     let newInputData = foldl' (inspectItem state) inputData itemWorryLevels
         newInputDataWithoutInspectedItems =
-            if monkeyIndex == 3
-            then newInputData
-            else (//)
+            (//)
                 newInputData
                 [(
                     monkeyIndex,
                     ([], operation, divideThenThrow)
                 )]
-    in newInputDataWithoutInspectedItems
+    --in newInputDataWithoutInspectedItems
+    in if monkeyIndex == 3
+        then error $ show (state, inputData, newInputDataWithoutInspectedItems)
+        else newInputDataWithoutInspectedItems
 
 
 round :: InputData -> InputData
