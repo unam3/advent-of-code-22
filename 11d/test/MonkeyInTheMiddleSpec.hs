@@ -1,5 +1,6 @@
 module MonkeyInTheMiddleSpec where 
 
+import Data.List (foldl')
 import Data.Vector ((!), fromList)
 import Prelude hiding (round)
 import Test.Hspec (Spec, describe, it, runIO, shouldBe)
@@ -145,12 +146,22 @@ spec = do
         --            ([], Add 3, (17, 0, 1))
         --        ]
 
-        it "works for testInput"
+        it "works for testInput first round"
             $ shouldBe
                 (round $ parseInput testInput)
                 $ fromList [
                     ([20, 23, 27, 26], MultiplyBy 19, (23, 2, 3)),
                     ([2080, 25, 167, 207, 401, 1046], Add 6, (19, 2, 0)),
+                    ([], Sqr, (13, 1, 3)),
+                    ([], Add 3, (17, 0, 1))
+                ]
+
+        it "works for testInput 20 rounds"
+            $ shouldBe
+                (foldl' (\ accV _ -> round accV) (parseInput testInput) [0..19])
+                $ fromList [
+                    ([10, 12, 14, 26, 34], MultiplyBy 19, (23, 2, 3)),
+                    ([245, 93, 53, 199, 115], Add 6, (19, 2, 0)),
                     ([], Sqr, (13, 1, 3)),
                     ([], Add 3, (17, 0, 1))
                 ]
