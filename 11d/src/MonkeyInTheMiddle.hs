@@ -96,8 +96,8 @@ modify itemWorryLevel (Add n) = n + itemWorryLevel
 modify itemWorryLevel (MultiplyBy n) = n * itemWorryLevel
 
 
-inspectItem :: MonkeyState -> InputData -> Int -> InputData
-inspectItem (_, operation, (divisibleBy, throwIfTrueTo, throwIfFalseTo)) inputData itemWorryLevel =
+inspectItem :: Int -> MonkeyState -> InputData -> Int -> InputData
+inspectItem monkeyIndex (_, operation, (divisibleBy, throwIfTrueTo, throwIfFalseTo)) inputData itemWorryLevel =
     {-
         Monkey inspects an item with a worry level of 79.
         Worry level is multiplied by 19 to 1501.
@@ -116,14 +116,16 @@ inspectItem (_, operation, (divisibleBy, throwIfTrueTo, throwIfFalseTo)) inputDa
         (itemWorryLevels', operation', divideThenThrow') = (!) inputData monkeyToThrow
         newItemWorryLevels' = itemWorryLevels' ++ [worryLevelAfterGetBored]
 
-    in (//)
-        inputData
-        [(monkeyToThrow, (newItemWorryLevels', operation', divideThenThrow'))]
+    in if monkeyIndex == monkeyToThrow
+        then error "Thow to itself encountered. Need to add support for item list modification."
+        else (//)
+            inputData
+            [(monkeyToThrow, (newItemWorryLevels', operation', divideThenThrow'))]
 
 
 inspect :: InputData -> Int -> MonkeyState -> InputData
 inspect inputData monkeyIndex state@(itemWorryLevels, operation, divideThenThrow) =
-    let newInputData = foldl' (inspectItem state) inputData itemWorryLevels
+    let newInputData = foldl' (inspectItem monkeyIndex state) inputData itemWorryLevels
         newInputDataWithoutInspectedItems =
             (//)
                 newInputData
