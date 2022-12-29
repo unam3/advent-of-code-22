@@ -2,9 +2,10 @@ module MonkeyInTheMiddle where
 
 
 import Data.Function (fix)
-import Data.List (isPrefixOf, foldl', stripPrefix)
+import Data.List (isPrefixOf, foldl', sortBy, stripPrefix)
 import qualified Data.List as L (length)
 import Data.Vector (Vector, (!), (//), fromList, ifoldl', length)
+import qualified Data.Vector as V (foldl')
 import Prelude hiding (length, round)
 import Text.Read (readMaybe)
 
@@ -173,5 +174,14 @@ round inputData = foldl' inspectWrapper inputData [0 .. subtract 1 $ length inpu
 --round :: InputData -> InputData
 --round inputData = mutatingAccIfoldl inspect inputData
 
-runNRounds :: InputData -> Int -> InputData
-runNRounds inputData n = foldl' (\ accV _ -> round accV) inputData [0..n]
+runNRounds :: Int -> InputData -> InputData
+runNRounds n inputData = foldl' (\ accV _ -> round accV) inputData [0..n]
+
+getMonkeyBusinessLevel :: InputData -> Int
+getMonkeyBusinessLevel =
+    product
+        . take 2
+        . sortBy (flip compare)
+        . V.foldl'
+            (\ acc (_, _, numberOfInspectedItems, _) -> acc ++ [numberOfInspectedItems])
+            []

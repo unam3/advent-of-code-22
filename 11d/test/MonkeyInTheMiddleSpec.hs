@@ -158,10 +158,16 @@ spec = do
 
         it "works for testInput 20 rounds"
             $ shouldBe
-                (runNRounds (parseInput testInput) 19)
+                (runNRounds 19 (parseInput testInput))
                 $ fromList [
                     (MultiplyBy 19, (23, 2, 3), 101, [10, 12, 14, 26, 34]),
                     (Add 6, (19, 2, 0), 95, [245, 93, 53, 199, 115]),
                     (Sqr, (13, 1, 3), 7, []),
                     (Add 3, (17, 0, 1), 105, [])
                 ]
+
+    describe "getMonkeyBusinessLevel" $ do
+        it "works for testInput"
+            $ shouldBe
+                (getMonkeyBusinessLevel . runNRounds 19 $ parseInput testInput)
+                10605
