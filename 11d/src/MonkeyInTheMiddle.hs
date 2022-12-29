@@ -3,6 +3,7 @@ module MonkeyInTheMiddle where
 
 import Data.Function (fix)
 import Data.List (isPrefixOf, foldl', stripPrefix)
+import qualified Data.List as L (length)
 import Data.Vector (Vector, (!), (//), fromList, ifoldl', length)
 import Prelude hiding (length, round)
 import Text.Read (readMaybe)
@@ -16,6 +17,8 @@ type State = (Round, InspectedItems)
 
 type ItemWorryLevel = Int
 
+type NumberOfInspectedItems = Int
+
 data Operation = MultiplyBy Int | Add Int | Sqr
     deriving (Eq, Show)
 
@@ -27,7 +30,7 @@ type ThrowIfFalseTo = Int
 
 type DivideThenThrow = (DivisibleBy, ThrowIfTrueTo, ThrowIfFalseTo)
 
-type MonkeyState = ([ItemWorryLevel], Operation, DivideThenThrow)
+type MonkeyState = (Operation, DivideThenThrow, NumberOfInspectedItems, [ItemWorryLevel])
 
 type InputData = Vector MonkeyState
 
@@ -42,7 +45,7 @@ splitByEmptyLines :: [String] -> [[String]]
 splitByEmptyLines = reverse . fmap reverse . foldl' group [[]]
 
 
-parseMonkeySection :: [String] -> ([ItemWorryLevel], Operation, DivideThenThrow)
+parseMonkeySection :: [String] -> MonkeyState
 parseMonkeySection [_, startingItemsS, operationS, divisibleByS, throwIfTrueToS, throwIfFalseToS] =
 
     let --(Just monkeyNumber) =
@@ -50,6 +53,8 @@ parseMonkeySection [_, startingItemsS, operationS, divisibleByS, throwIfTrueToS,
         --        -- removing closing ":"
         --        >>= Just . init
         --        >>= readMaybe
+
+        initialNumberOfInspectedItems = 0
 
         -- Starting items: 62, 68, 56, 65, 94, 78
         (Just startingItemWorryLevels) =
@@ -81,7 +86,12 @@ parseMonkeySection [_, startingItemsS, operationS, divisibleByS, throwIfTrueToS,
                 >>= readMaybe
 
     --in (monkeyNumber, startingItems, operation, (divisibleBy, throwIfTrueTo, throwIfFalseTo))
-    in (startingItemWorryLevels, operation, (divisibleBy, throwIfTrueTo, throwIfFalseTo))
+    in (
+        operation,
+        (divisibleBy, throwIfTrueTo, throwIfFalseTo),
+        initialNumberOfInspectedItems,
+        startingItemWorryLevels
+    )
 
 parseMonkeySection nonMatched = error $ "non matched input list: " ++ show nonMatched
 
@@ -97,7 +107,11 @@ modify itemWorryLevel (MultiplyBy n) = n * itemWorryLevel
 
 
 inspectItem :: Int -> MonkeyState -> InputData -> Int -> InputData
-inspectItem monkeyIndex (_, operation, (divisibleBy, throwIfTrueTo, throwIfFalseTo)) inputData itemWorryLevel =
+inspectItem
+    monkeyIndex
+    (operation, (divisibleBy, throwIfTrueTo, throwIfFalseTo), numberOfInspectedItems, _)
+    inputData
+    itemWorryLevel =
     {-
         Monkey inspects an item with a worry level of 79.
         Worry level is multiplied by 19 to 1501.
@@ -113,25 +127,26 @@ inspectItem monkeyIndex (_, operation, (divisibleBy, throwIfTrueTo, throwIfFalse
             then throwIfTrueTo
             else throwIfFalseTo
          -- monkeyToThrowState
-        (itemWorryLevels', operation', divideThenThrow') = (!) inputData monkeyToThrow
+        (operation', divideThenThrow', numberOfInspectedItems, itemWorryLevels') = (!) inputData monkeyToThrow
         newItemWorryLevels' = itemWorryLevels' ++ [worryLevelAfterGetBored]
 
     in if monkeyIndex == monkeyToThrow
         then error "Thow to itself encountered. Need to add support for item list modification."
         else (//)
             inputData
-            [(monkeyToThrow, (newItemWorryLevels', operation', divideThenThrow'))]
+            [(monkeyToThrow, (operation', divideThenThrow', numberOfInspectedItems, newItemWorryLevels'))]
 
 
 inspect :: InputData -> Int -> MonkeyState -> InputData
-inspect inputData monkeyIndex state@(itemWorryLevels, operation, divideThenThrow) =
+inspect inputData monkeyIndex state@(operation, divideThenThrow, numberOfInspectedItems, itemWorryLevels) =
     let newInputData = foldl' (inspectItem monkeyIndex state) inputData itemWorryLevels
+        newNumberOfInspectedItems = numberOfInspectedItems + L.length itemWorryLevels
         newInputDataWithoutInspectedItems =
             (//)
                 newInputData
                 [(
                     monkeyIndex,
-                    ([], operation, divideThenThrow)
+                    (operation, divideThenThrow, newNumberOfInspectedItems, [])
                 )]
     in newInputDataWithoutInspectedItems
 

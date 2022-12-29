@@ -28,7 +28,7 @@ Will we encounter throwing to current monkey itself? Need to add error throw in 
 
 The process of each monkey taking a single turn is called a round.
 
-How many items monkeys inspected? Need to collect this. In the state?
+How many items monkeys inspected? Need to collect this. In the state? Sure.
 
 monkey business = multiplication of the numbers two most active monkeys inspected items.
 

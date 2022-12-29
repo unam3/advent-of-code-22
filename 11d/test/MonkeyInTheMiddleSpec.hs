@@ -18,17 +18,17 @@ spec = do
         it "parses first monkey section of testInput"
             $ shouldBe
                 (parseMonkeySection $ head $ splitByEmptyLines $ lines testInput)
-                ([79, 98], MultiplyBy 19, (23, 2, 3))
+                (MultiplyBy 19, (23, 2, 3), 0, [79, 98])
 
     describe "parseInput" $ do
         it "works"
             $ shouldBe
                 (parseInput testInput)
                 $ fromList [
-                    ([79, 98], MultiplyBy 19, (23, 2, 3)),
-                    ([54, 65, 75, 74], Add 6, (19, 2, 0)),
-                    ([79, 60, 97], Sqr, (13, 1, 3)),
-                    ([74], Add 3, (17, 0, 1))
+                    (MultiplyBy 19, (23, 2, 3), 0, [79, 98]),
+                    (Add 6, (19, 2, 0), 0, [54, 65, 75, 74]),
+                    (Sqr, (13, 1, 3), 0, [79, 60, 97]),
+                    (Add 3, (17, 0, 1), 0, [74])
                 ]
 
 --    describe "inspect" $ do
@@ -150,18 +150,18 @@ spec = do
             $ shouldBe
                 (round $ parseInput testInput)
                 $ fromList [
-                    ([20, 23, 27, 26], MultiplyBy 19, (23, 2, 3)),
-                    ([2080, 25, 167, 207, 401, 1046], Add 6, (19, 2, 0)),
-                    ([], Sqr, (13, 1, 3)),
-                    ([], Add 3, (17, 0, 1))
+                    (MultiplyBy 19, (23, 2, 3), 2, [20, 23, 27, 26]),
+                    (Add 6, (19, 2, 0), 4, [2080, 25, 167, 207, 401, 1046]),
+                    (Sqr, (13, 1, 3), 3, []),
+                    (Add 3, (17, 0, 1), 5, [])
                 ]
 
         it "works for testInput 20 rounds"
             $ shouldBe
                 (runNRounds (parseInput testInput) 19)
                 $ fromList [
-                    ([10, 12, 14, 26, 34], MultiplyBy 19, (23, 2, 3)),
-                    ([245, 93, 53, 199, 115], Add 6, (19, 2, 0)),
-                    ([], Sqr, (13, 1, 3)),
-                    ([], Add 3, (17, 0, 1))
+                    (MultiplyBy 19, (23, 2, 3), 101, [10, 12, 14, 26, 34]),
+                    (Add 6, (19, 2, 0), 95, [245, 93, 53, 199, 115]),
+                    (Sqr, (13, 1, 3), 7, []),
+                    (Add 3, (17, 0, 1), 105, [])
                 ]
