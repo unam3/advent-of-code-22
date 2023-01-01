@@ -105,6 +105,13 @@ modify itemWorryLevel Sqr = itemWorryLevel * itemWorryLevel
 modify itemWorryLevel (Add n) = toInteger n + itemWorryLevel
 modify itemWorryLevel (MultiplyBy n) = toInteger n * itemWorryLevel
 
+divisibleBy :: ItemWorryLevel -> Int -> Bool
+divisibleBy itemWorryLevel 13 = 
+divisibleBy itemWorryLevel 17 = 
+divisibleBy itemWorryLevel 19 = 
+divisibleBy itemWorryLevel 23 = 
+divisibleBy _ nonMatched = error "no such divisibility rule: " ++ show nonMatched
+
 
 type WorryLevelModifier = (Integer -> Integer)
 

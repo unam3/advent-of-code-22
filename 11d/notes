@@ -32,7 +32,30 @@ How many items monkeys inspected? Need to collect this. In the state? Sure.
 
 Having run out of RAM with current implementation. Need to optimize.
 
-Will analyze operations on worry levels between inspections by collecting original value modifiers.
+Strategy 1. Analyze operations on worry levels between inspections by collecting original value modifiers.
+
+Strategy 2. Use divisibility rules.
+https://en.wikipedia.org/wiki/Divisibility_rule#Divisibility_rules_for_numbers_1%E2%80%9330
+https://brilliant.org/wiki/divisibility-rules/#intermediate-divisibility-rules
+
+Operations on worry levels: (1) addition, (2) multiplications and (3) exponentiation.
+
+grep Test input.txt 
+  Test: divisible by 3
+  Test: divisible by 17
+  Test: divisible by 2
+  Test: divisible by 19
+  Test: divisible by 11
+  Test: divisible by 5
+  Test: divisible by 13
+  Test: divisible by 7
+
+grep Test testInput
+  Test: divisible by 23
+  Test: divisible by 19
+  Test: divisible by 13
+  Test: divisible by 17
+
 
 monkey business = multiplication of the numbers two most active monkeys inspected items.
 
