@@ -30,6 +30,8 @@ The process of each monkey taking a single turn is called a round.
 
 How many items monkeys inspected? Need to collect this. In the state? Sure.
 
+Having run out of RAM with current implementation. Need to optimize.
+
 monkey business = multiplication of the numbers two most active monkeys inspected items.
 
 Figure out which monkeys to chase by counting how many items they inspect over 20 rounds.

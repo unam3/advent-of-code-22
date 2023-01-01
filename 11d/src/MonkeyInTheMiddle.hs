@@ -1,7 +1,6 @@
 module MonkeyInTheMiddle where
 
 
-import Data.Function (fix)
 import Data.List (isPrefixOf, foldl', sortBy, stripPrefix)
 import qualified Data.List as L (length)
 import Data.Vector (Vector, (!), (//), fromList, ifoldl', length)
@@ -18,7 +17,7 @@ type State = (Round, InspectedItems)
 
 type ItemWorryLevel = Integer
 
-type NumberOfInspectedItems = Integer
+type NumberOfInspectedItems = Int
 
 data Operation = MultiplyBy Int | Add Int | Sqr
     deriving (Eq, Show)
@@ -113,7 +112,7 @@ inspectItem :: WorryLevelModifier -> Int -> MonkeyState -> InputData -> Integer 
 inspectItem
     worryLevelModifier
     monkeyIndex
-    (operation, (divisibleBy, throwIfTrueTo, throwIfFalseTo), numberOfInspectedItems, _)
+    (operation, (divisibleBy, throwIfTrueTo, throwIfFalseTo), _, _)
     inputData
     itemWorryLevel =
     {-
@@ -131,14 +130,14 @@ inspectItem
             then throwIfTrueTo
             else throwIfFalseTo
          -- monkeyToThrowState
-        (operation', divideThenThrow', numberOfInspectedItems, itemWorryLevels') = (!) inputData monkeyToThrow
+        (operation', divideThenThrow', numberOfInspectedItems', itemWorryLevels') = (!) inputData monkeyToThrow
         newItemWorryLevels' = itemWorryLevels' ++ [worryLevelAfterGetBored]
 
     in if monkeyIndex == monkeyToThrow
         then error "Thow to itself encountered. Need to add support for item list modification."
         else (//)
             inputData
-            [(monkeyToThrow, (operation', divideThenThrow', numberOfInspectedItems, newItemWorryLevels'))]
+            [(monkeyToThrow, (operation', divideThenThrow', numberOfInspectedItems', newItemWorryLevels'))]
 
 
 inspect :: WorryLevelModifier -> InputData -> Int -> MonkeyState -> InputData
@@ -149,7 +148,7 @@ inspect
     state@(operation, divideThenThrow, numberOfInspectedItems, itemWorryLevels) =
 
     let newInputData = foldl' (inspectItem worryLevelModifier monkeyIndex state) inputData itemWorryLevels
-        newNumberOfInspectedItems = numberOfInspectedItems + (toInteger $ L.length itemWorryLevels)
+        newNumberOfInspectedItems = numberOfInspectedItems + L.length itemWorryLevels
         newInputDataWithoutInspectedItems =
             (//)
                 newInputData
@@ -189,6 +188,7 @@ runNRounds worryLevelModifier n inputData = foldl' (\ accV _ -> round worryLevel
 getMonkeyBusinessLevel :: InputData -> Integer
 getMonkeyBusinessLevel =
     product
+        . fmap toInteger
         . take 2
         . sortBy (flip compare)
         . V.foldl'

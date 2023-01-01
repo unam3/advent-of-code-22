@@ -177,10 +177,10 @@ spec = do
                 (getMonkeyBusinessLevel . runNRounds dropWorryLevel 19 $ parseInput input)
                 55944
 
-        it "works for part 2 1000 on testInput"
+        it "works for part 2 80 on testInput"
             $ shouldBe
-                (runNRounds id 999 $ parseInput testInput)
-                $ fromList []
+                (getMonkeyBusinessLevel . runNRounds id 1000 $ parseInput testInput)
+                10197
 
         --it "works for part 2 on testInput"
         --    $ shouldBe
