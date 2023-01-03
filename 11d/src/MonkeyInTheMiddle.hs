@@ -17,6 +17,10 @@ type State = (Round, InspectedItems)
 
 type ItemWorryLevel = Integer
 
+type ItemWorryLevelHistory = String
+
+type ItemState = (ItemWorryLevel, ItemWorryLevelHistory)
+
 type NumberOfInspectedItems = Int
 
 data Operation = MultiplyBy Int | Add Int | Sqr
@@ -30,7 +34,7 @@ type ThrowIfFalseTo = Int
 
 type DivideThenThrow = (DivisibleBy, ThrowIfTrueTo, ThrowIfFalseTo)
 
-type MonkeyState = (Operation, DivideThenThrow, NumberOfInspectedItems, [ItemWorryLevel])
+type MonkeyState = (Operation, DivideThenThrow, NumberOfInspectedItems, [ItemState])
 
 type InputData = Vector MonkeyState
 
@@ -57,10 +61,14 @@ parseMonkeySection [_, startingItemsS, operationS, divisibleByS, throwIfTrueToS,
         initialNumberOfInspectedItems = 0
 
         -- Starting items: 62, 68, 56, 65, 94, 78
-        (Just startingItemWorryLevels) =
+        (Just startingItemWorryStateList) =
             stripPrefix "  Starting items: " startingItemsS
                 >>= Just . (\ numbers -> "[" ++ numbers ++ "]")
                 >>= readMaybe
+                >>= Just . fmap (\ number -> (
+                        number,
+                        "initial number is " ++ show number
+                    ))
 
         (Just operation) =
             stripPrefix "  Operation: new = old " operationS
@@ -90,7 +98,7 @@ parseMonkeySection [_, startingItemsS, operationS, divisibleByS, throwIfTrueToS,
         operation,
         (divisibleBy, throwIfTrueTo, throwIfFalseTo),
         initialNumberOfInspectedItems,
-        startingItemWorryLevels
+        startingItemWorryStateList
     )
 
 parseMonkeySection nonMatched = error $ "non matched input list: " ++ show nonMatched
@@ -105,23 +113,29 @@ modify itemWorryLevel Sqr = itemWorryLevel * itemWorryLevel
 modify itemWorryLevel (Add n) = toInteger n + itemWorryLevel
 modify itemWorryLevel (MultiplyBy n) = toInteger n * itemWorryLevel
 
+modify' :: ItemWorryLevelHistory -> Operation -> ItemWorryLevelHistory
+modify' history Sqr = history ++ "; sqr()"
+modify' history (Add n) = history ++ " ; + " ++ show n
+modify' history (MultiplyBy n) = history ++ " ; * " ++ show n
+
 divisibleBy :: ItemWorryLevel -> Int -> Bool
-divisibleBy itemWorryLevel 13 = 
-divisibleBy itemWorryLevel 17 = 
-divisibleBy itemWorryLevel 19 = 
-divisibleBy itemWorryLevel 23 = 
-divisibleBy _ nonMatched = error "no such divisibility rule: " ++ show nonMatched
+-- for testInput
+divisibleBy itemWorryLevel 13 = undefined
+divisibleBy itemWorryLevel 17 = undefined
+divisibleBy itemWorryLevel 19 = undefined
+divisibleBy itemWorryLevel 23 = undefined
+divisibleBy _ nonMatched = error $ "no such divisibility rule: " ++ show nonMatched
 
 
 type WorryLevelModifier = (Integer -> Integer)
 
-inspectItem :: WorryLevelModifier -> Int -> MonkeyState -> InputData -> Integer -> InputData
+inspectItem :: WorryLevelModifier -> Int -> MonkeyState -> InputData -> ItemState -> InputData
 inspectItem
     worryLevelModifier
     monkeyIndex
     (operation, (divisibleBy, throwIfTrueTo, throwIfFalseTo), _, _)
     inputData
-    itemWorryLevel =
+    itemWorryState@(itemWorryLevel, itemWorryLevelHistory) =
     {-
         Monkey inspects an item with a worry level of 79.
         Worry level is multiplied by 19 to 1501.
@@ -132,19 +146,21 @@ inspectItem
     let worryLevel' = modify itemWorryLevel operation
         worryLevelAfterGetBored = worryLevelModifier worryLevel'
         isDivisibleByTestNumber = (rem worryLevelAfterGetBored divisibleBy) == 0
+        worryLevelHistory' = modify' itemWorryLevelHistory operation
+            ++ "; is divisible by " ++ show divisibleBy
         monkeyToThrow =
             if isDivisibleByTestNumber
             then throwIfTrueTo
             else throwIfFalseTo
          -- monkeyToThrowState
-        (operation', divideThenThrow', numberOfInspectedItems', itemWorryLevels') = (!) inputData monkeyToThrow
-        newItemWorryLevels' = itemWorryLevels' ++ [worryLevelAfterGetBored]
+        (operation', divideThenThrow', numberOfInspectedItems', itemWorryState') = (!) inputData monkeyToThrow
+        newItemWorryState' = itemWorryState' ++ [(worryLevelAfterGetBored, worryLevelHistory')]
 
     in if monkeyIndex == monkeyToThrow
         then error "Thow to itself encountered. Need to add support for item list modification."
         else (//)
             inputData
-            [(monkeyToThrow, (operation', divideThenThrow', numberOfInspectedItems', newItemWorryLevels'))]
+            [(monkeyToThrow, (operation', divideThenThrow', numberOfInspectedItems', newItemWorryState'))]
 
 
 inspect :: WorryLevelModifier -> InputData -> Int -> MonkeyState -> InputData
