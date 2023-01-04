@@ -118,13 +118,24 @@ modify' history Sqr = history ++ "; sqr()"
 modify' history (Add n) = history ++ " ; + " ++ show n
 modify' history (MultiplyBy n) = history ++ " ; * " ++ show n
 
-divisibleBy :: ItemWorryLevel -> Int -> Bool
--- for testInput
-divisibleBy itemWorryLevel 13 = undefined
-divisibleBy itemWorryLevel 17 = undefined
-divisibleBy itemWorryLevel 19 = undefined
-divisibleBy itemWorryLevel 23 = undefined
-divisibleBy _ nonMatched = error $ "no such divisibility rule: " ++ show nonMatched
+-- https://brilliant.org/wiki/divisibility-rules/#intermediate-divisibility-rules
+isDivisibleBy :: ItemWorryLevel -> Int -> Bool
+isDivisibleBy worryLevel 13 =
+    case show worryLevel of
+
+    [_, _] -> (rem worryLevel 13) == 0
+
+    stringWorryLevel ->
+        
+        let unitsDigit = read $ [last stringWorryLevel]
+            withoutUnitsDigit = read $ init stringWorryLevel
+        in isDivisibleBy (4 * unitsDigit + withoutUnitsDigit) 13
+
+isDivisibleBy worryLevel 13 = undefined
+isDivisibleBy worryLevel 17 = undefined
+isDivisibleBy worryLevel 19 = undefined
+isDivisibleBy worryLevel 23 = undefined
+isDivisibleBy _ nonMatched = error $ "no such divisibility rule: " ++ show nonMatched
 
 
 type WorryLevelModifier = (Integer -> Integer)
