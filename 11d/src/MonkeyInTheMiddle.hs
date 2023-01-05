@@ -119,9 +119,12 @@ modify' history (Add n) = history ++ " ; + " ++ show n
 modify' history (MultiplyBy n) = history ++ " ; * " ++ show n
 
 -- https://brilliant.org/wiki/divisibility-rules/#intermediate-divisibility-rules
-isDivisibleBy :: ItemWorryLevel -> Int -> Bool
+isDivisibleBy :: ItemWorryLevel -> DivisibleBy -> Bool
 isDivisibleBy worryLevel 13 =
+
     case show worryLevel of
+    
+    [_] -> False
 
     [_, _] -> (rem worryLevel 13) == 0
 
@@ -133,9 +136,15 @@ isDivisibleBy worryLevel 13 =
         in isDivisibleBy (4 * unitsDigit + withoutUnitsDigit) 13
 
 isDivisibleBy worryLevel 17 =
+
     case show worryLevel of
+    
+    [_] -> False
 
     [_, _] -> (rem worryLevel 17) == 0
+
+    -- test shows that we can miss some input without it
+    [_, _, _] -> (rem worryLevel 17) == 0
 
     stringWorryLevel ->
         
@@ -145,7 +154,10 @@ isDivisibleBy worryLevel 17 =
         in isDivisibleBy (withoutUnitsDigit - 5 * unitsDigit) 17
 
 isDivisibleBy worryLevel 19 =
+    
     case show worryLevel of
+    
+    [_] -> False
 
     [_, _] -> (rem worryLevel 19) == 0
 
@@ -157,11 +169,12 @@ isDivisibleBy worryLevel 19 =
         in isDivisibleBy (withoutUnitsDigit + 2 * unitsDigit) 19
 
 isDivisibleBy worryLevel 23 =
+
     case show worryLevel of
 
-    [_, _] -> (rem worryLevel 23) == 0
+    [_] -> False
 
-    [_, _, _] -> (rem worryLevel 23) == 0
+    [_, _] -> (rem worryLevel 23) == 0
 
     stringWorryLevel ->
         
@@ -191,7 +204,8 @@ inspectItem
     -}
     let worryLevel' = modify itemWorryLevel operation
         worryLevelAfterGetBored = worryLevelModifier worryLevel'
-        isDivisibleByTestNumber = (rem worryLevelAfterGetBored divisibleBy) == 0
+        isDivisibleByTestNumber = isDivisibleBy worryLevelAfterGetBored divisibleBy
+        --isDivisibleByTestNumber = (rem worryLevelAfterGetBored divisibleBy) == 0
         worryLevelHistory' = modify' itemWorryLevelHistory operation
             ++ "; is divisible by " ++ show divisibleBy
         monkeyToThrow =

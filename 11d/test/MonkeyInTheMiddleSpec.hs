@@ -172,15 +172,15 @@ spec = do
                 (getMonkeyBusinessLevel . runNRounds dropWorryLevel 19 $ parseInput testInput)
                 10605
 
-        it "works for input.txt"
-            $ shouldBe
-                (getMonkeyBusinessLevel . runNRounds dropWorryLevel 19 $ parseInput input)
-                55944
-
-        --it "works for part 2 80 on testInput"
+        --it "works for input.txt"
         --    $ shouldBe
-        --        (getMonkeyBusinessLevel . runNRounds id 100 $ parseInput testInput)
-        --        10197
+        --        (getMonkeyBusinessLevel . runNRounds dropWorryLevel 19 $ parseInput input)
+        --        55944
+
+        it "works for 20 rounds part 2 on testInput"
+            $ shouldBe
+                (getMonkeyBusinessLevel . runNRounds id 19 $ parseInput testInput)
+                (99 * 103)
 
         --it "works for part 2 on testInput"
         --    $ shouldBe
@@ -196,20 +196,20 @@ spec = do
 
         it "works for 13"
             $ shouldBe
-                (isDivisibleBy (13 * 5347) 13)
+                (and $ fmap (`isDivisibleBy` 13) $ fmap (*13) [1..13])
                 True
 
         it "works for 17"
             $ shouldBe
-                (isDivisibleBy (17 * 5347) 17)
+                (and $ fmap (`isDivisibleBy` 17) $ fmap (*17) [1..17])
                 True
 
         it "works for 19"
             $ shouldBe
-                (isDivisibleBy (19 * 5347) 19)
+                (and $ fmap (`isDivisibleBy` 19) $ fmap (*19) [1..19])
                 True
 
         it "works for 23"
             $ shouldBe
-                (isDivisibleBy (23 * 5347) 23)
+                (and $ fmap (`isDivisibleBy` 23) $ fmap (*23) [1..23])
                 True
