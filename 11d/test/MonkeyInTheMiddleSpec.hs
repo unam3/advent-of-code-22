@@ -193,7 +193,23 @@ spec = do
         --        2713310158
 
     describe "isDivisibleBy" $ do
+
         it "works for 13"
             $ shouldBe
                 (isDivisibleBy (13 * 5347) 13)
+                True
+
+        it "works for 17"
+            $ shouldBe
+                (isDivisibleBy (17 * 5347) 17)
+                True
+
+        it "works for 19"
+            $ shouldBe
+                (isDivisibleBy (19 * 5347) 19)
+                True
+
+        it "works for 23"
+            $ shouldBe
+                (isDivisibleBy (23 * 5347) 23)
                 True

@@ -129,12 +129,47 @@ isDivisibleBy worryLevel 13 =
         
         let unitsDigit = read $ [last stringWorryLevel]
             withoutUnitsDigit = read $ init stringWorryLevel
+
         in isDivisibleBy (4 * unitsDigit + withoutUnitsDigit) 13
 
-isDivisibleBy worryLevel 13 = undefined
-isDivisibleBy worryLevel 17 = undefined
-isDivisibleBy worryLevel 19 = undefined
-isDivisibleBy worryLevel 23 = undefined
+isDivisibleBy worryLevel 17 =
+    case show worryLevel of
+
+    [_, _] -> (rem worryLevel 17) == 0
+
+    stringWorryLevel ->
+        
+        let unitsDigit = read $ [last stringWorryLevel]
+            withoutUnitsDigit = read $ init stringWorryLevel
+        
+        in isDivisibleBy (withoutUnitsDigit - 5 * unitsDigit) 17
+
+isDivisibleBy worryLevel 19 =
+    case show worryLevel of
+
+    [_, _] -> (rem worryLevel 19) == 0
+
+    stringWorryLevel ->
+        
+        let unitsDigit = read $ [last stringWorryLevel]
+            withoutUnitsDigit = read $ init stringWorryLevel
+        
+        in isDivisibleBy (withoutUnitsDigit + 2 * unitsDigit) 19
+
+isDivisibleBy worryLevel 23 =
+    case show worryLevel of
+
+    [_, _] -> (rem worryLevel 23) == 0
+
+    [_, _, _] -> (rem worryLevel 23) == 0
+
+    stringWorryLevel ->
+        
+        let unitsDigit = read $ [last stringWorryLevel]
+            withoutUnitsDigit = read $ init stringWorryLevel
+        
+        in isDivisibleBy (withoutUnitsDigit + 7 * unitsDigit) 23
+
 isDivisibleBy _ nonMatched = error $ "no such divisibility rule: " ++ show nonMatched
 
 
