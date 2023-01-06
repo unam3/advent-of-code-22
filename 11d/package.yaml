@@ -7,9 +7,21 @@ dependencies:
 - vector == 0.12.3.1
 
 ghc-options:
-- -threaded
 - -O2
 - -Wall
+
+executables:
+  11d:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - 11d
+
+
 
 library:
   source-dirs:      src

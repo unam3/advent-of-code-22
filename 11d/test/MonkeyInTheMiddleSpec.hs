@@ -182,10 +182,10 @@ spec = do
                 (getMonkeyBusinessLevel . runNRounds id 19 $ parseInput testInput)
                 (99 * 103)
 
-        --it "works for part 2 on testInput"
+        --it "works for 1000 rounds part 2 on testInput"
         --    $ shouldBe
-        --        (getMonkeyBusinessLevel . runNRounds id 9999 $ parseInput testInput)
-        --        2713310158
+        --        (getMonkeyBusinessLevel . runNRounds id 999 $ parseInput testInput)
+        --        (5204 * 5192)
 
         --it "works for part 2 on input.txt"
         --    $ shouldBe

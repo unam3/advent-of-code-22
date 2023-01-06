@@ -38,6 +38,10 @@ Strategy 2. Use divisibility rules.
 https://en.wikipedia.org/wiki/Divisibility_rule#Divisibility_rules_for_numbers_1%E2%80%9330
 https://brilliant.org/wiki/divisibility-rules/#intermediate-divisibility-rules
 
+Current implementation is too slow. What if we try "-exe: with -threaded?. Slow too:
+stack ghc -- -Wall -O2 -threaded  app/Main.hs && stack exec -- $(pwd)/app/Main +RTS -N4
+
+
 Operations on worry levels: (1) addition, (2) multiplications and (3) exponentiation.
 
 grep Test input.txt 
