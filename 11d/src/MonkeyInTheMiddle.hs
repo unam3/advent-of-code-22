@@ -114,9 +114,9 @@ modify itemWorryLevel (Add n) = toInteger n + itemWorryLevel
 modify itemWorryLevel (MultiplyBy n) = toInteger n * itemWorryLevel
 
 modify' :: ItemWorryLevelHistory -> Operation -> ItemWorryLevelHistory
-modify' history Sqr = history ++ "; \n sqr()"
-modify' history (Add n) = history ++ " ; \n + " ++ show n
-modify' history (MultiplyBy n) = history ++ " ; \n * " ++ show n
+modify' history Sqr = history ++ "\n— sqr()"
+modify' history (Add n) = history ++ "\n+ " ++ show n
+modify' history (MultiplyBy n) = history ++ "\n* " ++ show n
 
 -- https://brilliant.org/wiki/divisibility-rules/#intermediate-divisibility-rules
 isDivisibleBy :: ItemWorryLevel -> DivisibleBy -> Bool
@@ -210,10 +210,10 @@ inspectItem
             if isDivisibleByTestNumber
             then throwIfTrueTo
             else throwIfFalseTo
+        -- + 6 is divisible by 19: False => throwing to 0
         worryLevelHistory' = modify' itemWorryLevelHistory operation
-            ++ " = " ++ show worryLevelAfterGetBored
-            ++ " is divisible by " ++ show divisibleBy ++ ": " ++ show isDivisibleByTestNumber
-            ++ " => throwing to " ++ show monkeyToThrow
+            ++ " : " ++ show divisibleBy ++ " " ++ show isDivisibleByTestNumber
+            ++ " " ++ show monkeyToThrow
          -- monkeyToThrowState
         (operation', divideThenThrow', numberOfInspectedItems', itemWorryState') = (!) inputData monkeyToThrow
         newItemWorryState' = itemWorryState' ++ [(worryLevelAfterGetBored, worryLevelHistory')]
