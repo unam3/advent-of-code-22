@@ -67,7 +67,7 @@ parseMonkeySection [_, startingItemsS, operationS, divisibleByS, throwIfTrueToS,
                 >>= readMaybe
                 >>= Just . fmap (\ number -> (
                         number,
-                        "initial number is " ++ show number
+                        show number
                     ))
 
         (Just operation) =
@@ -114,9 +114,9 @@ modify itemWorryLevel (Add n) = toInteger n + itemWorryLevel
 modify itemWorryLevel (MultiplyBy n) = toInteger n * itemWorryLevel
 
 modify' :: ItemWorryLevelHistory -> Operation -> ItemWorryLevelHistory
-modify' history Sqr = history ++ "; sqr()"
-modify' history (Add n) = history ++ " ; + " ++ show n
-modify' history (MultiplyBy n) = history ++ " ; * " ++ show n
+modify' history Sqr = history ++ "; \n sqr()"
+modify' history (Add n) = history ++ " ; \n + " ++ show n
+modify' history (MultiplyBy n) = history ++ " ; \n * " ++ show n
 
 -- https://brilliant.org/wiki/divisibility-rules/#intermediate-divisibility-rules
 isDivisibleBy :: ItemWorryLevel -> DivisibleBy -> Bool
@@ -206,12 +206,14 @@ inspectItem
         worryLevelAfterGetBored = worryLevelModifier worryLevel'
         isDivisibleByTestNumber = isDivisibleBy worryLevelAfterGetBored divisibleBy
         --isDivisibleByTestNumber = (rem worryLevelAfterGetBored divisibleBy) == 0
-        worryLevelHistory' = modify' itemWorryLevelHistory operation
-            ++ "; is divisible by " ++ show divisibleBy
         monkeyToThrow =
             if isDivisibleByTestNumber
             then throwIfTrueTo
             else throwIfFalseTo
+        worryLevelHistory' = modify' itemWorryLevelHistory operation
+            ++ " = " ++ show worryLevelAfterGetBored
+            ++ " is divisible by " ++ show divisibleBy ++ ": " ++ show isDivisibleByTestNumber
+            ++ " => throwing to " ++ show monkeyToThrow
          -- monkeyToThrowState
         (operation', divideThenThrow', numberOfInspectedItems', itemWorryState') = (!) inputData monkeyToThrow
         newItemWorryState' = itemWorryState' ++ [(worryLevelAfterGetBored, worryLevelHistory')]
