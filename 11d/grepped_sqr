@@ -1,0 +1,99 @@
+dump_54-33-*          19     :  23  True   2
+dump_54:34:—          sqr()  :  13  False  3
+dump_54-35-+          3      :  17  False  1
+--                                         
+dump_54-100-*         19     :  23  True   2
+dump_54:101:—         sqr()  :  13  False  3
+dump_54-102-+         3      :  17  False  1
+--                                         
+dump_60-5-60                               
+dump_60:6:—           sqr()  :  13  False  3
+dump_60-7-+           3      :  17  False  1
+--                                         
+dump_60-30-*          19     :  23  True   2
+dump_60:31:—          sqr()  :  13  False  3
+dump_60-32-+          3      :  17  False  1
+--                                         
+dump_60-97-*          19     :  23  True   2
+dump_60:98:—          sqr()  :  13  False  3
+dump_60-99-+          3      :  17  False  1
+--                                         
+dump_65-64-*          19     :  23  True   2
+dump_65:65:—          sqr()  :  13  False  3
+dump_65-66-+          3      :  17  False  1
+--                                         
+dump_65-131-*         19     :  23  True   2
+dump_65:132:—         sqr()  :  13  False  3
+dump_65-133-+         3      :  17  False  1
+--                                         
+dump_74-44-*          19     :  23  True   2
+dump_74:45:—          sqr()  :  13  False  3
+dump_74-46-+          3      :  17  False  1
+--                                         
+dump_74-111-*         19     :  23  True   2
+dump_74:112:—         sqr()  :  13  False  3
+dump_74-113-+         3      :  17  False  1
+--                                         
+dump_74_suffix-61-*   19     :  23  True   2
+dump_74_suffix:62:—   sqr()  :  13  False  3
+dump_74_suffix-63-+   3      :  17  False  1
+--                                         
+dump_74_suffix-128-*  19     :  23  True   2
+dump_74_suffix:129:—  sqr()  :  13  True   1
+dump_74_suffix-130-+  6      :  19  False  0
+--                                         
+dump_74_suffix-137-*  19     :  23  True   2
+dump_74_suffix:138:—  sqr()  :  13  False  3
+dump_74_suffix-139-+  3      :  17  False  1
+--                                         
+dump_75-55-*          19     :  23  True   2
+dump_75:56:—          sqr()  :  13  False  3
+dump_75-57-+          3      :  17  False  1
+--                                         
+dump_75-122-*         19     :  23  True   2
+dump_75:123:—         sqr()  :  13  False  3
+dump_75-124-+         3      :  17  False  1
+--                                         
+dump_79-21-*          19     :  23  True   2
+dump_79:22:—          sqr()  :  13  False  3
+dump_79-23-+          3      :  17  False  1
+--                                         
+dump_79-88-*          19     :  23  True   2
+dump_79:89:—          sqr()  :  13  False  3
+dump_79-90-+          3      :  17  False  1
+--                                         
+dump_79_suffix-5-79                        
+dump_79_suffix:6:—    sqr()  :  13  False  3
+dump_79_suffix-7-+    3      :  17  False  1
+--                                         
+dump_79_suffix-27-*   19     :  23  True   2
+dump_79_suffix:28:—   sqr()  :  13  False  3
+dump_79_suffix-29-+   3      :  17  False  1
+--                                         
+dump_79_suffix-94-*   19     :  23  True   2
+dump_79_suffix:95:—   sqr()  :  13  True   1
+dump_79_suffix-96-+   6      :  19  False  0
+--                                         
+dump_79_suffix-103-*  19     :  23  True   2
+dump_79_suffix:104:—  sqr()  :  13  False  3
+dump_79_suffix-105-+  3      :  17  False  1
+--                                         
+dump_97-5-97                               
+dump_97:6:—           sqr()  :  13  False  3
+dump_97-7-+           3      :  17  False  1
+--                                         
+dump_97-72-*          19     :  23  True   2
+dump_97:73:—          sqr()  :  13  False  3
+dump_97-74-+          3      :  17  False  1
+--                                         
+dump_97-139-*         19     :  23  True   2
+dump_97:140:—         sqr()  :  13  False  3
+dump_97-141-+         3      :  17  False  1
+--                                         
+dump_98-12-*          19     :  23  True   2
+dump_98:13:—          sqr()  :  13  False  3
+dump_98-14-+          3      :  17  False  1
+--                                         
+dump_98-53-*          19     :  23  True   2
+dump_98:54:—          sqr()  :  13  False  3
+dump_98-55-+          3      :  17  False  1
