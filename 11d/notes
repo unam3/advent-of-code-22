@@ -37,9 +37,21 @@ Strategy 1. Analyze operations on worry levels between inspections by collecting
 
 Base method: grep -n -A 1 -B 1 True dump_* | column -t > grepped
 
-1) Before sqr() always goes True? Yes (if it's not the first inspection).
 grep -n -A 1 -B 1 sqr dump_* | column -t > grepped_sqr
 
+1) Before sqr() always goes True? Yes (if it's not the first inspection).
+2) When we have series of sqr() and then non-sqr True there can't be another sqr()? Nope. dump_98 has sqr after (sqr,
+pluh) series.
+
+
+· True after sqr() on non-sqr() operation:
+
+dump_54  dump_60  dump_65  dump_74  dump_74_suffix  dump_75  dump_79  dump_79_suffix  dump_97  dump_98
+    
+    x       v       v        x          x               x       v           v            x          v
+
+
+-) In which cases except before sqr() we {, always} get True?
 
 Strategy 2. Use divisibility rules.
 https://en.wikipedia.org/wiki/Divisibility_rule#Divisibility_rules_for_numbers_1%E2%80%9330
