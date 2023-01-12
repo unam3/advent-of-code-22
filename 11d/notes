@@ -30,6 +30,15 @@ The process of each monkey taking a single turn is called a round.
 
 How many items monkeys inspected? Need to collect this. In the state? Sure.
 
+monkey business = multiplication of the numbers two most active monkeys inspected items.
+
+Figure out which monkeys to chase by counting how many items they inspect over 20 rounds.
+What is the level of monkey business after 20 rounds?
+
+
+
+Part II.
+
 Having run out of RAM with current implementation. Need to optimize.
 
 
@@ -52,6 +61,8 @@ dump_54  dump_60  dump_65  dump_74  dump_74_suffix  dump_75  dump_79  dump_79_su
 
 
 -) In which cases except before sqr() we {, always} get True?
+
+
 
 Strategy 2. Use divisibility rules.
 https://en.wikipedia.org/wiki/Divisibility_rule#Divisibility_rules_for_numbers_1%E2%80%9330
@@ -79,8 +90,4 @@ grep Test testInput
   Test: divisible by 13
   Test: divisible by 17
 
-
-monkey business = multiplication of the numbers two most active monkeys inspected items.
-
-Figure out which monkeys to chase by counting how many items they inspect over 20 rounds.
-What is the level of monkey business after 20 rounds?
+Strategy 3. Run rounds on each item individually. Will help gather more info.
