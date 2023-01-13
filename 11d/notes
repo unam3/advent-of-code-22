@@ -69,7 +69,7 @@ https://en.wikipedia.org/wiki/Divisibility_rule#Divisibility_rules_for_numbers_1
 https://brilliant.org/wiki/divisibility-rules/#intermediate-divisibility-rules
 
 Current implementation is too slow. What if we try "-exe: with -threaded?. Slow too:
-stack ghc -- -Wall -O2 -threaded  app/Main.hs && stack exec -- $(pwd)/app/Main +RTS -N4
+stack clean; stack build && stack exec 11d --rts-options -N4
 
 
 Operations on worry levels: (1) addition, (2) multiplications and (3) exponentiation.
@@ -93,4 +93,4 @@ grep Test testInput
 
 Strategy 3. Run rounds on each item individually. Will help gather more info.
 
-The most puzzling one is with 98 initial worry level of the fourth monkey ("3"), because it has non-sqr() True between sqr()s.
+The most puzzling one is with 98 initial worry level of the fourth monkey ("3"), because it has non-sqr() True between sqr()s (dump_98, g98 files).
