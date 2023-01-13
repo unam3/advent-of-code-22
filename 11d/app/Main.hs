@@ -3,15 +3,15 @@ module Main where
 
 import Control.Monad (foldM)
 import Data.List (intersperse)
+import Data.Vector (fromList)
 
 import MonkeyInTheMiddle
 
 
 main :: IO ()
-main = readFile "testInput"
-    >>= writeInputStateForDebug
-        . runNRounds id 99
-        . parseInput
+main = --readFile "testInput" >>= print . parseInput
+    (writeInputStateForDebug
+        $ runNRounds id 299 inputData_fourthMonkey_98)
             >>= print
 
 
@@ -68,3 +68,13 @@ writeMonkeyState
 
 writeInputStateForDebug :: InputData -> IO [String]
 writeInputStateForDebug = foldM writeMonkeyState []
+
+
+inputData_fourthMonkey_98 :: InputData
+inputData_fourthMonkey_98 = 
+    fromList [
+        (MultiplyBy 19, (23, 2, 3), 0, [(98, "98")]),
+        (Add 6, (19, 2, 0), 0, []),
+        (Sqr, (13, 1, 3), 0, []),
+        (Add 3, (17, 0, 1), 0, [])
+    ]
