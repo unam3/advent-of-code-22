@@ -11,7 +11,7 @@ import MonkeyInTheMiddle
 main :: IO ()
 main = --readFile "testInput" >>= print . parseInput
     (writeInputStateForDebug
-        $ runNRounds id 299 inputData_fourthMonkey_98)
+        $ runNRounds id 299 inputData_fourthMonkey_54)
             >>= print
 
 
@@ -74,6 +74,24 @@ inputData_fourthMonkey_98 :: InputData
 inputData_fourthMonkey_98 = 
     fromList [
         (MultiplyBy 19, (23, 2, 3), 0, [(98, "98")]),
+        (Add 6, (19, 2, 0), 0, []),
+        (Sqr, (13, 1, 3), 0, []),
+        (Add 3, (17, 0, 1), 0, [])
+    ]
+
+inputData_fourthMonkey_79 :: InputData
+inputData_fourthMonkey_79 = 
+    fromList [
+        (MultiplyBy 19, (23, 2, 3), 0, [(79, "79")]),
+        (Add 6, (19, 2, 0), 0, []),
+        (Sqr, (13, 1, 3), 0, []),
+        (Add 3, (17, 0, 1), 0, [])
+    ]
+
+inputData_fourthMonkey_54 :: InputData
+inputData_fourthMonkey_54 = 
+    fromList [
+        (MultiplyBy 19, (23, 2, 3), 0, [(54, "54")]),
         (Add 6, (19, 2, 0), 0, []),
         (Sqr, (13, 1, 3), 0, []),
         (Add 3, (17, 0, 1), 0, [])
