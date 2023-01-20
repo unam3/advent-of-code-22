@@ -29,3 +29,16 @@ What is the fewest steps required to move from your current position to the loca
 --
 
 For test input 40 squares. 8 unvisited. 31 steps total.
+
+
+--
+
+Need to produce possible paths from S to E and select shortest one.
+
+
+Do I need to visualize path as in puzzle definition?
+
+Do I need to orient path to E during each step or it will go to it itself/eventually?
+
+
+Which datatype will represent paths, heightmap? [Char] for Path and 
