@@ -219,7 +219,7 @@ inspectItem
         newItemWorryState' = itemWorryState' ++ [(worryLevelAfterGetBored, worryLevelHistory')]
 
     in if monkeyIndex == monkeyToThrow
-        then error "Thow to itself encountered. Need to add support for item list modification."
+        then error "Throw to itself encountered. Need to add support for item list modification."
         else (//)
             inputData
             [(monkeyToThrow, (operation', divideThenThrow', numberOfInspectedItems', newItemWorryState'))]
