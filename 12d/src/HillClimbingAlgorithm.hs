@@ -1,7 +1,8 @@
 module HillClimbingAlgorithm where
 
 
-import Data.HashMap.Strict (HashMap, fromList)
+import Data.HashMap.Strict (HashMap, foldlWithKey', fromList)
+import Data.Maybe (fromJust)
 
 
 type X = Int
@@ -35,3 +36,23 @@ parseInput = fromList . assignCoords
 
 type Path = [SquareCoords]
 
+-- better name?
+discoverPaths' :: Heightmap -> Path -> [Path]
+discoverPaths' heightmap path = undefined
+
+
+getStartingSquareCoords :: Heightmap -> SquareCoords
+getStartingSquareCoords =
+    fromJust
+        . foldlWithKey'
+            (\ maybeS k v ->
+                if maybeS == Nothing
+                    then if v == 'S'
+                        then Just k
+                        else Nothing
+                    else maybeS
+            )
+            Nothing
+
+discoverPath :: Heightmap -> Path
+discoverPath heightmap = [getStartingSquareCoords heightmap]
