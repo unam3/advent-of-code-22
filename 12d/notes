@@ -1,0 +1,31 @@
+input - heightmap of surrounding area
+
+
+The heightmap shows the local area from above broken into a grid; the elevation of each square of the grid is given by a single lowercase letter.
+
+a — lowest elevation. z — highest.
+
+S — current position.
+
+E — the location that should get the best signal.
+
+
+Your current position (S) has elevation a, and the location that should get the best signal (E) has elevation z.
+
+
+Need to reach E in as few steps as possible.
+
+
+During each step, you can move exactly one square up, down, left, or right.
+
+
+Constraint to go higher: elevation of the destination square can be at most one higher than the elevation of your current square: if current elevation is m, you could step to elevation n, but not to elevation o.
+
+The elevation of the destination square can be much lower than the elevation of your current square.
+
+
+What is the fewest steps required to move from your current position to the location that should get the best signal?
+
+--
+
+For test input 40 squares. 8 unvisited. 31 steps total.
