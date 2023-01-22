@@ -96,3 +96,5 @@ Strategy 3. Run rounds on each item individually. Will help gather more info.
 The most puzzling one is with 98 initial worry level of the fourth monkey ("3"), because it has non-sqr() True between sqr()s (dump_98, g98 files).
 
 Also need to check out worry levels during rounds. Maybe they last digits are the same when we get True?
+
+Strategy 4. Division memoization. HashMap (Dividend, Divisor) IsResultWithoutRemainder
