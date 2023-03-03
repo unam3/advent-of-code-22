@@ -6,17 +6,19 @@ import Control.Applicative (liftA2)
 import Control.Monad (void)
 
 
-getX200 :: Int -> [Int]
-getX200 n = foldl' (\ acc el -> acc ++ [el * n]) [] [1..1000]
+getXN :: Int -> Int -> [Int]
+getXN multiplier number = foldl' (\ acc el -> acc ++ [el * number]) [] [1..multiplier]
 
 f :: Int -> IO String
-f n =
+f number =
 
     do
 
-    let list = concat . intersperse "\n" . fmap show $ getX200 n
+    let maxMultiplier = 1000
+
+    let list = concat . intersperse "\n" . fmap show $ getXN maxMultiplier number
    
-    writeFile (show n) list
+    writeFile (show number) list
 
     pure list
 
