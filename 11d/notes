@@ -98,3 +98,5 @@ The most puzzling one is with 98 initial worry level of the fourth monkey ("3"),
 Also need to check out worry levels during rounds. Maybe they last digits are the same when we get True?
 
 Strategy 4. Division memoization. HashMap (Dividend, Divisor) IsResultWithoutRemainder
+
+Strategy 5. Analyze common results of multiplication.
